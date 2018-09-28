@@ -108,7 +108,7 @@ class MySceneGraph {
 
     processTag(node, nodeNames, tag, tagIndex) {
         var index;
-        if ((index = nodeNames.indexOf(tag)) == -1)
+        if ((index = nodeNames.indexOf(tag)) == null)
             return "tag <" + tag + "> missing";
         else {
             if (index != tagIndex)
@@ -144,31 +144,32 @@ class MySceneGraph {
 
         // <scene>
         this.processTag(nodes[SCENE_INDEX], nodeNames, "scene", SCENE_INDEX);
-       
-                // <views>
-                this.processTag(nodes[VIEWS_INDEX], nodeNames, "views", VIEWS_INDEX);
 
-                /* // <ambient>
-                this.processTag(nodes[AMBIENT_INDEX], nodeNames, "ambient", AMBIENT_INDEX);
+        // <views>
+        this.processTag(nodes[VIEWS_INDEX], nodeNames, "views", VIEWS_INDEX);
 
-                // <lights>
-                this.processTag(nodes[LIGHTS_INDEX], nodeNames, "lights", LIGHTS_INDEX);
-
-                // <textures>
-                this.processTag(nodes[TEXTURES_INDEX], nodeNames, "textures", TEXTURES_INDEX);
-
-                // <materials>
-                this.processTag(nodes[MATERIALS_INDEX], nodeNames, "materials", MATERIALS_INDEX);
-
-                // <transformations>
-                this.processTag(nodes[TRANSFORMATIONS_INDEX], nodeNames, "transformations", TRANSFORMATIONS_INDEX);
-
-                // <primitives>
-                this.processTag(nodes[PRIMITIVES_INDEX], nodeNames, "primitives", PRIMITIVES_INDEX);
-
-                // <components>
-                this.processTag(nodes[COMPONENTS_INDEX], nodeNames, "components", COMPONENTS_INDEX);
-            */
+        /*
+             // <ambient>
+            this.processTag(nodes[AMBIENT_INDEX], nodeNames, "ambient", AMBIENT_INDEX);
+    
+            // <lights>
+            this.processTag(nodes[LIGHTS_INDEX], nodeNames, "lights", LIGHTS_INDEX);
+    
+            // <textures>
+            this.processTag(nodes[TEXTURES_INDEX], nodeNames, "textures", TEXTURES_INDEX);
+    
+            // <materials>
+            this.processTag(nodes[MATERIALS_INDEX], nodeNames, "materials", MATERIALS_INDEX);
+    
+            // <transformations>
+            this.processTag(nodes[TRANSFORMATIONS_INDEX], nodeNames, "transformations", TRANSFORMATIONS_INDEX);
+    
+            // <primitives>
+            this.processTag(nodes[PRIMITIVES_INDEX], nodeNames, "primitives", PRIMITIVES_INDEX);
+    
+            // <components>
+            this.processTag(nodes[COMPONENTS_INDEX], nodeNames, "components", COMPONENTS_INDEX);
+        */
     }
 
     /**
@@ -186,7 +187,7 @@ class MySceneGraph {
 
         // Scene root
         let indexRoot = nodeNames.indexOf("root");
-        if (indexRoot == -1) {
+        if (indexRoot == null) {
             return "scene root missing";
         } else {
             this.root = this.reader.getString(sceneNode, 'root');
@@ -202,7 +203,7 @@ class MySceneGraph {
         // (default values)
         this.axis_length = 100;
         var indexAxisLength = nodeNames.indexOf("axis_length");
-        if (indexAxisLength == -1) {
+        if (indexAxisLength == null) {
             // TODO: gregueiras test dollar string 
             this.onXMLMinorError(`axis length missing; assuming ${this.axis_length}`);
         } else {
@@ -212,10 +213,163 @@ class MySceneGraph {
                 this.onXMLMinorError(`unable to parse value for axis length; assuming ${this.axis_length}`);
             }
         }
-        
+
         console.log("Parsed scene");
 
         return null;
+    }
+
+    checkForRepeatedViewsId(id) {
+        for(var k = 0; k < this.views.perspectives.length; ++k) {
+            if(id == this.views.perspectives[k].id)
+                return "repeated id value";
+        }
+        for(var k = 0; k < this.views.orthos.length; ++k) {
+            if(id == this.views.orthos[k].id)
+                return "repeated id value";
+        }
+
+        return 0;
+    }
+
+    parseViewOrtho(child) {
+        var ortho = {
+            id: null,
+            near: null,
+            far: null,
+            left: null,
+            right: null,
+            top: null,
+            bottom: null,
+        }
+
+        ortho.id = this.reader.getString(child, 'id');
+        if (ortho.id == null || !isString(ortho.id)) {
+            return "unable to parse id value";
+        }
+
+        // Check for repeated id
+        var reply;
+        if((reply = this.checkForRepeatedViewsId(ortho.id)) != "OK")
+            return reply;
+
+        ortho.near = this.reader.getFloat(child, 'near');
+        if (ortho.near == null || isNaN(ortho.near)) {
+            return "unable to parse near value";
+        }
+
+        ortho.far = this.reader.getFloat(child, 'far');
+        if (ortho.far == null || isNaN(ortho.far)) {
+            return "unable to parse far value";
+        }
+
+        ortho.left = this.reader.getFloat(child, 'left');
+        if (ortho.left == null || isNaN(ortho.left)) {
+            return "unable to parse left value";
+        }
+
+        ortho.right = this.reader.getFloat(child, 'right');
+        if (ortho.right == null || isNaN(ortho.right)) {
+            return "unable to parse right value";
+        }
+
+        ortho.top = this.reader.getFloat(child, 'top');
+        if (ortho.top == null || isNaN(ortho.top)) {
+            return "unable to parse top value";
+        }
+
+        ortho.bottom = this.reader.getFloat(child, 'bottom');
+        if (ortho.bottom == null || isNaN(ortho.bottom)) {
+            return "unable to parse bottom value";
+        }
+
+        this.views.orthos.push(ortho);
+        return 0;
+    }
+
+    parseViewPrespectiveChildren(child, perspective) {
+        if (child.nodeName == "from") {
+            perspective.from.x = this.reader.getFloat(child, 'x');
+            if (perspective.from.x == null || isNaN(perspective.from.x)) {
+                return "unable to parse from/x value";
+            }
+
+            perspective.from.y = this.reader.getFloat(child, 'y');
+            if (perspective.from.y == null || isNaN(perspective.from.y)) {
+                return "unable to parse from/y value";
+            }
+
+            perspective.from.z = this.reader.getFloat(child, 'z');
+            if (perspective.from.z == null || isNaN(perspective.from.z)) {
+                return "unable to parse from/z value";
+            }
+        } else if (child.nodeName == "to") {
+            perspective.to.x = this.reader.getFloat(child, 'x');
+            if (perspective.to.x == null || isNaN(perspective.to.x)) {
+                return "unable to parse to/x value";
+            }
+
+            perspective.to.y = this.reader.getFloat(child, 'y');
+            if (perspective.to.y == null || isNaN(perspective.to.y)) {
+                return "unable to parse to/y value";
+            }
+
+            perspective.to.z = this.reader.getFloat(child, 'z');
+            if (perspective.to.z == null || isNaN(perspective.to.z)) {
+                return "unable to parse to/z value";
+            }
+        } else
+            this.onXMLMinorError("unknown tag <" + child.nodeName + "/" + child.nodeName + ">");
+    }
+
+    parseViewPrespective(child) {
+        var perspective = {
+            id: null,
+            near: null,
+            far: null,
+            angle: null,
+            from: { x: null, y: null, z: null },
+            to: { x: null, y: null, z: null },
+        }
+
+        perspective.id = this.reader.getString(child, 'id');
+        if (perspective.id == null || !isString(perspective.id)) {
+            return "unable to parse id value";
+        }
+
+        // Check for repeated id
+        var reply;
+        if((reply = this.checkForRepeatedViewsId(perspective.id)) != "OK")
+            return reply;
+
+        perspective.near = this.reader.getFloat(child, 'near');
+        if (perspective.near == null || isNaN(perspective.near)) {
+            return "unable to parse near value";
+        }
+
+        perspective.far = this.reader.getFloat(child, 'far');
+        if (perspective.far == null || isNaN(perspective.far)) {
+            return "unable to parse far value";
+        }
+
+        perspective.angle = this.reader.getFloat(child, 'angle');
+        if (perspective.angle == null || isNaN(perspective.angle)) {
+            return "unable to parse angle value";
+        }
+
+        perspective.angle = this.reader.getFloat(child, 'angle');
+        if (perspective.angle == null || isNaN(perspective.angle)) {
+            return "unable to parse angle value";
+        }
+
+        var grandchildren = child.children;
+
+        for (var j = 0; j < grandchildren.length; j++) {
+            this.parseViewPrespectiveChildren(grandchildren[j], perspective);
+        }
+
+        this.views.perspectives.push(perspective);
+        return "OK";
     }
 
     /**
@@ -223,32 +377,49 @@ class MySceneGraph {
      * @param {views block element} viewsNode
      */
     parseViews(viewsNode) {
-        
-        console.log("Will parse views");
+        this.log("Will parse views");
+        var children = viewsNode.children;
         let attributes = viewsNode.attributes;
-
         let viewsNames = [];
 
         for (let i = 0; i < attributes.length; i++) {
             viewsNames.push(attributes[i].nodeName);
         }
 
-        // Views default
-        let viewsDefault = viewsNames.indexOf("default");
-        if (viewsDefault == -1) {
-            return "views default missing";
-        } else {
-            this.default = this.reader.getString(viewsNode, 'default');
-
-            if (!(this.default != null && isString(this.default))) {
-                return "unable to parse default value";
-            }
-
+        this.views = {
+            default: "",
+            perspectives: [],
+            orthos: []
         }
 
+        // Views default
+        let viewsDefault = viewsNames.indexOf("default");
+        if (viewsDefault == null) {
+            return "views default missing";
+        } else {
+            this.views.default = this.reader.getString(viewsNode, 'default');
 
-        this.log("Parsed illumination");
+            if (this.views.default == null || !isString(this.views.default)) {
+                return "unable to parse default value";
+            }
+        }
 
+        //Any number of Views
+        if (children.length < 1)
+            return "no views available"
+        for (var i = 0; i < children.length; i++) {
+
+            if (children[i].nodeName == "perspective") {
+                if(this.parseViewPrespective(children[i]) == 0);
+                    this.log("perspective parsed")
+            } else if (children[i].nodeName == "ortho") {
+                if(this.parseViewOrtho(children[i]) == 0);
+                    this.log("ortho parsed")
+            } else
+                this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
+        }
+
+        this.log("Parsed views");
         return null;
     }
 
@@ -264,7 +435,7 @@ class MySceneGraph {
         var nodeNames = [];
 
         for (var i = 0; i < children.length; i++)
-            nodeNames.push(children[i].nodeName);
+            nodeNames.push(child.nodeName);
 
         // Ambient light values
         // (default values)
@@ -274,7 +445,7 @@ class MySceneGraph {
         this.ambient.a = 0.2;
 
         var indexAmbient = nodeNames.indexOf("ambient");
-        if (indexAmbient == -1) {
+        if (indexAmbient == null) {
             this.onXMLMinorError(`ambient light values missing; assuming RGBA(${this.ambient.r}, ${this.ambient.g}, ${this.ambient.b}, ${this.ambient.a})`);
         }
         else {

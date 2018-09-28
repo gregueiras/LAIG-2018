@@ -16,11 +16,11 @@
     <views default="ss">
         <!-- tem de existir, pelo menos, uma vista de -->
         <!-- entre as seguintes (perspective ou ortho) -->
-        <perspective id="ss" near="ff" far="ff" angle="ff">
-            <from x="ff" y="ff" z="ff" />
-            <to x="ff" y="ff" z="ff" />
+        <perspective id="ss" near="1" far="2" angle="3">
+            <from x="4" y="5" z="6" />
+            <to x="7" y="8" z="9" />
         </perspective>
-        <ortho id="ss" near="ff" far="ff" left="ff" right="ff" top="ff" bottom="ff" />
+        <ortho id="ss" near="10" far="11" left="12" right="13" top="14" bottom="15" />
     </views>
     <ambient>
         <ambient r="ff" g="ff" b="ff" a="ff" />
