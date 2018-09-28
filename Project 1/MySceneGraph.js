@@ -187,12 +187,12 @@ class MySceneGraph {
 
         // Scene root
         let indexRoot = nodeNames.indexOf("root");
-        if (indexRoot == null) {
+        if (indexRoot == -1) {
             return "scene root missing";
         } else {
             this.root = this.reader.getString(sceneNode, 'root');
 
-            if (!(this.root != null && isString(this.root))) {
+            if (!(this.root != -1 && isString(this.root))) {
                 return "unable to parse root value";
             }
 
