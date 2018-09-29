@@ -148,12 +148,12 @@ class MySceneGraph {
         // <views>
         this.processTag(nodes[VIEWS_INDEX], nodeNames, "views", VIEWS_INDEX);
 
+        // <lights>
+        this.processTag(nodes[LIGHTS_INDEX], nodeNames, "lights", LIGHTS_INDEX);
+
         /*
              // <ambient>
             this.processTag(nodes[AMBIENT_INDEX], nodeNames, "ambient", AMBIENT_INDEX);
-    
-            // <lights>
-            this.processTag(nodes[LIGHTS_INDEX], nodeNames, "lights", LIGHTS_INDEX);
     
             // <textures>
             this.processTag(nodes[TEXTURES_INDEX], nodeNames, "textures", TEXTURES_INDEX);
@@ -229,7 +229,7 @@ class MySceneGraph {
                 return "repeated id value";
         }
 
-        return 0;
+        return "OK";
     }
 
     parseViewOrtho(child) {
@@ -369,7 +369,7 @@ class MySceneGraph {
         }
 
         this.views.perspectives.push(perspective);
-        return "OK";
+        return 0;
     }
 
     /**
@@ -416,7 +416,7 @@ class MySceneGraph {
                 if(this.parseViewOrtho(children[i]) == 0);
                     this.log("ortho parsed")
             } else
-                this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
         }
 
         this.log("Parsed views");
@@ -484,15 +484,163 @@ class MySceneGraph {
 
     }
 
+    checkForRepeatedLightsId(id) {
+        for(var k = 0; k < this.light.omnis.length; ++k) {
+            if(id == this.light.omnis[k].id)
+                return "repeated id value";
+        }
+        for(var k = 0; k < this.light.spots.length; ++k) {
+            if(id == this.light.spots[k].id)
+                return "repeated id value";
+        }
+
+        return "OK";
+    }
+
+    isBoolean(value) {
+        if(isNaN(value) || value < 0 || value > 1)
+            return false;
+        return true;
+    }
+
+    parseLightsOmniChildrenColours(param, child) {
+        param.r = this.reader.getFloat(child, 'r');
+        if (param.r == null || isNaN(param.r)) {
+            return "unable to parse r value";
+        }
+
+        param.g = this.reader.getFloat(child, 'g');
+        if (param.g == null || isNaN(param.g)) {
+            return "unable to parse g value";
+        }
+
+        param.b = this.reader.getFloat(child, 'b');
+        if (param.b == null || isNaN(param.b)) {
+            return "unable to parse b value";
+        }
+
+        param.a = this.reader.getFloat(child, 'a');
+        if (param.a == null || isNaN(param.a)) {
+            return "unable to parse a value";
+        }
+    }
+
+    parseLightsOmniChildren(child, omni) {
+        if (child.nodeName == "location") {
+            omni.location.x = this.reader.getFloat(child, 'x');
+            if (omni.location.x == null || isNaN(omni.location.x)) {
+                return "unable to parse location/x value";
+            }
+
+            omni.location.y = this.reader.getFloat(child, 'y');
+            if (omni.location.y == null || isNaN(omni.location.y)) {
+                return "unable to parse location/y value";
+            }
+
+            omni.location.z = this.reader.getFloat(child, 'z');
+            if (omni.location.z == null || isNaN(omni.location.z)) {
+                return "unable to parse location/z value";
+            }
+
+            omni.location.w = this.reader.getFloat(child, 'w');
+            if (omni.location.w == null || isNaN(omni.location.w)) {
+                return "unable to parse location/w value";
+            }
+        } else if (child.nodeName == "ambient" || child.nodeName == "diffuse" || child.nodeName == "specular") {
+            switch(child.nodeName) {
+                case "ambient":
+                this.parseLightsOmniChildrenColours(omni.ambient, child);
+                break;
+                case "diffuse":
+                this.parseLightsOmniChildrenColours(omni.diffuse, child);
+                break;
+                case "specular":
+                this.parseLightsOmniChildrenColours(omni.specular, child);
+                break;
+            }
+        } else
+            this.onXMLMinorError("unknown tag <" + child.nodeName + "/" + child.nodeName + ">");
+    }
+
+    parseLightsOmni(child) {
+        var omni = {
+            id: null,
+            enabled: null,
+            location: {x: null, y: null, z:null, w: null},
+            ambient: {r: null, g: null, b:null, a: null},
+            diffuse: {r: null, g: null, b:null, a: null},
+            specular: {r: null, g: null, b:null, a: null}
+        }
+
+        omni.id = this.reader.getString(child, 'id');
+        if (omni.id == null || !isString(omni.id)) {
+            return "unable to parse id value";
+        }
+
+        // Check for repeated id
+        var reply;
+        if((reply = this.checkForRepeatedLightsId(omni.id)) != "OK")
+            return reply;
+
+            omni.enabled = this.reader.getFloat(child, 'enabled');
+        if (omni.enabled == null || !this.isBoolean(omni.enabled)) {
+            return "unable to parse enabled value";
+        }
+
+        var grandchildren = child.children;
+
+        for (var j = 0; j < grandchildren.length; j++) {
+            this.parseLightsOmniChildren(grandchildren[j], omni);
+        }
+
+        this.light.omnis.push(omni);
+        return 0;
+    }
+
+    parseLightsSpot(child) {
+        var spot = {
+            id: null,
+            enabled: null,
+            angle: null,
+            exponent: null,
+            location: {x: null, y: null, z:null, w: null},
+            target: {x: null, y: null, z:null},
+            ambient: {r: null, g: null, b:null, a: null},
+            diffuse: {r: null, g: null, b:null, a: null},
+            specular: {r: null, g: null, b:null, a: null}
+        }
+
+
+    }
+
     /**
-     * Parses the <TEXTURES> block. 
-     * @param {textures block element} texturesNode
+     * Parses the <LIGHTS> block. 
+     * @param {lights block element} lightsNode
      */
-    parseTextures(texturesNode) {
-        // TODO: Parse block
+    parseLights(lightsNode) {
+        var children = lightsNode.children;
 
-        console.log("Parsed textures");
+        this.light = {
+            omnis: [],
+            spots: []
+        }
 
+        //Any number of Lights
+        if (children.length < 1)
+            return "no lights available"
+        for (var i = 0; i < children.length; i++) {
+
+            if (children[i].nodeName == "omni") {
+                if(this.parseLightsOmni(children[i]) == 0);
+                    this.log("omni parsed")
+            } else if (children[i].nodeName == "spot") {
+                if(this.parseLightsSpot(children[i]) == 0);
+                    this.log("spot parsed")
+            } else
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+        }
+
+        this.log("Parsed lights");
         return null;
     }
 
