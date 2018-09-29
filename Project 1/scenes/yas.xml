@@ -47,7 +47,7 @@
     <textures>
         <!-- Deve existir um ou mais blocos "texture" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <texture id="ss" file="ss" />
+        <texture id="sstexttures" file="ss/file/exemple.txt" />
     </textures>
     <materials>
         <!-- Deve existir um ou mais blocos "material" -->

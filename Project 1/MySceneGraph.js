@@ -151,12 +151,12 @@ class MySceneGraph {
         // <lights>
         this.processTag(nodes[LIGHTS_INDEX], nodeNames, "lights", LIGHTS_INDEX);
 
+        // <textures>
+        this.processTag(nodes[TEXTURES_INDEX], nodeNames, "textures", TEXTURES_INDEX);
+
         /*
              // <ambient>
             this.processTag(nodes[AMBIENT_INDEX], nodeNames, "ambient", AMBIENT_INDEX);
-    
-            // <textures>
-            this.processTag(nodes[TEXTURES_INDEX], nodeNames, "textures", TEXTURES_INDEX);
     
             // <materials>
             this.processTag(nodes[MATERIALS_INDEX], nodeNames, "materials", MATERIALS_INDEX);
@@ -604,8 +604,6 @@ class MySceneGraph {
         return 0;
     }
 
-
-
     parseLightsSpotChildren(child, spot) {
         switch (child.nodeName) {
             case "location":
@@ -705,6 +703,52 @@ class MySceneGraph {
         }
 
         this.log("Parsed lights");
+        return null;
+    }
+
+    checkForRepeatedTextureId(id) {
+        for (let j = 0; j < this.textures.length; j++) {
+            if(this.textures[i].id == id)
+                return "repeated id value";
+        }
+        return "OK";
+    }
+
+    parseTexturesTexture(child) {
+        var texture = {
+            id: null,
+            file: null
+        }
+
+        texture.id = this.reader.getString(child, 'id');
+        if (texture.id == null || !isString(texture.id)) {
+            return "unable to parse id value";
+        }
+
+        //Check for repeated Id
+        var reply;
+        if ((reply = this.checkForRepeatedTextureId(texture.id)) != "OK")
+            return reply;
+
+        texture.file = this.reader.getString(child, 'file');
+        if (texture.file == null || !isString(texture.file)) {
+            return "unable to parse file value";
+        }
+
+        this.textures.push(texture);
+    }
+
+    parseTextures(texturesNode) {
+        var children = texturesNode.children;
+
+        this.textures = [];
+        if (children.length < 1)
+            return "no textures available"
+        for (var i = 0; i < children.length; i++) {
+            this.parseTexturesTexture(children[i]);
+        }
+
+        this.log("Parsed textures");
         return null;
     }
 
