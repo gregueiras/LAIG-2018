@@ -4,15 +4,15 @@ var DEGREE_TO_RAD = Math.PI / 180;
 
 // Order of the groups in the XML document.
 const YAS_INDEX = 0;
-const SCENE_INDEX = 1;
-const VIEWS_INDEX = 2;
-const AMBIENT_INDEX = 3;
-const LIGHTS_INDEX = 4;
-const TEXTURES_INDEX = 5;
-const MATERIALS_INDEX = 6;
-const TRANSFORMATIONS_INDEX = 7;
-const PRIMITIVES_INDEX = 8;
-const COMPONENTS_INDEX = 9;
+const SCENE_INDEX = 0;
+const VIEWS_INDEX = 1;
+const AMBIENT_INDEX = 2;
+const LIGHTS_INDEX = 3;
+const TEXTURES_INDEX = 4;
+const MATERIALS_INDEX = 5;
+const TRANSFORMATIONS_INDEX = 6;
+const PRIMITIVES_INDEX = 7;
+const COMPONENTS_INDEX = 8;
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -220,12 +220,12 @@ class MySceneGraph {
     }
 
     checkForRepeatedViewsId(id) {
-        for(var k = 0; k < this.views.perspectives.length; ++k) {
-            if(id == this.views.perspectives[k].id)
+        for (var k = 0; k < this.views.perspectives.length; ++k) {
+            if (id == this.views.perspectives[k].id)
                 return "repeated id value";
         }
-        for(var k = 0; k < this.views.orthos.length; ++k) {
-            if(id == this.views.orthos[k].id)
+        for (var k = 0; k < this.views.orthos.length; ++k) {
+            if (id == this.views.orthos[k].id)
                 return "repeated id value";
         }
 
@@ -250,7 +250,7 @@ class MySceneGraph {
 
         // Check for repeated id
         var reply;
-        if((reply = this.checkForRepeatedViewsId(ortho.id)) != "OK")
+        if ((reply = this.checkForRepeatedViewsId(ortho.id)) != "OK")
             return reply;
 
         ortho.near = this.reader.getFloat(child, 'near');
@@ -339,7 +339,7 @@ class MySceneGraph {
 
         // Check for repeated id
         var reply;
-        if((reply = this.checkForRepeatedViewsId(perspective.id)) != "OK")
+        if ((reply = this.checkForRepeatedViewsId(perspective.id)) != "OK")
             return reply;
 
         perspective.near = this.reader.getFloat(child, 'near');
@@ -387,7 +387,7 @@ class MySceneGraph {
         }
 
         this.views = {
-            default: "",
+            default: null,
             perspectives: [],
             orthos: []
         }
@@ -410,11 +410,11 @@ class MySceneGraph {
         for (var i = 0; i < children.length; i++) {
 
             if (children[i].nodeName == "perspective") {
-                if(this.parseViewPrespective(children[i]) == 0);
-                    this.log("perspective parsed")
+                if (this.parseViewPrespective(children[i]) == 0);
+                this.log("perspective parsed")
             } else if (children[i].nodeName == "ortho") {
-                if(this.parseViewOrtho(children[i]) == 0);
-                    this.log("ortho parsed")
+                if (this.parseViewOrtho(children[i]) == 0);
+                this.log("ortho parsed")
             } else
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
         }
@@ -485,12 +485,12 @@ class MySceneGraph {
     }
 
     checkForRepeatedLightsId(id) {
-        for(var k = 0; k < this.light.omnis.length; ++k) {
-            if(id == this.light.omnis[k].id)
+        for (var k = 0; k < this.light.omnis.length; ++k) {
+            if (id == this.light.omnis[k].id)
                 return "repeated id value";
         }
-        for(var k = 0; k < this.light.spots.length; ++k) {
-            if(id == this.light.spots[k].id)
+        for (var k = 0; k < this.light.spots.length; ++k) {
+            if (id == this.light.spots[k].id)
                 return "repeated id value";
         }
 
@@ -498,12 +498,12 @@ class MySceneGraph {
     }
 
     isBoolean(value) {
-        if(isNaN(value) || value < 0 || value > 1)
+        if (isNaN(value) || value < 0 || value > 1)
             return false;
         return true;
     }
 
-    parseLightsOmniChildrenColours(param, child) {
+    parseLightsChildrenColours(param, child) {
         param.r = this.reader.getFloat(child, 'r');
         if (param.r == null || isNaN(param.r)) {
             return "unable to parse r value";
@@ -525,51 +525,58 @@ class MySceneGraph {
         }
     }
 
-    parseLightsOmniChildren(child, omni) {
-        if (child.nodeName == "location") {
-            omni.location.x = this.reader.getFloat(child, 'x');
-            if (omni.location.x == null || isNaN(omni.location.x)) {
-                return "unable to parse location/x value";
-            }
+    parseLightsChildrenCoordinates(param, child, forthColour) {
+        param.x = this.reader.getFloat(child, 'x');
+        if (param.x == null || isNaN(param.x)) {
+            return "unable to parse location/x value";
+        }
 
-            omni.location.y = this.reader.getFloat(child, 'y');
-            if (omni.location.y == null || isNaN(omni.location.y)) {
-                return "unable to parse location/y value";
-            }
+        param.y = this.reader.getFloat(child, 'y');
+        if (param.y == null || isNaN(param.y)) {
+            return "unable to parse location/y value";
+        }
 
-            omni.location.z = this.reader.getFloat(child, 'z');
-            if (omni.location.z == null || isNaN(omni.location.z)) {
-                return "unable to parse location/z value";
-            }
+        param.z = this.reader.getFloat(child, 'z');
+        if (param.z == null || isNaN(param.z)) {
+            return "unable to parse location/z value";
+        }
 
-            omni.location.w = this.reader.getFloat(child, 'w');
-            if (omni.location.w == null || isNaN(omni.location.w)) {
+        if (forthColour == 1) {
+            param.w = this.reader.getFloat(child, 'w');
+            if (param.w == null || isNaN(param.w)) {
                 return "unable to parse location/w value";
             }
-        } else if (child.nodeName == "ambient" || child.nodeName == "diffuse" || child.nodeName == "specular") {
-            switch(child.nodeName) {
-                case "ambient":
-                this.parseLightsOmniChildrenColours(omni.ambient, child);
+        }
+    }
+
+    parseLightsOmniChildren(child, omni) {
+        switch (child.nodeName) {
+            case "location":
+                this.parseLightsChildrenCoordinates(omni.location, child, 1);
                 break;
-                case "diffuse":
-                this.parseLightsOmniChildrenColours(omni.diffuse, child);
+            case "ambient":
+                this.parseLightsChildrenColours(omni.ambient, child);
                 break;
-                case "specular":
-                this.parseLightsOmniChildrenColours(omni.specular, child);
+            case "diffuse":
+                this.parseLightsChildrenColours(omni.diffuse, child);
                 break;
-            }
-        } else
-            this.onXMLMinorError("unknown tag <" + child.nodeName + "/" + child.nodeName + ">");
+            case "specular":
+                this.parseLightsChildrenColours(omni.specular, child);
+                break;
+            default:
+                this.onXMLMinorError("unknown tag <" + child.nodeName + "/" + child.nodeName + ">");
+                break;
+        }
     }
 
     parseLightsOmni(child) {
         var omni = {
             id: null,
             enabled: null,
-            location: {x: null, y: null, z:null, w: null},
-            ambient: {r: null, g: null, b:null, a: null},
-            diffuse: {r: null, g: null, b:null, a: null},
-            specular: {r: null, g: null, b:null, a: null}
+            location: { x: null, y: null, z: null, w: null },
+            ambient: { r: null, g: null, b: null, a: null },
+            diffuse: { r: null, g: null, b: null, a: null },
+            specular: { r: null, g: null, b: null, a: null }
         }
 
         omni.id = this.reader.getString(child, 'id');
@@ -579,10 +586,10 @@ class MySceneGraph {
 
         // Check for repeated id
         var reply;
-        if((reply = this.checkForRepeatedLightsId(omni.id)) != "OK")
+        if ((reply = this.checkForRepeatedLightsId(omni.id)) != "OK")
             return reply;
 
-            omni.enabled = this.reader.getFloat(child, 'enabled');
+        omni.enabled = this.reader.getFloat(child, 'enabled');
         if (omni.enabled == null || !this.isBoolean(omni.enabled)) {
             return "unable to parse enabled value";
         }
@@ -597,20 +604,77 @@ class MySceneGraph {
         return 0;
     }
 
+
+
+    parseLightsSpotChildren(child, spot) {
+        switch (child.nodeName) {
+            case "location":
+                this.parseLightsChildrenCoordinates(spot.location, child, 1);
+                break;
+            case "target":
+                this.parseLightsChildrenCoordinates(spot.target, child, 0);
+                break;
+            case "ambient":
+                this.parseLightsChildrenColours(spot.ambient, child);
+                break;
+            case "diffuse":
+                this.parseLightsChildrenColours(spot.diffuse, child);
+                break;
+            case "specular":
+                this.parseLightsChildrenColours(spot.specular, child);
+                break;
+            default:
+                this.onXMLMinorError("unknown tag <" + child.nodeName + "/" + child.nodeName + ">");
+                break;
+        }
+    }
+
     parseLightsSpot(child) {
         var spot = {
             id: null,
             enabled: null,
             angle: null,
             exponent: null,
-            location: {x: null, y: null, z:null, w: null},
-            target: {x: null, y: null, z:null},
-            ambient: {r: null, g: null, b:null, a: null},
-            diffuse: {r: null, g: null, b:null, a: null},
-            specular: {r: null, g: null, b:null, a: null}
+            location: { x: null, y: null, z: null, w: null },
+            target: { x: null, y: null, z: null },
+            ambient: { r: null, g: null, b: null, a: null },
+            diffuse: { r: null, g: null, b: null, a: null },
+            specular: { r: null, g: null, b: null, a: null }
         }
 
+        spot.id = this.reader.getString(child, 'id');
+        if (spot.id == null || !isString(spot.id)) {
+            return "unable to parse id value";
+        }
 
+        // Check for repeated id
+        var reply;
+        if ((reply = this.checkForRepeatedLightsId(spot.id)) != "OK")
+            return reply;
+
+        spot.enabled = this.reader.getFloat(child, 'enabled');
+        if (spot.enabled == null || !this.isBoolean(spot.enabled)) {
+            return "unable to parse enabled value";
+        }
+
+        spot.angle = this.reader.getFloat(child, 'angle');
+        if (spot.angle == null || isNaN(spot.angle)) {
+            return "unable to parse angle value";
+        }
+
+        spot.exponent = this.reader.getFloat(child, 'exponent');
+        if (spot.exponent == null || isNaN(spot.exponent)) {
+            return "unable to parse exponent value";
+        }
+
+        var grandchildren = child.children;
+
+        for (var j = 0; j < grandchildren.length; j++) {
+            this.parseLightsSpotChildren(grandchildren[j], spot);
+        }
+
+        this.light.spots.push(spot);
+        return 0;
     }
 
     /**
@@ -631,11 +695,11 @@ class MySceneGraph {
         for (var i = 0; i < children.length; i++) {
 
             if (children[i].nodeName == "omni") {
-                if(this.parseLightsOmni(children[i]) == 0);
-                    this.log("omni parsed")
+                if (this.parseLightsOmni(children[i]) == 0);
+                this.log("omni parsed")
             } else if (children[i].nodeName == "spot") {
-                if(this.parseLightsSpot(children[i]) == 0);
-                    this.log("spot parsed")
+                if (this.parseLightsSpot(children[i]) == 0);
+                this.log("spot parsed")
             } else
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
         }
