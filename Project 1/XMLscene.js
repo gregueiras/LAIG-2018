@@ -81,11 +81,10 @@ class XMLscene extends CGFscene {
    * As loading is asynchronous, this may be called already after the application has started the run loop
    */
   onGraphLoaded() {
-    this.camera.near = this.graph.near;
-    this.camera.far = this.graph.far;
 
-    //TODO: Change reference length according to parsed graph
-    //this.axis = new CGFaxis(this, this.graph.referenceLength);
+    this.loadCamera();
+
+    this.axis = new CGFaxis(this, this.graph.axis_length);
 
     // TODO: Change ambient and background details according to parsed graph
 
@@ -97,6 +96,26 @@ class XMLscene extends CGFscene {
     this.sceneInited = true;
   }
 
+  /**
+   *  Apply camera loaded from XML
+   */
+  loadCamera() {
+    let defaultCamera = this.graph.views.default;
+    let defOrtho = this.graph.views.orthos[defaultCamera];
+    let defPerspective = this.graph.views.perspectives[defaultCamera];
+    if (defOrtho != null) {
+      let cam = defOrtho;
+      //TODO: Load ortho camera
+    }
+    if (defPerspective != null) {
+      let cam = defPerspective;
+      let target = cam.to;
+      let from = cam.from;
+      //TODO: Fix FOV to respect angle provided
+      this.camera = new CGFcamera(0.4, cam.near, cam.far, vec3.fromValues(from.x, from.y, from.z), vec3.fromValues(target.x, target.y, target.z));
+      console.log("Camera applied!");
+    }
+  }
 
   /**
    * Displays the scene.
