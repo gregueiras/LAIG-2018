@@ -1,0 +1,97 @@
+<yas>
+
+ <scene root="root" axis_length="10.0" />
+
+ <views default="views" >
+	<perspective id="p1" near="10.0" far="0.5" angle="60">
+		 <from x="2.0" y="2.0" z="2.0" />
+		 <to x="3.0" y="1.0" z="4.0" />
+	</perspective>
+
+	<ortho id="o1" near="12.0" far="5.0"
+		 left="1.0" right="1.0" top="1.0" bottom="1.0" />
+ </views>
+
+ <ambient>
+ 	<ambient r="0.3" g="0.2" b="0.1" a="0.4" />
+ 	<background r="0.1" g="0.4" b="0.4" a="0.5" />
+ </ambient>
+
+ <lights>
+	 <omni id="om1" enabled="0" >
+		 <location x="1.0" y="1.0" z="2.0" w="1.0" />
+		 <ambient r="0.1" g="0.2" b="0.3" a="0.4" />
+		 <diffuse r="0.3" g="0.2" b="0.1" a="0.3" />
+		 <specular r="0.3" g="0.2" b="0.2" a="0.4" />
+ 	</omni>
+ 	<spot id="sp1" enabled="1" angle="30" exponent="0.2">
+		 <location x="4.0" y="2.0" z="1.0" w="5.0" />
+		 <target x="2.0" y="1.0" z="4.0" />
+		 <ambient r="0.1" g="0.3" b="0.4" a="0.4" />
+		 <diffuse r="0.3" g="0.2" b="0.5" a="0.8" />
+		 <specular r="0.4" g="0.7" b="0.8" a="1.0" />
+ 	</spot>
+ </lights>
+
+ <textures>
+	 <texture id="t1" file="ss" />
+ </textures>
+
+ <materials>
+ 	<material id="ss" shininess = "ff" >
+		 <emission r="ff" g="ff" b="ff" a="ff" />
+		 <ambient r="ff" g="ff" b="ff" a="ff" />
+		 <diffuse r="ff" g="ff" b="ff" a="ff" />
+		 <specular r="ff" g="ff" b="ff" a="ff" />
+	 </material>
+ </materials>
+
+ <transformations>
+	<transformation id="ss">
+		 <translate x="ff" y="ff" z="ff" />
+		 <rotate axis="cc" angle="ff" />
+		 <scale x="ff" y="ff" z="ff" />
+	 </transformation>
+ </transformations>
+
+
+ <primitives>
+ 	<primitive id="ss">
+ 		<rectangle x1="ff" y1="ff" x2="ff" y2="ff" />
+		<triangle x1="ff" y1="ff" z1="ff"
+			 x2="ff" y2="ff" z2="ff"
+			 x3="ff" y3="ff" z3="ff" />
+		<cylinder base="ff" top="ff" height="ff" slices="ii" stacks="ii" />
+		<sphere radius="ff" slices="ii" stacks="ii" />
+		<torus inner="ff" outer="ff" slices="ii" loops="ii" />
+    </primitive >
+ </primitives >
+
+
+ <components>
+ 	<component id="ss">
+ 		<transformation>
+ 			<transformationref id="ss" />
+ 			<translate x="ff" y="ff" z="ff" />
+			<rotate axis="cc" angle="ff" />
+			<scale x="ff" y="ff" z="ff" />
+		</transformation>
+
+		<materials>
+			 <material id="ss" />
+		</materials>
+
+
+		<texture id="ss" length_s="ff" length_t="ff" />
+			 <children>
+				 <componentref id="ss" />
+				 <primitiveref id="ss" />
+			 </children>
+	 </component>
+ </components>
+ 
+</yas>
+
+
+
+
