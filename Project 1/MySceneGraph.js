@@ -157,12 +157,12 @@ class MySceneGraph {
         // <materials>
         this.processTag(nodes[MATERIALS_INDEX], nodeNames, "materials", MATERIALS_INDEX);
 
+        // <transformations>
+        this.processTag(nodes[TRANSFORMATIONS_INDEX], nodeNames, "transformations", TRANSFORMATIONS_INDEX);
+
         /*
              // <ambient>
             this.processTag(nodes[AMBIENT_INDEX], nodeNames, "ambient", AMBIENT_INDEX);
-    
-            // <transformations>
-            this.processTag(nodes[TRANSFORMATIONS_INDEX], nodeNames, "transformations", TRANSFORMATIONS_INDEX);
     
             // <primitives>
             this.processTag(nodes[PRIMITIVES_INDEX], nodeNames, "primitives", PRIMITIVES_INDEX);
@@ -513,7 +513,7 @@ class MySceneGraph {
         }
     }
 
-    parseLightsChildrenCoordinates(param, child, forthColour) {
+    parseChildrenCoordinates(param, child, forthCoor) {
         param.x = this.reader.getFloat(child, 'x');
         if (param.x == null || isNaN(param.x)) {
             return "unable to parse location/x value";
@@ -529,7 +529,7 @@ class MySceneGraph {
             return "unable to parse location/z value";
         }
 
-        if (forthColour == 1) {
+        if (forthCoor == 1) {
             param.w = this.reader.getFloat(child, 'w');
             if (param.w == null || isNaN(param.w)) {
                 return "unable to parse location/w value";
@@ -540,7 +540,7 @@ class MySceneGraph {
     parseLightsOmniChildren(child, omni) {
         switch (child.nodeName) {
             case "location":
-                this.parseLightsChildrenCoordinates(omni.location, child, 1);
+                this.parseChildrenCoordinates(omni.location, child, 1);
                 break;
             case "ambient":
                 this.parseChildrenColours(omni.ambient, child);
@@ -598,10 +598,10 @@ class MySceneGraph {
     parseLightsSpotChildren(child, spot) {
         switch (child.nodeName) {
             case "location":
-                this.parseLightsChildrenCoordinates(spot.location, child, 1);
+                this.parseChildrenCoordinates(spot.location, child, 1);
                 break;
             case "target":
-                this.parseLightsChildrenCoordinates(spot.target, child, 0);
+                this.parseChildrenCoordinates(spot.target, child, 0);
                 break;
             case "ambient":
                 this.parseChildrenColours(spot.ambient, child);
@@ -809,6 +809,107 @@ class MySceneGraph {
             this.parseMaterial(children[i]);
         }
         this.log("Parsed materials");
+        return null;
+
+    }
+
+    isAxis(axis) {
+
+        switch (axis) {
+            case "x":
+            case "X":
+            case "y":
+            case "Y":
+            case "z":
+            case "Z":
+                return true;
+                break;
+            default:
+                return false;
+                break;
+        }
+    }
+
+    parseChildrenRotation(param, child) {
+        param.axis = this.reader.getString(child, 'axis');
+        if (param.axis == null || !this.isAxis(param.axis)) {
+            return "unable to parse axis value";
+        }
+
+        param.angle = this.reader.getFloat(child, 'angle');
+        if (param.angle == null || isNaN(param.angle)) {
+            return "unable to parse angle value";
+        }
+    }
+
+    parseTransformationsTransformationChildren(child, material) {
+        switch (child.nodeName) {
+            case "translate":
+            case "scale":
+                var tmpCoor = { x: null, y: null, z: null}
+                this.parseChildrenCoordinates(tmpCoor, child, 0);
+
+                if (child.nodeName == "translate") {
+                    material.translate.push(tmpCoor);
+                } else {
+                    material.scale.push(tmpCoor);
+                }
+                break;
+            case "rotate":
+                var tmpRot = { axis: null, angle: null }
+                this.parseChildrenRotation(tmpRot, child);
+                material.rotate.push(tmpRot);
+                break;
+            default:
+                this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
+                break;
+        }
+    }
+
+    parseTransformation(child) {
+        var transformation = {
+            id: null,
+            translate: [],
+            rotate: [],
+            scale: []
+        }
+
+        transformation.id = this.reader.getString(child, 'id');
+        if (transformation.id == null || !isString(transformation.id)) {
+            return "unable to parse id value";
+        }
+
+        // Check for repeated id
+        var reply;
+        if ((reply = this.checkForRepeatedId(transformation.id, this.transformations)) != "OK")
+            return reply;
+
+        var grandchildren = child.children;
+
+        for (var j = 0; j < grandchildren.length; j++) {
+            this.parseTransformationsTransformationChildren(grandchildren[j], transformation);
+        }
+
+        this.transformations.push(transformation);
+        return 0;
+    }
+
+    /**
+     * Parses the <TRANSFORMATIONS> node.
+     * @param {transformations block element} transformationsNode
+     */
+    parseTransformations(transformationsNode) {
+        var children = transformationsNode.children;
+
+        this.transformations = [];
+
+        //Any number of transformations
+        if (children.length < 1)
+            return "no transformations available"
+        for (var i = 0; i < children.length; i++) {
+            this.parseTransformation(children[i]);
+        }
+        this.log("Parsed transformations");
         return null;
 
     }

@@ -66,9 +66,10 @@
         <transformation id="ss">
             <!-- instrucoes a usar sem limite nem ordem -->
             <!-- deve existir pelo menos uma transformacao -->
-            <translate x="ff" y="ff" z="ff" />
-            <rotate axis="cc" angle="ff" />
-            <scale x="ff" y="ff" z="ff" />
+            <translate x="39" y="40" z="50" />
+            <rotate axis="x" angle="51" />
+            <scale x="52" y="53" z="54" />
+            <scale x="55" y="56" z="57" />
         </transformation>
     </transformations>
     <primitives>
