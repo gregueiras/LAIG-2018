@@ -485,12 +485,6 @@ class MySceneGraph {
         return "OK";
     }
 
-    isBoolean(value) {
-        if (isNaN(value) || value < 0 || value > 1)
-            return false;
-        return true;
-    }
-
     parseChildrenColours(param, child) {
         param.r = this.reader.getFloat(child, 'r');
         if (param.r == null || isNaN(param.r)) {
@@ -581,7 +575,7 @@ class MySceneGraph {
             return reply;
 
         omni.enabled = this.reader.getFloat(child, 'enabled');
-        if (omni.enabled == null || !this.isBoolean(omni.enabled)) {
+        if (omni.enabled == null || !isBoolean(omni.enabled)) {
             return "unable to parse enabled value";
         }
 
@@ -645,7 +639,7 @@ class MySceneGraph {
             return reply;
 
         spot.enabled = this.reader.getFloat(child, 'enabled');
-        if (spot.enabled == null || !this.isBoolean(spot.enabled)) {
+        if (spot.enabled == null || !isBoolean(spot.enabled)) {
             return "unable to parse enabled value";
         }
 
@@ -813,26 +807,9 @@ class MySceneGraph {
 
     }
 
-    isAxis(axis) {
-
-        switch (axis) {
-            case "x":
-            case "X":
-            case "y":
-            case "Y":
-            case "z":
-            case "Z":
-                return true;
-                break;
-            default:
-                return false;
-                break;
-        }
-    }
-
     parseChildrenRotation(param, child) {
         param.axis = this.reader.getString(child, 'axis');
-        if (param.axis == null || !this.isAxis(param.axis)) {
+        if (param.axis == null || !isAxis(param.axis)) {
             return "unable to parse axis value";
         }
 
@@ -958,6 +935,29 @@ class MySceneGraph {
         //TODO: Render loop starting at root of graph
     }
 
+}
+
+function isBoolean(value) {
+    if (isNaN(value) || value < 0 || value > 1)
+        return false;
+    return true;
+}
+
+function isAxis(axis) {
+
+    switch (axis) {
+        case "x":
+        case "X":
+        case "y":
+        case "Y":
+        case "z":
+        case "Z":
+            return true;
+            break;
+        default:
+            return false;
+            break;
+    }
 }
 
 /**
