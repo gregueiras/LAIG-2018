@@ -52,11 +52,11 @@
     <materials>
         <!-- Deve existir um ou mais blocos "material" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <material id="ss" shininess = "ff">
-            <emission r="ff" g="ff" b="ff" a="ff" />
-            <ambient r="ff" g="ff" b="ff" a="ff" />
-            <diffuse r="ff" g="ff" b="ff" a="ff" />
-            <specular r="ff" g="ff" b="ff" a="ff" />
+        <material id="ss" shininess = "22">
+            <emission r="23" g="24" b="25" a="26" />
+            <ambient r="27" g="28" b="29" a="30" />
+            <diffuse r="31" g="32" b="33" a="34" />
+            <specular r="35" g="36" b="37" a="38" />
         </material>
     </materials>
     <transformations>

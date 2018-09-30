@@ -154,12 +154,12 @@ class MySceneGraph {
         // <textures>
         this.processTag(nodes[TEXTURES_INDEX], nodeNames, "textures", TEXTURES_INDEX);
 
+        // <materials>
+        this.processTag(nodes[MATERIALS_INDEX], nodeNames, "materials", MATERIALS_INDEX);
+
         /*
              // <ambient>
             this.processTag(nodes[AMBIENT_INDEX], nodeNames, "ambient", AMBIENT_INDEX);
-    
-            // <materials>
-            this.processTag(nodes[MATERIALS_INDEX], nodeNames, "materials", MATERIALS_INDEX);
     
             // <transformations>
             this.processTag(nodes[TRANSFORMATIONS_INDEX], nodeNames, "transformations", TRANSFORMATIONS_INDEX);
@@ -219,19 +219,6 @@ class MySceneGraph {
         return null;
     }
 
-    checkForRepeatedViewsId(id) {
-        for (var k = 0; k < this.views.perspectives.length; ++k) {
-            if (id == this.views.perspectives[k].id)
-                return "repeated id value";
-        }
-        for (var k = 0; k < this.views.orthos.length; ++k) {
-            if (id == this.views.orthos[k].id)
-                return "repeated id value";
-        }
-
-        return "OK";
-    }
-
     parseViewOrtho(child) {
         var ortho = {
             id: null,
@@ -250,7 +237,10 @@ class MySceneGraph {
 
         // Check for repeated id
         var reply;
-        if ((reply = this.checkForRepeatedViewsId(ortho.id)) != "OK")
+        if ((reply = this.checkForRepeatedId(ortho.id, this.views.perspectives)) != "OK")
+            return reply;
+
+        if ((reply = this.checkForRepeatedId(ortho.id, this.views.orthos)) != "OK")
             return reply;
 
         ortho.near = this.reader.getFloat(child, 'near');
@@ -339,7 +329,10 @@ class MySceneGraph {
 
         // Check for repeated id
         var reply;
-        if ((reply = this.checkForRepeatedViewsId(perspective.id)) != "OK")
+        if ((reply = this.checkForRepeatedId(perspective.id, this.views.perspectives)) != "OK")
+            return reply;
+
+        if ((reply = this.checkForRepeatedId(perspective.id, this.views.orthos)) != "OK")
             return reply;
 
         perspective.near = this.reader.getFloat(child, 'near');
@@ -484,16 +477,11 @@ class MySceneGraph {
 
     }
 
-    checkForRepeatedLightsId(id) {
-        for (var k = 0; k < this.light.omnis.length; ++k) {
-            if (id == this.light.omnis[k].id)
+    checkForRepeatedId(id, arr) {
+        for (var k = 0; k < arr.length; ++k) {
+            if (id == arr[k].id)
                 return "repeated id value";
         }
-        for (var k = 0; k < this.light.spots.length; ++k) {
-            if (id == this.light.spots[k].id)
-                return "repeated id value";
-        }
-
         return "OK";
     }
 
@@ -503,7 +491,7 @@ class MySceneGraph {
         return true;
     }
 
-    parseLightsChildrenColours(param, child) {
+    parseChildrenColours(param, child) {
         param.r = this.reader.getFloat(child, 'r');
         if (param.r == null || isNaN(param.r)) {
             return "unable to parse r value";
@@ -555,16 +543,16 @@ class MySceneGraph {
                 this.parseLightsChildrenCoordinates(omni.location, child, 1);
                 break;
             case "ambient":
-                this.parseLightsChildrenColours(omni.ambient, child);
+                this.parseChildrenColours(omni.ambient, child);
                 break;
             case "diffuse":
-                this.parseLightsChildrenColours(omni.diffuse, child);
+                this.parseChildrenColours(omni.diffuse, child);
                 break;
             case "specular":
-                this.parseLightsChildrenColours(omni.specular, child);
+                this.parseChildrenColours(omni.specular, child);
                 break;
             default:
-                this.onXMLMinorError("unknown tag <" + child.nodeName + "/" + child.nodeName + ">");
+                this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
                 break;
         }
     }
@@ -586,7 +574,10 @@ class MySceneGraph {
 
         // Check for repeated id
         var reply;
-        if ((reply = this.checkForRepeatedLightsId(omni.id)) != "OK")
+        if ((reply = this.checkForRepeatedId(omni.id, this.light.omnis)) != "OK")
+            return reply;
+
+        if ((reply = this.checkForRepeatedId(omni.id, this.light.spots)) != "OK")
             return reply;
 
         omni.enabled = this.reader.getFloat(child, 'enabled');
@@ -613,13 +604,13 @@ class MySceneGraph {
                 this.parseLightsChildrenCoordinates(spot.target, child, 0);
                 break;
             case "ambient":
-                this.parseLightsChildrenColours(spot.ambient, child);
+                this.parseChildrenColours(spot.ambient, child);
                 break;
             case "diffuse":
-                this.parseLightsChildrenColours(spot.diffuse, child);
+                this.parseChildrenColours(spot.diffuse, child);
                 break;
             case "specular":
-                this.parseLightsChildrenColours(spot.specular, child);
+                this.parseChildrenColours(spot.specular, child);
                 break;
             default:
                 this.onXMLMinorError("unknown tag <" + child.nodeName + "/" + child.nodeName + ">");
@@ -647,7 +638,10 @@ class MySceneGraph {
 
         // Check for repeated id
         var reply;
-        if ((reply = this.checkForRepeatedLightsId(spot.id)) != "OK")
+        if ((reply = this.checkForRepeatedId(spot.id, this.light.omnis)) != "OK")
+            return reply;
+
+        if ((reply = this.checkForRepeatedId(spot.id, this.light.spots)) != "OK")
             return reply;
 
         spot.enabled = this.reader.getFloat(child, 'enabled');
@@ -706,14 +700,6 @@ class MySceneGraph {
         return null;
     }
 
-    checkForRepeatedTextureId(id) {
-        for (let j = 0; j < this.textures.length; j++) {
-            if(this.textures[i].id == id)
-                return "repeated id value";
-        }
-        return "OK";
-    }
-
     parseTexturesTexture(child) {
         var texture = {
             id: null,
@@ -727,7 +713,7 @@ class MySceneGraph {
 
         //Check for repeated Id
         var reply;
-        if ((reply = this.checkForRepeatedTextureId(texture.id)) != "OK")
+        if ((reply = this.checkForRepeatedId(texture.id, this.textures)) != "OK")
             return reply;
 
         texture.file = this.reader.getString(child, 'file');
@@ -752,12 +738,76 @@ class MySceneGraph {
         return null;
     }
 
+    parseMaterialsMaterialChildren(child, material) {
+        switch (child.nodeName) {
+            case "emission":
+                this.parseChildrenColours(material.emission, child);
+                break;
+            case "ambient":
+                this.parseChildrenColours(material.ambient, child);
+                break;
+            case "diffuse":
+                this.parseChildrenColours(material.diffuse, child);
+                break;
+            case "specular":
+                this.parseChildrenColours(material.specular, child);
+                break;
+            default:
+                this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
+                break;
+        }
+    }
+
+    parseMaterial(child) {
+        var material = {
+            id: null,
+            shininess: null,
+            emission: { r: null, g: null, b: null, a: null },
+            ambient: { r: null, g: null, b: null, a: null },
+            diffuse: { r: null, g: null, b: null, a: null },
+            specular: { r: null, g: null, b: null, a: null }
+        }
+
+        material.id = this.reader.getString(child, 'id');
+        if (material.id == null || !isString(material.id)) {
+            return "unable to parse id value";
+        }
+
+        // Check for repeated id
+        var reply;
+        if ((reply = this.checkForRepeatedId(material.id, this.materials)) != "OK")
+            return reply;
+
+        material.shininess = this.reader.getFloat(child, 'shininess');
+        if (material.shininess == null || isNaN(material.shininess)) {
+            return "unable to parse shininess value";
+        }
+
+        var grandchildren = child.children;
+
+        for (var j = 0; j < grandchildren.length; j++) {
+            this.parseMaterialsMaterialChildren(grandchildren[j], material);
+        }
+
+        this.materials.push(material);
+        return 0;
+    }
+
     /**
      * Parses the <MATERIALS> node.
      * @param {materials block element} materialsNode
      */
     parseMaterials(materialsNode) {
-        // TODO: Parse block
+        var children = materialsNode.children;
+
+        this.materials = [];
+
+        //Any number of Materials
+        if (children.length < 1)
+            return "no materials available"
+        for (var i = 0; i < children.length; i++) {
+            this.parseMaterial(children[i]);
+        }
         this.log("Parsed materials");
         return null;
 
