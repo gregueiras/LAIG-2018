@@ -167,9 +167,11 @@ class MySceneGraph {
             // <primitives>
             this.processTag(nodes[PRIMITIVES_INDEX], nodeNames, "primitives", PRIMITIVES_INDEX);
     
-            // <components>
-            this.processTag(nodes[COMPONENTS_INDEX], nodeNames, "components", COMPONENTS_INDEX);
+            
         */
+
+    // <components>
+    this.processTag(nodes[COMPONENTS_INDEX], nodeNames, "components", COMPONENTS_INDEX);
   }
 
   /**
@@ -1014,6 +1016,211 @@ class MySceneGraph {
       this.parseTransformation(children[i]);
     }
     this.log("Parsed transformations");
+    return null;
+
+  }
+
+  parseChildrenTransformation(child, component) {
+    let children = child.children;
+
+    for (let i = 0; i < children.length; i++) {
+      switch (children[i].nodeName) {
+        case "transformationref":
+          component.transformation.ref = this.reader.getString(children[i], 'id');
+          if (component.transformation.ref == null || !isString(component.transformation.ref)) {
+            return "unable to parse id value";
+          }
+          return;
+        case "translate":
+        case "scale":
+          var tmpCoor = {
+            x: null,
+            y: null,
+            z: null
+          }
+          this.parseChildrenCoordinates(tmpCoor, children[i], 0);
+
+          if (child.nodeName == "translate") {
+            component.transformation.translate.push(tmpCoor);
+          } else {
+            component.transformation.scale.push(tmpCoor);
+          }
+          break;
+        case "rotate":
+          var tmpRot = {
+            axis: null,
+            angle: null
+          }
+          this.parseChildrenRotation(tmpRot, children[i]);
+          component.transformation.rotate.push(tmpRot);
+          break;
+      }
+    }
+  }
+
+  parseChildrenMaterials(child, component) {
+    let children = child.children;
+
+    for (let i = 0; i < children.length; i++) {
+      var id;
+      id = this.reader.getString(children[i], 'id');
+      if (id == null || !isString(id)) {
+        return "unable to parse id value";
+      }
+      component.materials.push(id);
+    }
+
+  }
+
+  parseChildrenTexture(child, component) {
+    var id;
+    id = this.reader.getString(child, 'id');
+    if (id == null || !isString(id)) {
+      return "unable to parse id value";
+    }
+
+    var ls;
+    ls = this.reader.getFloat(child, 'length_s');
+    if (ls == null || isNaN(ls)) {
+      return "unable to parse length_s value";
+    }
+
+    var lt;
+    lt = this.reader.getFloat(child, 'length_t');
+    if (lt == null || isNaN(lt)) {
+      return "unable to parse length_t value";
+    }
+    component.texture.id = id;
+    component.texture.length_s = ls;
+    component.texture.length_t = lt;
+  }
+
+  parseChildrenChildren(child, component) {
+    let children = child.children;
+
+    for (let i = 0; i < children.length; i++) {
+      switch (children[i].nodeName) {
+        case "componentref":
+          var id;
+          id = this.reader.getString(children[i], 'id');
+          if (id == null || !isString(id)) {
+            return "unable to parse id value";
+          }
+          component.children.componentref.push(id);
+          break;
+        case "primitiveref":
+          var id;
+          id = this.reader.getString(children[i], 'id');
+          if (id == null || !isString(id)) {
+            return "unable to parse id value";
+          }
+          component.children.primitiveref.push(id);
+          break;
+      }
+    }
+  }
+
+  parseComponentsComponentChildren(child, component) {
+    switch (child.nodeName) {
+      case "transformation":
+        this.parseChildrenTransformation(child, component);
+        break;
+      case "materials":
+        this.parseChildrenMaterials(child, component);
+        break;
+      case "texture":
+        this.parseChildrenTexture(child, component);
+        break;
+      case "children":
+        this.parseChildrenChildren(child, component);
+        break;
+      default:
+        this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
+        break;
+    }
+  }
+
+  componentErrCheck(component) {
+    if (component.transformation.ref == null &&
+      component.transformation.translate.length +
+      component.transformation.rotate.length +
+      component.transformation.scale.length == 0)
+      return "Invalid number of transformations";
+
+    if (component.materials.length == 0)
+      return "Invalid number of materials";
+
+    if (component.texture.id == null)
+      return "Invalid texture";
+
+    if (component.children.componentref.length +
+      component.children.primitiveref.length == 0)
+      return "Invalid number of children";
+
+    return "OK";
+  }
+
+  parseComponent(child) {
+    var component = {
+      id: null,
+      transformation: { //if ref == null, is transformation, otherwise, is a reference
+        ref: null,
+        translate: [],
+        rotate: [],
+        scale: []
+      },
+      materials: [],
+      texture: {
+        id: null,
+        length_s: null,
+        length_t: null
+      },
+      children: {
+        componentref: [],
+        primitiveref: []
+      }
+    }
+
+    component.id = this.reader.getString(child, 'id');
+    if (component.id == null || !isString(component.id)) {
+      return "unable to parse id value";
+    }
+
+    // Check for repeated id
+    var reply;
+    if ((reply = this.checkForRepeatedId(component.id, this.components)) != "OK")
+      return reply;
+
+    var grandchildren = child.children;
+
+    for (var j = 0; j < grandchildren.length; j++) {
+      this.parseComponentsComponentChildren(grandchildren[j], component);
+    }
+
+    var reply;
+    if ((reply = this.componentErrCheck(component)) != "OK")
+      return reply;
+
+    this.components.push(component);
+    return 0;
+  }
+
+  /**
+   * Parses the <COMPONENTS> node.
+   * @param {components block element} componentsNode
+   */
+  parseComponents(componentsNode) {
+    var children = componentsNode.children;
+
+    this.components = [];
+
+    //Any number of components
+    if (children.length < 1)
+      return "no components available"
+    for (var i = 0; i < children.length; i++) {
+      this.parseComponent(children[i]);
+    }
+    this.log("Parsed components");
     return null;
 
   }
