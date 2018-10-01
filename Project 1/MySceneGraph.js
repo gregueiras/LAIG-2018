@@ -789,11 +789,11 @@ class MySceneGraph {
     for (var i = 0; i < children.length; i++) {
 
       if (children[i].nodeName == "omni") {
-        if (this.parseLightsOmni(children[i]) == 0);
-        this.log("omni parsed")
+        if (this.parseLightsOmni(children[i]) == 0)
+          this.log("omni parsed");
       } else if (children[i].nodeName == "spot") {
-        if (this.parseLightsSpot(children[i]) == 0);
-        this.log("spot parsed")
+        if (this.parseLightsSpot(children[i]) == 0)
+          this.log("spot parsed");
       } else
         this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
     }
