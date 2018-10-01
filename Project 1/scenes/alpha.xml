@@ -17,11 +17,17 @@
     <lights>
         <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <omni id="l1" enabled="1">
-            <location x="10" y="0" z="5" w="0" />
-            <ambient r="25" g="0" b="0" a="0" />
-            <diffuse r="0" g="0" b="0" a="0" />
-            <specular r="0" g="0" b="0" a="0" />
+        <omni id="l1" enabled="0">
+            <location x="7" y="3" z="2" w="0" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="255" g="255" b="255" a="1" />
+            <specular r="255" g="255" b="255" a="1" />
+        </omni>
+        <omni id="l2" enabled="0">
+            <location x="-7" y="3" z="2" w="0" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="255" g="255" b="255" a="1" />
+            <specular r="255" g="255" b="255" a="1" />
         </omni>
     </lights>
     <textures>

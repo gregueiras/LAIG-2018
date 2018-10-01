@@ -49,33 +49,32 @@ class XMLscene extends CGFscene {
    * Initializes the scene lights with the values read from the XML file.
    */
   initLights() {
-    var i = 0;
-    // Lights index.
+    for (let i = 0;
+      (i < this.graph.light.omnis.length) && (i < 8); i++) {
+      const light = this.graph.light.omnis[i];
+      this.lightValues[light.id] = light;
 
-    // Reads the lights from the scene graph.
-    for (var key in this.graph.lights) {
-      if (i >= 8)
-        break; // Only eight lights allowed by WebGL.
+      let pos = light.location;
+      let amb = light.ambient;
+      let dif = light.diffuse;
+      let spe = light.specular;
+      let l = this.lights[i];
+      l.setPosition(pos.x, pos.y, pos.z, 1);
+      l.setVisible(true);
+      l.setAmbient(amb.r, amb.g, amb.b, amb.a);
+      l.setDiffuse(dif.r, dif.g, dif.b, dif.a);
+      l.setSpecular(spe.r, spe.g, spe.b, spe.a);
+      l.setConstantAttenuation(0);
+      l.setLinearAttenuation(1);
+      l.setQuadraticAttenuation(0);
 
-      if (this.graph.lights.hasOwnProperty(key)) {
-        var light = this.graph.lights[key];
-
-        //lights are predefined in cgfscene
-        this.lights[i].setPosition(light[1][0], light[1][1], light[1][2], light[1][3]);
-        this.lights[i].setAmbient(light[2][0], light[2][1], light[2][2], light[2][3]);
-        this.lights[i].setDiffuse(light[3][0], light[3][1], light[3][2], light[3][3]);
-        this.lights[i].setSpecular(light[4][0], light[4][1], light[4][2], light[4][3]);
-
-        this.lights[i].setVisible(true);
-        if (light[0])
-          this.lights[i].enable();
-        else
-          this.lights[i].disable();
-
-        this.lights[i].update();
-
-        i++;
+      //TODO: Fix disable light. Light is always enabled
+      if (l.enabled) {
+        l.enable();
+      } else {
+        l.disable();
       }
+
     }
   }
 
@@ -94,7 +93,7 @@ class XMLscene extends CGFscene {
     this.initLights();
 
     // Adds lights group.
-    this.interface.addLightsGroup(this.graph.lights);
+    this.interface.addLightsGroup(this.graph.light);
 
     this.sceneInited = true;
   }

@@ -1,6 +1,6 @@
 /**
-* MyInterface class, creating a GUI interface.
-*/
+ * MyInterface class, creating a GUI interface.
+ */
 class MyInterface extends CGFinterface {
     /**
      * @constructor
@@ -37,11 +37,25 @@ class MyInterface extends CGFinterface {
         // add two check boxes to the group. The identifiers must be members variables of the scene initialized in scene.init as boolean
         // e.g. this.option1=true; this.option2=false;
 
-        for (var key in lights) {
-            if (lights.hasOwnProperty(key)) {
-                this.scene.lightValues[key] = lights[key][0];
-                group.add(this.scene.lightValues, key);
-            }
+        let omniGroup = group.addFolder("Omnis");
+        omniGroup.open();
+
+        for (let i = 0; i < lights.omnis.length; i++) {
+            const light = lights.omnis[i];
+            this.scene.lightValues[light.id] = light;
+            //TODO: Add to GUI
+            //omniGroup.add(this.scene.lightValues[light.id], light.enabled)
+
         }
+
+
+        /*
+                for (var key in lights) {
+                    if (lights.hasOwnProperty(key)) {
+                        this.scene.lightValues[key] = lights[key][0];
+                        group.add(this.scene.lightValues, key);
+                    }
+                }
+                */
     }
 }
