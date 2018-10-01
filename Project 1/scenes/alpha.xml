@@ -11,7 +11,7 @@
         <ortho id="view2" near="0.1" far="1000" left="-15" right="15" top="15" bottom="-15" />
     </views>
     <ambient>
-        <ambient r="1" g="0" b="0" a="1" />
+        <ambient r="0" g="0" b="0" a="1" />
         <background r="0.53" g="0.81" b="0.92" a="1" />
     </ambient>
     <lights>

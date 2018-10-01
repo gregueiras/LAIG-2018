@@ -6,12 +6,12 @@ var DEGREE_TO_RAD = Math.PI / 180;
 class XMLscene extends CGFscene {
   /**
    * @constructor
-   * @param {MyInterface} myinterface 
+   * @param {MyInterface} myInterface 
    */
-  constructor(myinterface) {
+  constructor(myInterface) {
     super();
 
-    this.interface = myinterface;
+    this.interface = myInterface;
     this.lightValues = {};
   }
 
@@ -34,6 +34,9 @@ class XMLscene extends CGFscene {
     this.gl.depthFunc(this.gl.LEQUAL);
 
     this.axis = new CGFaxis(this);
+
+    this.cube = new MyUnitCubeQuad(this);
+
   }
 
   /**
@@ -86,7 +89,7 @@ class XMLscene extends CGFscene {
 
     this.axis = new CGFaxis(this, this.graph.axis_length);
 
-    // TODO: Change ambient and background details according to parsed graph
+    this.loadAmbient();
     this.loadBackground();
     this.initLights();
 
@@ -128,6 +131,17 @@ class XMLscene extends CGFscene {
       this.gl.clearColor(back.r, back.g, back.b, back.a);
     }
   }
+
+  /**
+   * Apply ambient light loaded from XML
+   */
+  loadAmbient() {
+    let amb = this.graph.ambient;
+    if (amb != null) {
+      this.setGlobalAmbientLight(amb.r, amb.g, amb.b, amb.a);
+    }
+  }
+
   /**
    * Displays the scene.
    */
@@ -150,7 +164,7 @@ class XMLscene extends CGFscene {
     if (this.sceneInited) {
       // Draw axis
       this.axis.display();
-
+      this.cube.display();
       var i = 0;
       for (var key in this.lightValues) {
         if (this.lightValues.hasOwnProperty(key)) {
