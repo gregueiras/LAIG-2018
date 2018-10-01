@@ -415,11 +415,11 @@ class MySceneGraph {
     for (var i = 0; i < children.length; i++) {
 
       if (children[i].nodeName == "perspective") {
-        if (this.parseViewPrespective(children[i]) == 0);
-        this.log("perspective parsed")
+        if (this.parseViewPrespective(children[i]) == 0)
+          this.log("perspective parsed");
       } else if (children[i].nodeName == "ortho") {
-        if (this.parseViewOrtho(children[i]) == 0);
-        this.log("ortho parsed")
+        if (this.parseViewOrtho(children[i]) == 0)
+          this.log("ortho parsed");
       } else
         this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
     }
