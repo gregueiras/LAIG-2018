@@ -87,7 +87,7 @@ class XMLscene extends CGFscene {
     this.axis = new CGFaxis(this, this.graph.axis_length);
 
     // TODO: Change ambient and background details according to parsed graph
-
+    this.loadBackground();
     this.initLights();
 
     // Adds lights group.
@@ -112,11 +112,22 @@ class XMLscene extends CGFscene {
       let target = cam.to;
       let from = cam.from;
       //TODO: Fix FOV to respect angle provided
-      this.camera = new CGFcamera(0.4, cam.near, cam.far, vec3.fromValues(from.x, from.y, from.z), vec3.fromValues(target.x, target.y, target.z));
+      let newC = new CGFcamera(0.4, cam.near, cam.far, vec3.fromValues(from.x, from.y, from.z), vec3.fromValues(target.x, target.y, target.z));
+      this.camera = newC;
+      this.interface.setActiveCamera(this.camera);
       console.log("Camera applied!");
     }
   }
 
+  /**
+   * Apply background color loaded from XML
+   */
+  loadBackground() {
+    let back = this.graph.background;
+    if (back != null) {
+      this.gl.clearColor(back.r, back.g, back.b, back.a);
+    }
+  }
   /**
    * Displays the scene.
    */

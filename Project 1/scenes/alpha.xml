@@ -1,10 +1,10 @@
 <yas>
 
-    <scene root="comp1" axis_length="50" />
+    <scene root="comp1" axis_length="3" />
     <views default="view1">
         <!-- tem de existir, pelo menos, uma vista de -->
         <!-- entre as seguintes (perspective ou ortho) -->
-        <perspective id="view1" near="0.1" far="1000" angle="60">
+        <perspective id="view1" near="0.1" far="500" angle="60">
             <from x="15" y="15" z="15" />
             <to x="0" y="0" z="0" />
         </perspective>

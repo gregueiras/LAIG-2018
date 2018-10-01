@@ -160,10 +160,10 @@ class MySceneGraph {
     // <transformations>
     this.processTag(nodes[TRANSFORMATIONS_INDEX], nodeNames, "transformations", TRANSFORMATIONS_INDEX);
 
+
+    // <ambient>
+    this.processTag(nodes[AMBIENT_INDEX], nodeNames, "ambient", AMBIENT_INDEX);
     /*
-             // <ambient>
-            this.processTag(nodes[AMBIENT_INDEX], nodeNames, "ambient", AMBIENT_INDEX);
-    
             // <primitives>
             this.processTag(nodes[PRIMITIVES_INDEX], nodeNames, "primitives", PRIMITIVES_INDEX);
     
@@ -437,15 +437,17 @@ class MySceneGraph {
 
     var nodeNames = [];
 
-    for (var i = 0; i < children.length; i++)
+    for (let child of children)
       nodeNames.push(child.nodeName);
 
     // Ambient light values
     // (default values)
-    this.ambient.r = 0.2;
-    this.ambient.g = 0.2;
-    this.ambient.b = 0.2;
-    this.ambient.a = 0.2;
+    this.ambient = {
+      r: 0,
+      g: 0,
+      b: 0,
+      a: 1
+    };
 
     var indexAmbient = nodeNames.indexOf("ambient");
     if (indexAmbient == null) {
@@ -457,16 +459,16 @@ class MySceneGraph {
       this.ambient.a = this.reader.getFloat(children[indexAmbient], 'a');
 
       if (!(this.ambient.r != null && !isNaN(this.ambient.r))) {
-        this.ambient.r = 0.2;
+        this.ambient.r = 0;
         this.onXMLMinorError(`unable to parse value for ambient red component; assuming 'r=${this.ambient.r}`);
       } else if (!(this.ambient.g != null && !isNaN(this.ambient.g))) {
-        this.ambient.g = 0.2;
+        this.ambient.g = 0;
         this.onXMLMinorError(`unable to parse value for ambient green component; assuming 'r=${this.ambient.g}`);
       } else if (!(this.ambient.b != null && !isNaN(this.ambient.b))) {
-        this.ambient.b = 0.2;
+        this.ambient.b = 0;
         this.onXMLMinorError(`unable to parse value for ambient blue component; assuming 'r=${this.ambient.b}`);
       } else if (!(this.ambient.a != null && !isNaN(this.ambient.a))) {
-        this.ambient.a = 0.2;
+        this.ambient.a = 1;
         this.onXMLMinorError(`unable to parse value for ambient alpha component; assuming 'r=${this.ambient.a}`);
       }
 
@@ -483,7 +485,52 @@ class MySceneGraph {
         return "alpha ambient component must be between 0 and 1";
       }
     }
+    // Background color values
+    // (default values)
+    this.background = {
+      r: 0,
+      g: 0,
+      b: 0,
+      a: 1
+    };
 
+
+    var indexBackground = nodeNames.indexOf("background");
+    if (indexBackground == null) {
+      this.onXMLMinorError(`background light values missing; assuming RGBA(${this.background.r}, ${this.background.g}, ${this.background.b}, ${this.background.a})`);
+    } else {
+      this.background.r = this.reader.getFloat(children[indexBackground], 'r');
+      this.background.g = this.reader.getFloat(children[indexBackground], 'g');
+      this.background.b = this.reader.getFloat(children[indexBackground], 'b');
+      this.background.a = this.reader.getFloat(children[indexBackground], 'a');
+
+      if (!(this.background.r != null && !isNaN(this.background.r))) {
+        this.background.r = 0;
+        this.onXMLMinorError(`unable to parse value for background red component; assuming 'r=${this.background.r}`);
+      } else if (!(this.background.g != null && !isNaN(this.background.g))) {
+        this.background.g = 0;
+        this.onXMLMinorError(`unable to parse value for background green component; assuming 'r=${this.background.g}`);
+      } else if (!(this.background.b != null && !isNaN(this.background.b))) {
+        this.background.b = 0;
+        this.onXMLMinorError(`unable to parse value for background blue component; assuming 'r=${this.background.b}`);
+      } else if (!(this.background.a != null && !isNaN(this.background.a))) {
+        this.background.a = 1;
+        this.onXMLMinorError(`unable to parse value for background alpha component; assuming 'r=${this.background.a}`);
+      }
+
+      if (!isBetween(this.background.r, 0, 1)) {
+        return "red background component must be between 0 and 1";
+      }
+      if (!isBetween(this.background.g, 0, 1)) {
+        return "green background component must be between 0 and 1";
+      }
+      if (!isBetween(this.background.b, 0, 1)) {
+        return "blue background component must be between 0 and 1";
+      }
+      if (!isBetween(this.background.a, 0, 1)) {
+        return "alpha background component must be between 0 and 1";
+      }
+    }
   }
 
   checkForRepeatedId(id, arr) {
