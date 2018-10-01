@@ -461,13 +461,16 @@ class MySceneGraph {
       if (!(this.ambient.r != null && !isNaN(this.ambient.r))) {
         this.ambient.r = 0;
         this.onXMLMinorError(`unable to parse value for ambient red component; assuming 'r=${this.ambient.r}`);
-      } else if (!(this.ambient.g != null && !isNaN(this.ambient.g))) {
+      }
+      if (!(this.ambient.g != null && !isNaN(this.ambient.g))) {
         this.ambient.g = 0;
         this.onXMLMinorError(`unable to parse value for ambient green component; assuming 'r=${this.ambient.g}`);
-      } else if (!(this.ambient.b != null && !isNaN(this.ambient.b))) {
+      }
+      if (!(this.ambient.b != null && !isNaN(this.ambient.b))) {
         this.ambient.b = 0;
         this.onXMLMinorError(`unable to parse value for ambient blue component; assuming 'r=${this.ambient.b}`);
-      } else if (!(this.ambient.a != null && !isNaN(this.ambient.a))) {
+      }
+      if (!(this.ambient.a != null && !isNaN(this.ambient.a))) {
         this.ambient.a = 1;
         this.onXMLMinorError(`unable to parse value for ambient alpha component; assuming 'r=${this.ambient.a}`);
       }
@@ -507,13 +510,16 @@ class MySceneGraph {
       if (!(this.background.r != null && !isNaN(this.background.r))) {
         this.background.r = 0;
         this.onXMLMinorError(`unable to parse value for background red component; assuming 'r=${this.background.r}`);
-      } else if (!(this.background.g != null && !isNaN(this.background.g))) {
+      }
+      if (!(this.background.g != null && !isNaN(this.background.g))) {
         this.background.g = 0;
         this.onXMLMinorError(`unable to parse value for background green component; assuming 'r=${this.background.g}`);
-      } else if (!(this.background.b != null && !isNaN(this.background.b))) {
+      }
+      if (!(this.background.b != null && !isNaN(this.background.b))) {
         this.background.b = 0;
         this.onXMLMinorError(`unable to parse value for background blue component; assuming 'r=${this.background.b}`);
-      } else if (!(this.background.a != null && !isNaN(this.background.a))) {
+      }
+      if (!(this.background.a != null && !isNaN(this.background.a))) {
         this.background.a = 1;
         this.onXMLMinorError(`unable to parse value for background alpha component; assuming 'r=${this.background.a}`);
       }
