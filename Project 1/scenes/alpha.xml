@@ -67,6 +67,7 @@
             <!-- os parametros devem ser interpretados, genericamente, -->
             <!-- como em WebGL; o cilindro deve adicionalmente ter tampas -->
             <rectangle x1="-3" y1="-3" x2="3" y2="3" />
+            <rectangle x1="-4" y1="-4" x2="4" y2="4" />
         </primitive >
     </primitives >
     <components>

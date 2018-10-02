@@ -163,12 +163,9 @@ class MySceneGraph {
 
     // <ambient>
     this.processTag(nodes[AMBIENT_INDEX], nodeNames, "ambient", AMBIENT_INDEX);
-    /*
-            // <primitives>
-            this.processTag(nodes[PRIMITIVES_INDEX], nodeNames, "primitives", PRIMITIVES_INDEX);
-    
-            
-        */
+
+    // <primitives>
+    this.processTag(nodes[PRIMITIVES_INDEX], nodeNames, "primitives", PRIMITIVES_INDEX);
 
     // <components>
     this.processTag(nodes[COMPONENTS_INDEX], nodeNames, "components", COMPONENTS_INDEX);
@@ -1026,6 +1023,261 @@ class MySceneGraph {
 
   }
 
+  parseChildrenRectangle(rectangle, child) {
+    rectangle.x1 = this.reader.getFloat(child, 'x1');
+    if (rectangle.x1 == null || isNaN(rectangle.x1)) {
+      return "unable to parse x1 value";
+    }
+
+    rectangle.x2 = this.reader.getFloat(child, 'x2');
+    if (rectangle.x2 == null || isNaN(rectangle.x2)) {
+      return "unable to parse x2 value";
+    }
+
+    rectangle.y1 = this.reader.getFloat(child, 'y1');
+    if (rectangle.y1 == null || isNaN(rectangle.y1)) {
+      return "unable to parse y1 value";
+    }
+
+    rectangle.y2 = this.reader.getFloat(child, 'y2');
+    if (rectangle.y2 == null || isNaN(rectangle.y2)) {
+      return "unable to parse y2 value";
+    }
+  }
+
+  parseChildrenTriangle(triangle, child) {
+    triangle.x1 = this.reader.getFloat(child, 'x1');
+    if (triangle.x1 == null || isNaN(triangle.x1)) {
+      return "unable to parse x1 value";
+    }
+
+    triangle.x2 = this.reader.getFloat(child, 'x2');
+    if (triangle.x2 == null || isNaN(triangle.x2)) {
+      return "unable to parse x2 value";
+    }
+
+    triangle.x3 = this.reader.getFloat(child, 'x3');
+    if (triangle.x3 == null || isNaN(triangle.x3)) {
+      return "unable to parse x3 value";
+    }
+
+    triangle.y1 = this.reader.getFloat(child, 'y1');
+    if (triangle.y1 == null || isNaN(triangle.y1)) {
+      return "unable to parse y1 value";
+    }
+
+    triangle.y2 = this.reader.getFloat(child, 'y2');
+    if (triangle.y2 == null || isNaN(triangle.y2)) {
+      return "unable to parse y2 value";
+    }
+
+    triangle.y3 = this.reader.getFloat(child, 'y3');
+    if (triangle.y3 == null || isNaN(triangle.y3)) {
+      return "unable to parse y3 value";
+    }
+
+    triangle.z1 = this.reader.getFloat(child, 'z1');
+    if (triangle.z1 == null || isNaN(triangle.z1)) {
+      return "unable to parse z1 value";
+    }
+
+    triangle.z2 = this.reader.getFloat(child, 'z2');
+    if (triangle.z2 == null || isNaN(triangle.z2)) {
+      return "unable to parse z2 value";
+    }
+
+    triangle.z3 = this.reader.getFloat(child, 'z3');
+    if (triangle.z3 == null || isNaN(triangle.z3)) {
+      return "unable to parse z3 value";
+    }
+  }
+
+  parseChildrenCylinder(cylinder, child) {
+    cylinder.base = this.reader.getFloat(child, 'base');
+    if (cylinder.base == null || isNaN(cylinder.base)) {
+      return "unable to parse base value";
+    }
+
+    cylinder.top = this.reader.getFloat(child, 'top');
+    if (cylinder.top == null || isNaN(cylinder.top)) {
+      return "unable to parse top value";
+    }
+
+    cylinder.height = this.reader.getFloat(child, 'height');
+    if (cylinder.height == null || isNaN(cylinder.height)) {
+      return "unable to parse height value";
+    }
+
+    cylinder.slices = this.reader.getFloat(child, 'slices');
+    if (cylinder.slices == null || isInteger(cylinder.slices)) {
+      return "unable to parse slices value";
+    }
+
+    cylinder.stacks = this.reader.getFloat(child, 'stacks');
+    if (cylinder.stacks == null || isInteger(cylinder.stacks)) {
+      return "unable to parse stacks value";
+    }
+  }
+
+  parseChildrenSphere(sphere, child) {
+    sphere.radius = this.reader.getFloat(child, 'radius');
+    if (sphere.radius == null || isNaN(sphere.radius)) {
+      return "unable to parse radius value";
+    }
+
+    sphere.slices = this.reader.getFloat(child, 'slices');
+    if (sphere.slices == null || isInteger(sphere.slices)) {
+      return "unable to parse slices value";
+    }
+
+    sphere.stacks = this.reader.getFloat(child, 'stacks');
+    if (sphere.stacks == null || isInteger(sphere.stacks)) {
+      return "unable to parse stacks value";
+    }
+  }
+
+  parseChildrenTorus(torus, child) {
+    torus.inner = this.reader.getFloat(child, 'inner');
+    if (torus.inner == null || isNaN(torus.inner)) {
+      return "unable to parse inner value";
+    }
+
+    torus.outer = this.reader.getFloat(child, 'outer');
+    if (torus.outer == null || isNaN(torus.outer)) {
+      return "unable to parse outer value";
+    }
+
+    torus.slices = this.reader.getFloat(child, 'slices');
+    if (torus.slices == null || isInteger(torus.slices)) {
+      return "unable to parse slices value";
+    }
+
+    torus.loops = this.reader.getFloat(child, 'loops');
+    if (torus.loops == null || isInteger(torus.loops)) {
+      return "unable to parse loops value";
+    }
+  }
+
+  parsePrimitivesPrimitiveChildren(child, primitive) {
+
+    if(!(primitive.type == null || primitive.type == child.nodeName))
+      return -1;
+
+    switch (child.nodeName) {
+      case "rectangle":
+        var rectangle = {
+          x1: null,
+          x2: null,
+          y1: null,
+          y2: null
+        }
+        this.parseChildrenRectangle(rectangle, child);
+        primitive.type = "rectangle";
+        primitive.specs.push(rectangle);
+        break;
+        case "triangle":
+        var triangle = {
+          x1: null,
+          x2: null,
+          x3: null,
+          y1: null,
+          y2: null,
+          y3: null,
+          z1: null,
+          z2: null,
+          z3: null
+        }
+        this.parseChildrenTriangle(triangle, child);
+        primitive.type = "triangle";
+        primitive.specs.push(triangle);
+        break;
+        case "cylinder":
+        var cylinder = {
+          base: null,
+          top: null,
+          height: null,
+          slices: null,
+          stacks: null
+        }
+        this.parseChildrenCylinder(cylinder, child);
+        primitive.type = "cylinder";
+        primitive.specs.push(cylinder);
+        break;
+        case "sphere":
+        var sphere = {
+          radius: null,
+          slices: null,
+          stacks: null
+        }
+        this.parseChildrenSphere(sphere, child);
+        primitive.type = "sphere";
+        primitive.specs.push(sphere);
+        break;
+        case "torus":
+        var cylinder = {
+          inner: null,
+          outer: null,
+          slices: null,
+          loops: null
+        }
+        this.parseChildrenTorus(torus, child);
+        primitive.type = "torus";
+        primitive.specs.push(torus);
+        break;
+      default:
+        this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
+        break;
+    }
+
+  }
+
+  parsePrimitive(child) {
+    var primitive = {
+      id: null,
+      type: null,
+      specs: []
+    }
+
+    primitive.id = this.reader.getString(child, 'id');
+    if (primitive.id == null || !isString(primitive.id)) {
+      return "unable to parse id value";
+    }
+
+    // Check for repeated id
+    var reply;
+    if ((reply = this.checkForRepeatedId(primitive.id, this.primitives)) != "OK")
+      return reply;
+
+    var grandchildren = child.children;
+
+    for (var j = 0; j < grandchildren.length; j++) {
+      this.parsePrimitivesPrimitiveChildren(grandchildren[j], primitive);
+    }
+
+    this.primitives.push(primitive);
+    return 0;
+  }
+
+  /**
+   * Parses the <PRIMITIVES> node.
+   * @param {primitives block element} primitivesNode
+   */
+  parsePrimitives(primitivesNode) {
+    var children = primitivesNode.children;
+
+    this.primitives = [];
+
+    //Any number of primitives
+    if (children.length < 1)
+      return "no primitives available"
+    for (var i = 0; i < children.length; i++) {
+      this.parsePrimitive(children[i]);
+    }
+    this.log("Parsed primitives");
+    return null;
+
+  }
+
   parseChildrenTransformation(child, component) {
     let children = child.children;
 
@@ -1307,6 +1559,15 @@ function isAxis(axis) {
  */
 function isString(string) {
   return (typeof string === 'string');
+}
+
+/**
+ * Check if param is an integer
+ * @param {number} number to test
+ * @return true if it is an integer, false if not
+ */
+function isInteger(number) {
+  return (!isNaN(number) && number % 1 == 0);
 }
 
 /**
