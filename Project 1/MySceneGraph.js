@@ -277,7 +277,7 @@ class MySceneGraph {
     return 0;
   }
 
-  parseViewPrespectiveChildren(child, perspective) {
+  parseViewPerspectiveChildren(child, perspective) {
     if (child.nodeName == "from") {
       perspective.from.x = this.reader.getFloat(child, 'x');
       if (perspective.from.x == null || isNaN(perspective.from.x)) {
@@ -312,7 +312,7 @@ class MySceneGraph {
       this.onXMLMinorError("unknown tag <" + child.nodeName + "/" + child.nodeName + ">");
   }
 
-  parseViewPrespective(child) {
+  parseViewPerspective(child) {
     var perspective = {
       id: null,
       near: null,
@@ -366,7 +366,7 @@ class MySceneGraph {
     var grandchildren = child.children;
 
     for (var j = 0; j < grandchildren.length; j++) {
-      this.parseViewPrespectiveChildren(grandchildren[j], perspective);
+      this.parseViewPerspectiveChildren(grandchildren[j], perspective);
     }
 
     //this.views.perspectives.push(perspective);
@@ -412,7 +412,7 @@ class MySceneGraph {
     for (var i = 0; i < children.length; i++) {
 
       if (children[i].nodeName == "perspective") {
-        if (this.parseViewPrespective(children[i]) == 0)
+        if (this.parseViewPerspective(children[i]) == 0)
           this.log("perspective parsed");
       } else if (children[i].nodeName == "ortho") {
         if (this.parseViewOrtho(children[i]) == 0)
