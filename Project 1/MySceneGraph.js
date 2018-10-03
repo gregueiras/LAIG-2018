@@ -46,9 +46,27 @@ class MySceneGraph {
      * If any error occurs, the reader calls onXMLError on this object, with an error message
      */
 
-    this.reader.open('scenes/' + filename, this);
+    this.reader.open('scenes/' + filename, this); 
   }
 
+  buildComponents() {
+    //rectangles
+    for (let i = 0; i < this.primitives.length; i++) {
+      switch(this.primitives[i].type) {
+        case "rectangle":
+          this.primitives[i].shape = new MyQuad(
+            this.scene, 
+            this.primitives[i].specs.x1, 
+            this.primitives[i].specs.x2, 
+            this.primitives[i].specs.y1, 
+            this.primitives[i].specs.y2);
+        break;
+        default:
+        break;
+      }
+      
+    }
+  }
 
   /*
    * Callback to be executed after successful reading
@@ -98,6 +116,7 @@ class MySceneGraph {
         break;
       case PRIMITIVES_INDEX:
         error = this.parsePrimitives(node);
+        this.buildComponents();
         break;
       case COMPONENTS_INDEX:
         error = this.parseComponents(node);
@@ -1160,7 +1179,7 @@ class MySceneGraph {
 
   parsePrimitivesPrimitiveChildren(child, primitive) {
 
-    if(!(primitive.type == null || primitive.type == child.nodeName))
+    if(primitive.type != null)
       return -1;
 
     switch (child.nodeName) {
@@ -1173,7 +1192,7 @@ class MySceneGraph {
         }
         this.parseChildrenRectangle(rectangle, child);
         primitive.type = "rectangle";
-        primitive.specs.push(rectangle);
+        primitive.specs = rectangle;
         break;
         case "triangle":
         var triangle = {
@@ -1189,7 +1208,7 @@ class MySceneGraph {
         }
         this.parseChildrenTriangle(triangle, child);
         primitive.type = "triangle";
-        primitive.specs.push(triangle);
+        primitive.specs = triangle;
         break;
         case "cylinder":
         var cylinder = {
@@ -1201,7 +1220,7 @@ class MySceneGraph {
         }
         this.parseChildrenCylinder(cylinder, child);
         primitive.type = "cylinder";
-        primitive.specs.push(cylinder);
+        primitive.specs = cylinder;
         break;
         case "sphere":
         var sphere = {
@@ -1211,7 +1230,7 @@ class MySceneGraph {
         }
         this.parseChildrenSphere(sphere, child);
         primitive.type = "sphere";
-        primitive.specs.push(sphere);
+        primitive.specs = sphere;
         break;
         case "torus":
         var cylinder = {
@@ -1222,7 +1241,7 @@ class MySceneGraph {
         }
         this.parseChildrenTorus(torus, child);
         primitive.type = "torus";
-        primitive.specs.push(torus);
+        primitive.specs = torus;
         break;
       default:
         this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
@@ -1235,7 +1254,8 @@ class MySceneGraph {
     var primitive = {
       id: null,
       type: null,
-      specs: []
+      specs: null,
+      shape: null
     }
 
     primitive.id = this.reader.getString(child, 'id');
@@ -1525,6 +1545,9 @@ class MySceneGraph {
   displayScene() {
     // entry point for graph rendering
     //TODO: Render loop starting at root of graph
+    for (let i = 0; i < this.primitives.length; i++) {
+      this.primitives[i].shape.display();
+    }
   }
 
 }
