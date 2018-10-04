@@ -904,20 +904,15 @@ class MySceneGraph {
   }
 
   createTexture(texture) {
-    if (this.textures[texture.id] == null) {
-
-      let tex = new CGFappearance(this.scene);
-      tex.loadTexture(texture.file);
-
-      this.textures[texture.id] = tex;
-    }
+    let tex = new CGFtexture(this.scene, texture.file);
+    this.textures[texture.id] = tex;
   }
 
   parseTextures(texturesNode) {
     var children = texturesNode.children;
 
     this.textures = [];
-    this.textures[NONE] = new CGFappearance(this.scene);
+    //    this.textures[NONE] = new CGFtexture(this.scene);
     if (children.length < 1)
       return "no textures available"
     for (var i = 0; i < children.length; i++) {
@@ -1001,8 +996,28 @@ class MySceneGraph {
       this.parseMaterialsMaterialChildren(grandchildren[j], material);
     }
 
-    this.materials.push(material);
+
+    this.createMaterial(material);
     return 0;
+  }
+
+  createMaterial(material) {
+    let newMaterial = new CGFappearance(this.scene);
+    newMaterial.setShininess(material.shininess);
+
+    let color = material.emission;
+    newMaterial.setEmission(color.r, color.g, color.b, color.a);
+
+    color = material.ambient;
+    newMaterial.setAmbient(color.r, color.g, color.b, color.a);
+
+    color = material.diffuse;
+    newMaterial.setDiffuse(color.r, color.g, color.b, color.a);
+
+    color = material.specular;
+    newMaterial.setSpecular(color.r, color.g, color.b, color.a);
+
+    this.materials[material.id] = newMaterial;
   }
 
   /**
@@ -1539,6 +1554,7 @@ class MySceneGraph {
         scale: []
       },
       materials: [],
+      materialID: 0,
       texture: {
         id: null,
         length_s: null,
@@ -1634,22 +1650,42 @@ class MySceneGraph {
   log(message) {
     console.log("   " + message);
   }
-
-  displayComponent(component) {
-
+  applyTexture(component) {
     switch (component.texture.id) {
+      case INHERIT:
+        //TODO: Acho que nao e preciso fazer nada. 
+        break;
+
+      case NONE:
+        //TODO: Aparentemente, nao e preciso fazer nada, ao trocar de material ja resolve, mas caso o material seja inherit talvez de asneira
+        break;
+
+      default:
+        this.textures[component.texture.id].bind();
+        break;
+    }
+  }
+
+  applyMaterial(component) {
+    if (component.materialID >= component.materials.length) {
+      component.materialID = 0;
+    }
+    let matID = component.materials[component.materialID];
+    switch (matID) {
       case INHERIT:
         //TODO: Acho que nao e preciso fazer nada
         break;
 
-      case NONE:
-        this.textures[NONE].apply();
-        break;
-
       default:
-        this.textures[component.texture.id].apply();
+        this.materials[matID].apply();
         break;
     }
+  }
+
+  displayComponent(component) {
+
+    this.applyMaterial(component);
+    this.applyTexture(component);
 
     let primRef = component.children.primitiveref;
     if (Object.keys(primRef).length != 0) {
