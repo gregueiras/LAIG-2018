@@ -75,7 +75,7 @@ class MySceneGraph {
             this.primitives[i].specs.z3);
         break;
         case "cylinder":
-          this.primitives[i].shape = new MyCilinder(
+          this.primitives[i].shape = new MyCilinderBase(
             this.scene, 
             this.primitives[i].specs.slices, 
             this.primitives[i].specs.stacks,

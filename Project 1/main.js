@@ -50,6 +50,8 @@ serialInclude([ '../lib/CGF.js',
                 '/primitives/MyQuad.js',
                 '/primitives/MyTriangle.js',
                 '/primitives/MyCilinder.js',
+                '/primitives/MyCilinderBase.js',
+                '/primitives/MyCircle.js',
 
     main = function () {
         // Standard application, scene and interface setup

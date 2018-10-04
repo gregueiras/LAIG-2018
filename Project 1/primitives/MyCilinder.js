@@ -34,7 +34,6 @@ class MyCilinder extends CGFobject {
       for (var stack = 0; stack <= this.stacks; stack++) {
   
         for (var slice = 0; slice < this.slices; slice++) {
-          console.log(this.base - (this.b2tRatePstack*stack));
           this.vertices.push(Math.cos(slice * this.delta)*(this.base - (this.b2tRatePstack*stack)));
           this.vertices.push(Math.sin(slice * this.delta)*(this.base - (this.b2tRatePstack*stack)));
           this.vertices.push(stack * alt - this.height / 2);
