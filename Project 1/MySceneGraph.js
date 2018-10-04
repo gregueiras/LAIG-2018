@@ -143,35 +143,50 @@ class MySceneGraph {
     // Processes each node, verifying errors.
 
     // <scene>
-    this.processTag(nodes[SCENE_INDEX], nodeNames, "scene", SCENE_INDEX);
+    error = this.processTag(nodes[SCENE_INDEX], nodeNames, "scene", SCENE_INDEX);
+    if (error != null)
+      return error;
 
     // <views>
-    this.processTag(nodes[VIEWS_INDEX], nodeNames, "views", VIEWS_INDEX);
+    error = this.processTag(nodes[VIEWS_INDEX], nodeNames, "views", VIEWS_INDEX);
+    if (error != null)
+      return error;
 
     // <lights>
-    this.processTag(nodes[LIGHTS_INDEX], nodeNames, "lights", LIGHTS_INDEX);
+    error = this.processTag(nodes[LIGHTS_INDEX], nodeNames, "lights", LIGHTS_INDEX);
+    if (error != null)
+      return error;
 
     // <textures>
-    this.processTag(nodes[TEXTURES_INDEX], nodeNames, "textures", TEXTURES_INDEX);
+    error = this.processTag(nodes[TEXTURES_INDEX], nodeNames, "textures", TEXTURES_INDEX);
+    if (error != null)
+      return error;
 
     // <materials>
-    this.processTag(nodes[MATERIALS_INDEX], nodeNames, "materials", MATERIALS_INDEX);
+    error = this.processTag(nodes[MATERIALS_INDEX], nodeNames, "materials", MATERIALS_INDEX);
+    if (error != null)
+      return error;
 
     // <transformations>
-    this.processTag(nodes[TRANSFORMATIONS_INDEX], nodeNames, "transformations", TRANSFORMATIONS_INDEX);
-
+    error = this.processTag(nodes[TRANSFORMATIONS_INDEX], nodeNames, "transformations", TRANSFORMATIONS_INDEX);
+    if (error != null)
+      return error;
 
     // <ambient>
-    this.processTag(nodes[AMBIENT_INDEX], nodeNames, "ambient", AMBIENT_INDEX);
-    /*
-            // <primitives>
-            this.processTag(nodes[PRIMITIVES_INDEX], nodeNames, "primitives", PRIMITIVES_INDEX);
-    
-            
-        */
+    error = this.processTag(nodes[AMBIENT_INDEX], nodeNames, "ambient", AMBIENT_INDEX);
+    if (error != null)
+      return error;
+
+    // <primitives>
+    error = this.processTag(nodes[PRIMITIVES_INDEX], nodeNames, "primitives", PRIMITIVES_INDEX);
+    if (error != null)
+      return error;
 
     // <components>
-    this.processTag(nodes[COMPONENTS_INDEX], nodeNames, "components", COMPONENTS_INDEX);
+    error = this.processTag(nodes[COMPONENTS_INDEX], nodeNames, "components", COMPONENTS_INDEX);
+    if (error != null)
+      return error;
+
   }
 
   /**
