@@ -51,37 +51,38 @@ class MySceneGraph {
 
   buildComponents() {
     //rectangles
-    for (let i = 0; i < this.primitives.length; i++) {
-      switch (this.primitives[i].type) {
+    let keys = Object.keys(this.primitives);
+    for (let key of keys) {
+      switch (this.primitives[key].type) {
         case "rectangle":
-          this.primitives[i].shape = new MyQuad(
+          this.primitives[key].shape = new MyQuad(
             this.scene,
-            this.primitives[i].specs.x1,
-            this.primitives[i].specs.x2,
-            this.primitives[i].specs.y1,
-            this.primitives[i].specs.y2);
+            this.primitives[key].specs.x1,
+            this.primitives[key].specs.x2,
+            this.primitives[key].specs.y1,
+            this.primitives[key].specs.y2);
           break;
         case "triangle":
-          this.primitives[i].shape = new MyTriangle(
+          this.primitives[key].shape = new MyTriangle(
             this.scene,
-            this.primitives[i].specs.x1,
-            this.primitives[i].specs.x2,
-            this.primitives[i].specs.x3,
-            this.primitives[i].specs.y1,
-            this.primitives[i].specs.y2,
-            this.primitives[i].specs.y3,
-            this.primitives[i].specs.z1,
-            this.primitives[i].specs.z2,
-            this.primitives[i].specs.z3);
+            this.primitives[key].specs.x1,
+            this.primitives[key].specs.x2,
+            this.primitives[key].specs.x3,
+            this.primitives[key].specs.y1,
+            this.primitives[key].specs.y2,
+            this.primitives[key].specs.y3,
+            this.primitives[key].specs.z1,
+            this.primitives[key].specs.z2,
+            this.primitives[key].specs.z3);
           break;
         case "cylinder":
-          this.primitives[i].shape = new MyCylinderBase(
+          this.primitives[key].shape = new MyCylinderBase(
             this.scene,
-            this.primitives[i].specs.slices,
-            this.primitives[i].specs.stacks,
-            this.primitives[i].specs.base,
-            this.primitives[i].specs.top,
-            this.primitives[i].specs.height);
+            this.primitives[key].specs.slices,
+            this.primitives[key].specs.stacks,
+            this.primitives[key].specs.base,
+            this.primitives[key].specs.top,
+            this.primitives[key].specs.height);
           break;
         default:
           break;
@@ -248,9 +249,9 @@ class MySceneGraph {
     if (indexRoot == -1) {
       return "scene root missing";
     } else {
-      this.root = this.reader.getString(sceneNode, 'root');
+      this.idRoot = this.reader.getString(sceneNode, 'root');
 
-      if (!(this.root != -1 && isString(this.root))) {
+      if (!(this.idRoot != -1 && isString(this.idRoot))) {
         return "unable to parse root value";
       }
 
@@ -331,7 +332,6 @@ class MySceneGraph {
       return "unable to parse bottom value";
     }
 
-    //this.views.orthos.push(ortho);
     this.views.orthos[ortho.id] = ortho;
     return 0;
   }
@@ -467,15 +467,23 @@ class MySceneGraph {
 
     //Any number of Views
     if (children.length < 1)
-      return "no views available"
+      return "no views available";
+
     for (var i = 0; i < children.length; i++) {
 
       if (children[i].nodeName == "perspective") {
-        if (this.parseViewPerspective(children[i]) == 0)
+        let error = this.parseViewPerspective(children[i]);
+        if (error == 0)
           this.log("perspective parsed");
+        else
+          return error;
+
       } else if (children[i].nodeName == "ortho") {
-        if (this.parseViewOrtho(children[i]) == 0)
+        let error = this.parseViewOrtho(children[i]);
+        if (error == 0)
           this.log("ortho parsed");
+        else
+          return error;
       } else
         this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
     }
@@ -598,8 +606,9 @@ class MySceneGraph {
   }
 
   checkForRepeatedId(id, arr) {
-    for (var k = 0; k < arr.length; ++k) {
-      if (id == arr[k].id)
+    let keys = Object.keys(arr);
+    for (let key of keys) {
+      if (id == arr[key].id)
         return "repeated id value";
     }
     return "OK";
@@ -649,25 +658,28 @@ class MySceneGraph {
         return "unable to parse location/w value";
       }
     }
+
+    return 0;
   }
 
   parseLightsOmniChildren(child, omni) {
     switch (child.nodeName) {
       case "location":
-        this.parseChildrenCoordinates(omni.location, child, 1);
-        break;
+        return this.parseChildrenCoordinates(omni.location, child, 1);
+
       case "ambient":
-        this.parseChildrenColours(omni.ambient, child);
-        break;
+        return this.parseChildrenColours(omni.ambient, child);
+
       case "diffuse":
-        this.parseChildrenColours(omni.diffuse, child);
-        break;
+        return this.parseChildrenColours(omni.diffuse, child);
+
       case "specular":
-        this.parseChildrenColours(omni.specular, child);
-        break;
+        return this.parseChildrenColours(omni.specular, child);
+
       default:
         this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
-        break;
+        return 0;
+
     }
   }
 
@@ -845,11 +857,17 @@ class MySceneGraph {
     for (var i = 0; i < children.length; i++) {
 
       if (children[i].nodeName == "omni") {
-        if (this.parseLightsOmni(children[i]) == 0)
+        let error = this.parseLightsOmni(children[i]);
+        if (error == 0)
           this.log("omni parsed");
+        else
+          return error;
       } else if (children[i].nodeName == "spot") {
-        if (this.parseLightsSpot(children[i]) == 0)
+        let error = this.parseLightsSpot(children[i]);
+        if (error == 0)
           this.log("spot parsed");
+        else
+          return error;
       } else
         this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
     }
@@ -880,6 +898,7 @@ class MySceneGraph {
     }
 
     this.textures.push(texture);
+    return 0;
   }
 
   parseTextures(texturesNode) {
@@ -889,7 +908,9 @@ class MySceneGraph {
     if (children.length < 1)
       return "no textures available"
     for (var i = 0; i < children.length; i++) {
-      this.parseTexturesTexture(children[i]);
+      let error = this.parseTexturesTexture(children[i]);
+      if (error != 0)
+        return error;
     }
 
     this.log("Parsed textures");
@@ -984,7 +1005,9 @@ class MySceneGraph {
     if (children.length < 1)
       return "no materials available"
     for (var i = 0; i < children.length; i++) {
-      this.parseMaterial(children[i]);
+      let error = this.parseMaterial(children[i]);
+      if (error != 0)
+        return error;
     }
     this.log("Parsed materials");
     return null;
@@ -1075,7 +1098,9 @@ class MySceneGraph {
     if (children.length < 1)
       return "no transformations available"
     for (var i = 0; i < children.length; i++) {
-      this.parseTransformation(children[i]);
+      let error = this.parseTransformation(children[i]);
+      if (error != 0)
+        return error;
     }
     this.log("Parsed transformations");
     return null;
@@ -1288,6 +1313,8 @@ class MySceneGraph {
         break;
     }
 
+    return 0;
+
   }
 
   parsePrimitive(child) {
@@ -1311,10 +1338,13 @@ class MySceneGraph {
     var grandchildren = child.children;
 
     for (var j = 0; j < grandchildren.length; j++) {
-      this.parsePrimitivesPrimitiveChildren(grandchildren[j], primitive);
+      let error = this.parsePrimitivesPrimitiveChildren(grandchildren[j], primitive);
+      if (error != 0) {
+        return error;
+      }
     }
 
-    this.primitives.push(primitive);
+    this.primitives[primitive.id] = primitive;
     return 0;
   }
 
@@ -1331,7 +1361,9 @@ class MySceneGraph {
     if (children.length < 1)
       return "no primitives available"
     for (var i = 0; i < children.length; i++) {
-      this.parsePrimitive(children[i]);
+      let error = this.parsePrimitive(children[i]);
+      if (error != 0)
+        return error;
     }
     this.log("Parsed primitives");
     return null;
@@ -1348,7 +1380,7 @@ class MySceneGraph {
           if (component.transformation.ref == null || !isString(component.transformation.ref)) {
             return "unable to parse id value";
           }
-          return;
+          return 0;
         case "translate":
         case "scale":
           var tmpCoor = {
@@ -1374,6 +1406,7 @@ class MySceneGraph {
           break;
       }
     }
+    return 0;
   }
 
   parseChildrenMaterials(child, component) {
@@ -1387,7 +1420,7 @@ class MySceneGraph {
       }
       component.materials.push(id);
     }
-
+    return 0;
   }
 
   parseChildrenTexture(child, component) {
@@ -1411,6 +1444,8 @@ class MySceneGraph {
     component.texture.id = id;
     component.texture.length_s = ls;
     component.texture.length_t = lt;
+
+    return 0;
   }
 
   parseChildrenChildren(child, component) {
@@ -1436,25 +1471,28 @@ class MySceneGraph {
           break;
       }
     }
+
+    return 0;
   }
 
   parseComponentsComponentChildren(child, component) {
     switch (child.nodeName) {
       case "transformation":
-        this.parseChildrenTransformation(child, component);
-        break;
+        return this.parseChildrenTransformation(child, component);
+
       case "materials":
-        this.parseChildrenMaterials(child, component);
-        break;
+        return this.parseChildrenMaterials(child, component);
+
       case "texture":
-        this.parseChildrenTexture(child, component);
-        break;
+        return this.parseChildrenTexture(child, component);
+
       case "children":
-        this.parseChildrenChildren(child, component);
-        break;
+        return this.parseChildrenChildren(child, component);
+
       default:
         this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
-        break;
+        return 0;
+
     }
   }
 
@@ -1512,14 +1550,16 @@ class MySceneGraph {
     var grandchildren = child.children;
 
     for (var j = 0; j < grandchildren.length; j++) {
-      this.parseComponentsComponentChildren(grandchildren[j], component);
+      let error = this.parseComponentsComponentChildren(grandchildren[j], component);
+      if (error != 0)
+        return error;
     }
 
     var reply;
     if ((reply = this.componentErrCheck(component)) != "OK")
       return reply;
 
-    this.components.push(component);
+    this.components[component.id] = component;
     return 0;
   }
 
@@ -1536,7 +1576,10 @@ class MySceneGraph {
     if (children.length < 1)
       return "no components available"
     for (var i = 0; i < children.length; i++) {
-      this.parseComponent(children[i]);
+      let error = this.parseComponent(children[i]);
+      if (error != 0) {
+        return error;
+      }
     }
     this.log("Parsed components");
     return null;
@@ -1579,18 +1622,41 @@ class MySceneGraph {
     console.log("   " + message);
   }
 
+  displayComponent(component) {
+    let primRef = component.children.primitiveref;
+    if (Object.keys(primRef).length != 0) {
+      primRef.forEach(primID => {
+        let prim = this.primitives[primID];
+        prim.shape.display();
+      });
+    }
+
+    let compRef = component.children.componentref;
+    if (Object.keys(compRef).length != 0) {
+      compRef.forEach(compID => {
+        let comp = this.components[compID];
+        this.displayComponent(comp);
+      });
+    }
+  }
+
   /**
    * Displays the scene, processing each node, starting in the root node.
    */
   displayScene() {
     // entry point for graph rendering
     //TODO: Render loop starting at root of graph
-    for (let i = 0; i < this.primitives.length; i++) {
+    /* for (let i = 0; i < this.primitives.length; i++) {
       this.primitives[i].shape.display();
     }
+    */
+    let rootNode = this.components[this.idRoot];
+    this.displayComponent(rootNode);
   }
 
 }
+
+
 
 function isBoolean(value) {
   if (isNaN(value) || value < 0 || value > 1)
