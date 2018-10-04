@@ -61,6 +61,28 @@ class MySceneGraph {
             this.primitives[i].specs.y1, 
             this.primitives[i].specs.y2);
         break;
+        case "triangle":
+          this.primitives[i].shape = new MyTriangle(
+            this.scene, 
+            this.primitives[i].specs.x1, 
+            this.primitives[i].specs.x2, 
+            this.primitives[i].specs.x3,
+            this.primitives[i].specs.y1, 
+            this.primitives[i].specs.y2,
+            this.primitives[i].specs.y3,
+            this.primitives[i].specs.z1, 
+            this.primitives[i].specs.z2,
+            this.primitives[i].specs.z3);
+        break;
+        case "cylinder":
+          this.primitives[i].shape = new MyCilinder(
+            this.scene, 
+            this.primitives[i].specs.slices, 
+            this.primitives[i].specs.stacks,
+            this.primitives[i].specs.base,
+            this.primitives[i].specs.top,
+            this.primitives[i].specs.height);
+        break;
         default:
         break;
       }
@@ -1128,12 +1150,12 @@ class MySceneGraph {
     }
 
     cylinder.slices = this.reader.getFloat(child, 'slices');
-    if (cylinder.slices == null || isInteger(cylinder.slices)) {
+    if (cylinder.slices == null || !isInteger(cylinder.slices)) {
       return "unable to parse slices value";
     }
 
     cylinder.stacks = this.reader.getFloat(child, 'stacks');
-    if (cylinder.stacks == null || isInteger(cylinder.stacks)) {
+    if (cylinder.stacks == null || !isInteger(cylinder.stacks)) {
       return "unable to parse stacks value";
     }
   }
@@ -1145,12 +1167,12 @@ class MySceneGraph {
     }
 
     sphere.slices = this.reader.getFloat(child, 'slices');
-    if (sphere.slices == null || isInteger(sphere.slices)) {
+    if (sphere.slices == null || !isInteger(sphere.slices)) {
       return "unable to parse slices value";
     }
 
     sphere.stacks = this.reader.getFloat(child, 'stacks');
-    if (sphere.stacks == null || isInteger(sphere.stacks)) {
+    if (sphere.stacks == null || !isInteger(sphere.stacks)) {
       return "unable to parse stacks value";
     }
   }
@@ -1167,12 +1189,12 @@ class MySceneGraph {
     }
 
     torus.slices = this.reader.getFloat(child, 'slices');
-    if (torus.slices == null || isInteger(torus.slices)) {
+    if (torus.slices == null || !isInteger(torus.slices)) {
       return "unable to parse slices value";
     }
 
     torus.loops = this.reader.getFloat(child, 'loops');
-    if (torus.loops == null || isInteger(torus.loops)) {
+    if (torus.loops == null || !isInteger(torus.loops)) {
       return "unable to parse loops value";
     }
   }
