@@ -5,7 +5,7 @@
  */
 
 class MyCircle extends CGFobject {
-    constructor(scene, slices) {
+    constructor(scene, slices, radius) {
       super(scene);
   
       this.slices = slices;
@@ -15,6 +15,10 @@ class MyCircle extends CGFobject {
       this.indices = new Array();
       this.normals = new Array();
       this.texCoords = new Array();
+
+      radius = typeof radius !== 'undefined' ? radius : 1;
+
+      this.radius = radius;
   
       this.initBuffers();
     };
@@ -22,8 +26,8 @@ class MyCircle extends CGFobject {
     initVIN() {
       for (var slice = 0; slice < this.slices; slice++) {
   
-        this.vertices.push(Math.cos(slice * this.delta));
-        this.vertices.push(Math.sin(slice * this.delta));
+        this.vertices.push(Math.cos(slice * this.delta)*this.radius);
+        this.vertices.push(Math.sin(slice * this.delta)*this.radius);
         this.vertices.push(0);
       }
   

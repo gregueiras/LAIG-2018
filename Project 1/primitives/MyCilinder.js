@@ -5,7 +5,7 @@
  */
 
 class MyCilinder extends CGFobject {
-    constructor(scene, slices, stacks) {
+    constructor(scene, slices, stacks, base, top, height) {
       super(scene);
   
       this.slices = slices;
@@ -16,22 +16,30 @@ class MyCilinder extends CGFobject {
       this.indices = new Array();
       this.normals = new Array();
       this.texCoords = new Array();
+
+      base = typeof base !== 'undefined' ? base : 1;
+      top = typeof top !== 'undefined' ? top : 1;
+      height = typeof height !== 'undefined' ? height : 1;
+
+      this.base = base;
+      this.top = top;
+      this.b2tRatePstack = (base - top) / stacks;
+      this.height = height;
+
       this.initBuffers();
     };
   
     initVIN() {
-      var alt = 1 / this.stacks;
+      var alt = this.height / this.stacks;
       for (var stack = 0; stack <= this.stacks; stack++) {
   
         for (var slice = 0; slice < this.slices; slice++) {
+          this.vertices.push(Math.cos(slice * this.delta)*(this.base - (this.b2tRatePstack*stack)));
+          this.vertices.push(Math.sin(slice * this.delta)*(this.base - (this.b2tRatePstack*stack)));
+          this.vertices.push(stack * alt - this.height / 2);
   
-  
-          this.vertices.push(Math.cos(slice * this.delta));
-          this.vertices.push(Math.sin(slice * this.delta));
-          this.vertices.push(stack * alt - 0.5);
-  
-          this.normals.push(Math.cos(slice * this.delta));
-          this.normals.push(Math.sin(slice * this.delta));
+          this.normals.push(Math.cos(slice * this.delta)*(this.base - (this.b2tRatePstack*stack)));
+          this.normals.push(Math.sin(slice * this.delta)*(this.base - (this.b2tRatePstack*stack)));
           this.normals.push(0);
   
         }

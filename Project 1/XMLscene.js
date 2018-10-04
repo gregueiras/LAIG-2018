@@ -163,7 +163,7 @@ class XMLscene extends CGFscene {
     if (this.sceneInited) {
       // Draw axis
       this.axis.display();
-      this.cube.display();
+      //this.cube.display();
       var i = 0;
       for (var key in this.lightValues) {
         if (this.lightValues.hasOwnProperty(key)) {
