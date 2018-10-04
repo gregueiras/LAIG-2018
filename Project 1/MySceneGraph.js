@@ -13,6 +13,8 @@ const MATERIALS_INDEX = 5;
 const TRANSFORMATIONS_INDEX = 6;
 const PRIMITIVES_INDEX = 7;
 const COMPONENTS_INDEX = 8;
+const INHERIT = "inherit";
+const NONE = "none";
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -897,14 +899,25 @@ class MySceneGraph {
       return "unable to parse file value";
     }
 
-    this.textures.push(texture);
+    this.createTexture(texture);
     return 0;
+  }
+
+  createTexture(texture) {
+    if (this.textures[texture.id] == null) {
+
+      let tex = new CGFappearance(this.scene);
+      tex.loadTexture(texture.file);
+
+      this.textures[texture.id] = tex;
+    }
   }
 
   parseTextures(texturesNode) {
     var children = texturesNode.children;
 
     this.textures = [];
+    this.textures[NONE] = new CGFappearance(this.scene);
     if (children.length < 1)
       return "no textures available"
     for (var i = 0; i < children.length; i++) {
@@ -1623,6 +1636,21 @@ class MySceneGraph {
   }
 
   displayComponent(component) {
+
+    switch (component.texture.id) {
+      case INHERIT:
+        //TODO: Acho que nao e preciso fazer nada
+        break;
+
+      case NONE:
+        this.textures[NONE].apply();
+        break;
+
+      default:
+        this.textures[component.texture.id].apply();
+        break;
+    }
+
     let primRef = component.children.primitiveref;
     if (Object.keys(primRef).length != 0) {
       primRef.forEach(primID => {

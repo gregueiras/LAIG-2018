@@ -33,7 +33,7 @@
     <textures>
         <!-- Deve existir um ou mais blocos "texture" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <texture id="text1" file="./images/trunk-image.jpg" />
+        <texture id="text1" file="./scenes/images/trunk-image.jpg" />
     </textures>
     <materials>
         <!-- Deve existir um ou mais blocos "material" -->
@@ -67,6 +67,9 @@
             <!-- os parametros devem ser interpretados, genericamente, -->
             <!-- como em WebGL; o cilindro deve adicionalmente ter tampas -->
             <rectangle x1="0" y1="0" x2="6" y2="3"/>
+        </primitive >
+        <primitive id="tri">
+            <triangle x1="0" y1="0" z1="0" x2="-6" y2="0" z2="0" x3="-3" y3="-3" z3="0" />
         </primitive >
     </primitives >
     <components>
@@ -114,6 +117,22 @@
                 <!-- deve existir uma ou mais tags "componentref" e/ou -->
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
+                <!-- <primitiveref id="rect" /> -->
+                <componentref id="comp2" />
+                <primitiveref id="tri" />
+
+            </children>
+        </component>
+        <component id="comp2">
+
+            <transformation>
+                <transformationref id="tf1" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
                 <primitiveref id="rect" />
             </children>
         </component>
