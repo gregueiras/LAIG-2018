@@ -46,47 +46,47 @@ class MySceneGraph {
      * If any error occurs, the reader calls onXMLError on this object, with an error message
      */
 
-    this.reader.open('scenes/' + filename, this); 
+    this.reader.open('scenes/' + filename, this);
   }
 
   buildComponents() {
     //rectangles
     for (let i = 0; i < this.primitives.length; i++) {
-      switch(this.primitives[i].type) {
+      switch (this.primitives[i].type) {
         case "rectangle":
           this.primitives[i].shape = new MyQuad(
-            this.scene, 
-            this.primitives[i].specs.x1, 
-            this.primitives[i].specs.x2, 
-            this.primitives[i].specs.y1, 
+            this.scene,
+            this.primitives[i].specs.x1,
+            this.primitives[i].specs.x2,
+            this.primitives[i].specs.y1,
             this.primitives[i].specs.y2);
-        break;
+          break;
         case "triangle":
           this.primitives[i].shape = new MyTriangle(
-            this.scene, 
-            this.primitives[i].specs.x1, 
-            this.primitives[i].specs.x2, 
+            this.scene,
+            this.primitives[i].specs.x1,
+            this.primitives[i].specs.x2,
             this.primitives[i].specs.x3,
-            this.primitives[i].specs.y1, 
+            this.primitives[i].specs.y1,
             this.primitives[i].specs.y2,
             this.primitives[i].specs.y3,
-            this.primitives[i].specs.z1, 
+            this.primitives[i].specs.z1,
             this.primitives[i].specs.z2,
             this.primitives[i].specs.z3);
-        break;
+          break;
         case "cylinder":
-          this.primitives[i].shape = new MyCilinderBase(
-            this.scene, 
-            this.primitives[i].specs.slices, 
+          this.primitives[i].shape = new MyCylinderBase(
+            this.scene,
+            this.primitives[i].specs.slices,
             this.primitives[i].specs.stacks,
             this.primitives[i].specs.base,
             this.primitives[i].specs.top,
             this.primitives[i].specs.height);
-        break;
+          break;
         default:
-        break;
+          break;
       }
-      
+
     }
   }
 
@@ -1219,7 +1219,7 @@ class MySceneGraph {
 
   parsePrimitivesPrimitiveChildren(child, primitive) {
 
-    if(primitive.type != null)
+    if (primitive.type != null)
       return -1;
 
     switch (child.nodeName) {
@@ -1234,7 +1234,7 @@ class MySceneGraph {
         primitive.type = "rectangle";
         primitive.specs = rectangle;
         break;
-        case "triangle":
+      case "triangle":
         var triangle = {
           x1: null,
           x2: null,
@@ -1250,7 +1250,7 @@ class MySceneGraph {
         primitive.type = "triangle";
         primitive.specs = triangle;
         break;
-        case "cylinder":
+      case "cylinder":
         var cylinder = {
           base: null,
           top: null,
@@ -1262,7 +1262,7 @@ class MySceneGraph {
         primitive.type = "cylinder";
         primitive.specs = cylinder;
         break;
-        case "sphere":
+      case "sphere":
         var sphere = {
           radius: null,
           slices: null,
@@ -1272,7 +1272,7 @@ class MySceneGraph {
         primitive.type = "sphere";
         primitive.specs = sphere;
         break;
-        case "torus":
+      case "torus":
         var cylinder = {
           inner: null,
           outer: null,
