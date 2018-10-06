@@ -2,8 +2,6 @@
 
     <scene root="comp1" axis_length="3" />
     <views default="view1">
-        <!-- tem de existir, pelo menos, uma vista de -->
-        <!-- entre as seguintes (perspective ou ortho) -->
         <perspective id="view1" near="0.1" far="500" angle="60">
             <from x="15" y="15" z="15" />
             <to x="0" y="0" z="0" />
@@ -15,8 +13,6 @@
         <background r="0.53" g="0.81" b="0.92" a="1" />
     </ambient>
     <lights>
-        <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
-        <!-- Os identificadores "id" nao podem ser repetidos -->
         <omni id="l1" enabled="0">
             <location x="7" y="3" z="2" w="0" />
             <ambient r="0" g="0" b="0" a="1" />
@@ -31,13 +27,12 @@
         </omni>
     </lights>
     <textures>
-        <!-- Deve existir um ou mais blocos "texture" -->
-        <!-- Os identificadores "id" nao podem ser repetidos -->
-        <texture id="text1" file="./scenes/images/trunk-image.jpg" />
+        <texture id="text_trunk" file="./scenes/images/trunk-image.jpg" />
+        <texture id="text_rocks" file="./scenes/images/rocks.jpg" />
+        <texture id="text_wallpaint" file="./scenes/images/wallpaint.jpg" />
+        <texture id="text_soalho" file="./scenes/images/soalho2.jpg" />
     </textures>
     <materials>
-        <!-- Deve existir um ou mais blocos "material" -->
-        <!-- Os identificadores "id" nao podem ser repetidos -->
         <material id="mat1" shininess = "0.1">
             <emission r="0" g="0" b="0" a="0" />
             <ambient r="0.1" g="0.1" b="0.1" a="1" />
@@ -46,27 +41,75 @@
         </material>
     </materials>
     <transformations>
-        <!-- Deve existir um ou mais blocos "transformation" -->
-        <!-- Os identificadores "id" nao podem ser repetidos -->
-        <!-- Os angulos sao expressos em graus -->
         <transformation id="tf1">
-            <!-- instrucoes a usar sem limite nem ordem -->
-            <!-- deve existir pelo menos uma transformacao -->
             <translate x="0" y="0" z="0" />
             <rotate axis="x" angle="0" />
             <scale x="1" y="1" z="1" />
         </transformation>
+        <transformation id="tf2">
+            <rotate axis="y" angle="90" />
+        </transformation>
+        <transformation id="tf3">
+            <rotate axis="x" angle="90" />
+        </transformation>
+        <transformation id="tf4">
+            <translate x="4.5" y="0" z="4.5" />
+            <rotate axis="x" angle="90" />
+            <translate x="0" y="0" z="1.5" />
+        </transformation>
+        <transformation id="tf5">
+            <translate x="2" y="0" z="4.5" />
+            <rotate axis="x" angle="90" />
+            <translate x="0" y="0" z="1.5" />
+        </transformation>
+        <transformation id="tf6">
+            <translate x="0.75" y="1" z="0" />
+        </transformation>
+        <transformation id="tf7">
+            <translate x="3.25" y="1" z="0" />
+        </transformation>
+        <transformation id="tf8"> <!-- table translation -->
+            <translate x="2" y="0" z="2.5" />
+        </transformation>
+        <transformation id="tf9"> <!-- table side -->
+            <translate x="2" y="0" z="0" />
+            <rotate axis="y" angle="-90" />
+        </transformation>
+         <transformation id="tf10"> <!-- table side -->
+            <rotate axis="y" angle="-90" />
+        </transformation>
+        <transformation id="tf11"> <!-- table back -->
+            <translate x="0" y="0" z="1.2" />
+        </transformation>
+        <transformation id="tf12"> <!-- table top -->
+            <translate x="0" y="0.2" z="0" />
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="tf13"> <!-- table bot -->
+            <rotate axis="x" angle="-90" />
+        </transformation>
     </transformations>
     <primitives>
-        <!-- Uma "primitive" e' uma primitiva e pode ser usada em nos folha -->
-        <!-- Deve existir um ou mais blocos "primitive" -->
-        <!-- Os identificadores "id" nao podem ser repetidos -->
-        <primitive id="rect">
-            <!-- apenas pode existir UMA das seguintes tags: -->
-            <!-- rectangle, triangle, cylinder, sphere, torus -->
-            <!-- os parametros devem ser interpretados, genericamente, -->
-            <!-- como em WebGL; o cilindro deve adicionalmente ter tampas -->
+        <primitive id="rect1">
             <rectangle x1="0" y1="0" x2="6" y2="3"/>
+        </primitive >
+        <primitive id="rect2">
+            <rectangle x1="0" y1="0" x2="6" y2="3"/>
+        </primitive >
+        <primitive id="rect3">
+            <rectangle x1="0" y1="0" x2="6" y2="6"/>
+        </primitive >
+        <primitive id="rect4">
+            <rectangle x1="0" y1="0" x2="2" y2="1.2"/>
+        </primitive >
+        <primitive id="rect5">
+            <rectangle x1="0" y1="0" x2="1.2" y2="0.2"/>
+        </primitive >
+        <primitive id="rect6">
+            <rectangle x1="0" y1="0" x2="2" y2="0.2"/>
+        </primitive >
+        <primitive id="cil1">
+            <cylinder base="0.7" top="0.7" height="3" slices="30" stacks="30" />
         </primitive >
         <primitive id="tri">
             <triangle x1="0" y1="0" z1="0" x2="-6" y2="0" z2="0" x3="-3" y3="-3" z3="0" />
@@ -74,66 +117,196 @@
     </primitives >
     <components>
         <component id="comp1">
-            <!-- Uma "component" e' um objeto composto e pode ser -->
-            <!-- usada em nos intermédios -->
-            <!-- bloco "transformation" e' obrigatorio -->
             <transformation>
-                <!-- deve conter uma referencia a uma das "transformation" -->
-                <!-- declaradas anteriormente -->
                 <transformationref id="tf1" />
-                <!-- ou, ALTERNATIVAMENTE, transformacoes explicitas, -->
-                <!-- usando zero ou mais das instrucoes seguintes, sem -->
-                <!-- limite nem ordem -->
-                <!-- ex: bloco transformation pode ficar sem conteudo -->
-
             </transformation>
-            <!-- declaracao obrigatoria de pelo menos um material; -->
-            <!-- o material id="inherit", mantem (herda) material do "pai" -->
-            <!-- se varios materiais declarados, o default e' o -->
-            <!-- primeiro material; de cada vez que se pressione a tecla m/M, -->
-            <!-- o material muda para o proximo material da lista; do -->
-            <!-- ultimo material da lista volta ao primeiro -->
             <materials>
                 <material id="mat1" />
             </materials>
-            <!-- declaracao obrigatoria de texture -->
-            <!-- id="inherit" mantem (herda) a textura do objecto "pai" -->
-            <!-- id="none" remove a textura recebida do pai -->
-            <!-- a textura declarada sobrepoe a textura recebida do -->
-            <!-- objecto "pai" -->
-            <!-- length_s e length_t sao fatores de escala de textura:-->
-            <!-- Exemplo length_s=3.0: uma ocorrencia da textura, em -->
-            <!-- comprimento, deve cobrir um comprimento igual -->
-            <!-- a 3 unidades; -->
-            <!-- Exemplo length_t=0.4, uma ocorrencia da textura, em -->
-            <!-- largura, deve cobrir uma largura igual a 0.4 unidades. -->
-            <!-- E' permitido que objetos afetados por Transf. Geometr. -->
-            <!-- do tipo escalamento violem esta regra. -->
-            <!-- Nao e' necessario aplicar fatores de escala em -->
-            <!-- quadricas (esfera, cilindro...) -->
-            <texture id="text1" length_s="1" length_t="1" />
-            <!-- bloco "children" obrigatorio num "component" -->
+            <texture id="text_trunk" length_s="1" length_t="1" />
             <children>
-                <!-- deve existir uma ou mais tags "componentref" e/ou -->
-                <!-- "primitiveref", identificando outros -->
-                <!-- componentes ou primitivas -->
-                <!-- <primitiveref id="rect" /> -->
-                <componentref id="comp2" />
+                <componentref id="board_wall" />
                 <primitiveref id="tri" />
-
             </children>
         </component>
-        <component id="comp2">
-
+        <component id="board_wall">
             <transformation>
-                <transformationref id="tf1" />
+                <transformationref id="tf1"/>
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="text_wallpaint" length_s="1" length_t="1" />
+            <children>
+                <componentref id="window_wall" />
+                <primitiveref id="rect1" />
+            </children>
+        </component>
+        <component id="window_wall">
+            <transformation>
+                <transformationref id="tf2" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="text_wallpaint" length_s="1" length_t="1" />
+            <children>
+                <componentref id="floor" />
+                <primitiveref id="rect2" />
+            </children>
+        </component>
+        <component id="floor">
+            <transformation>
+                <transformationref id="tf3" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="text_soalho" length_s="1" length_t="1" />
+            <children>
+                <componentref id="pilar1" />
+                <primitiveref id="rect3" />
+            </children>
+        </component>
+        <component id="pilar1">
+            <transformation>
+                <transformationref id="tf4" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="text_rocks" length_s="1" length_t="1" />
+            <children>
+                <componentref id="pilar2" />
+                <primitiveref id="cil1" />
+            </children>
+        </component>
+        <component id="pilar2">
+            <transformation>
+                <transformationref id="tf5" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="text_rocks" length_s="1" length_t="1" />
+            <children>
+                <componentref id="board1" />
+                <primitiveref id="cil1" />
+            </children>
+        </component>
+        <component id="board1">
+            <transformation>
+                <transformationref id="tf6" />
             </transformation>
             <materials>
                 <material id="mat1" />
             </materials>
             <texture id="none" length_s="1" length_t="1" />
             <children>
-                <primitiveref id="rect" />
+                <componentref id="board2" />
+                <primitiveref id="rect4" />
+            </children>
+        </component>
+        <component id="board2">
+            <transformation>
+                <transformationref id="tf7" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="table_base" />
+                <primitiveref id="rect4" />
+            </children>
+        </component>
+        <component id="table_base">
+            <transformation>
+                <transformationref id="trf8" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="text_trunk" length_s="1" length_t="1" />
+            <children>
+                <componentref id="table_top" />
+                <componentref id="table_bot" />
+                <componentref id="table_left" />
+                <componentref id="table_rigth" />
+                <componentref id="table_front" />
+                <componentref id="table_back" />
+            </children>
+        </component>
+        <component id="table_top">
+            <transformation>
+                <transformationref id="tf12" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rect4" />
+            </children>
+        </component>
+        <component id="table_bot">
+            <transformation>
+                <transformationref id="tf13" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rect4" />
+            </children>
+        </component>
+        <component id="table_left">
+            <transformation>
+                <transformationref id="tf9" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rect5" />
+            </children>
+        </component>
+        <component id="table_rigth">
+            <transformation>
+                <transformationref id="tf10" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rect5" />
+            </children>
+        </component>
+        <component id="table_front">
+            <transformation>
+                <transformationref id="tf1" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rect6" />
+            </children>
+        </component>
+        <component id="table_back">
+            <transformation>
+                <transformationref id="tf11" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rect6" />
             </children>
         </component>
     </components>
