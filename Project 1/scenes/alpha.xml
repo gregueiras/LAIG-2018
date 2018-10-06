@@ -192,6 +192,14 @@
             <texture id="text_wood" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="tri" />
+                <componentref id="board_wall" />
+                <componentref id="window_wall" />
+                <componentref id="floor" />
+                <componentred id="pilar1" />
+                <componentred id="pilar2" />
+                <componentred id="board1" />
+                <componentred id="board2" />
+                <componentred id="table" />
             </children>
         </component>
         <component id="board_wall">
