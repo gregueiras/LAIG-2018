@@ -1564,7 +1564,8 @@ class MySceneGraph {
       children: {
         componentref: [],
         primitiveref: []
-      }
+      },
+      isRoot: true
     }
 
     component.id = this.reader.getString(child, 'id');
@@ -1589,7 +1590,7 @@ class MySceneGraph {
     if ((reply = this.componentErrCheck(component)) != "OK")
       return reply;
 
-    this.components[component.id] = component;
+    this.components.push(component);
     return 0;
   }
 
@@ -1651,10 +1652,10 @@ class MySceneGraph {
   log(message) {
     console.log("   " + message);
   }
-  applyTexture(component) {
+  applyTexture(component, heritage = null) {
     switch (component.texture.id) {
       case INHERIT:
-        //TODO: Acho que nao e preciso fazer nada. 
+        component.texture = heritage.texture;
         break;
 
       case NONE:
@@ -1667,7 +1668,7 @@ class MySceneGraph {
     }
   }
 
-  applyMaterial(component) {
+  applyMaterial(component, heritage = null) {
     if (component.materialID >= component.materials.length) {
       component.materialID = 0;
     }
@@ -1732,12 +1733,15 @@ class MySceneGraph {
 
   }
 
-  displayComponent(component) {
+  displayComponent(component, heritage = null) {
 
+    if(!component.isRoot && heritage == null)
+      return;
+    
     this.scene.pushMatrix();
 
-    this.applyMaterial(component);
-    this.applyTexture(component);
+    this.applyMaterial(component, heritage);
+    this.applyTexture(component, heritage);
     this.applyTransformation(component);
 
     let primRef = component.children.primitiveref;
@@ -1749,13 +1753,21 @@ class MySceneGraph {
     }
 
     let compRef = component.children.componentref;
-    if (Object.keys(compRef).length != 0) {
+    /*if (Object.keys(compRef).length != 0) {
       compRef.forEach(compID => {
         let comp = this.components[compID];
         this.displayComponent(comp);
       });
+    }*/
+    for (let i = 0; i < compRef.length; i++) {
+      for (let j = 0; j < this.components.length; j++) {
+        if(this.components[j].id == compRef[i]) {
+          this.components[j].isRoot = false;
+          this.displayComponent(this.components[j], component);
+          break;
+        }
+      }
     }
-
     this.scene.popMatrix();
   }
 
@@ -1769,8 +1781,10 @@ class MySceneGraph {
       this.primitives[i].shape.display();
     }
     */
-    let rootNode = this.components[this.idRoot];
-    this.displayComponent(rootNode);
+    //let rootNode = this.components[this.idRoot];
+    for (let i = 0; i < this.components.length; i++) {
+      this.displayComponent(this.components[i]);
+    }
   }
 
 }
