@@ -1061,23 +1061,27 @@ class MySceneGraph {
         var tmpCoor = {
           x: null,
           y: null,
-          z: null
-        }
+          z: null,
+          type: null
+        };
+
         this.parseChildrenCoordinates(tmpCoor, child, 0);
+        tmpCoor.type = child.nodeName;
 
         if (child.nodeName == "translate") {
-          material.translate.push(tmpCoor);
+          material.steps.push(tmpCoor);
         } else {
-          material.scale.push(tmpCoor);
+          material.steps.push(tmpCoor);
         }
         break;
       case "rotate":
         var tmpRot = {
           axis: null,
-          angle: null
-        }
+          angle: null,
+          type: "rotate"
+        };
         this.parseChildrenRotation(tmpRot, child);
-        material.rotate.push(tmpRot);
+        material.steps.push(tmpRot);
         break;
       default:
         this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
@@ -1088,10 +1092,8 @@ class MySceneGraph {
   parseTransformation(child) {
     var transformation = {
       id: null,
-      translate: [],
-      rotate: [],
-      scale: []
-    }
+      steps: []
+    };
 
     transformation.id = this.reader.getString(child, 'id');
     if (transformation.id == null || !isString(transformation.id)) {
@@ -1109,7 +1111,7 @@ class MySceneGraph {
       this.parseTransformationsTransformationChildren(grandchildren[j], transformation);
     }
 
-    this.transformations.push(transformation);
+    this.transformations[transformation.id] = transformation;
     return 0;
   }
 
@@ -1414,23 +1416,26 @@ class MySceneGraph {
           var tmpCoor = {
             x: null,
             y: null,
-            z: null
-          }
+            z: null,
+            type: children[i].nodeName
+          };
+
           this.parseChildrenCoordinates(tmpCoor, children[i], 0);
 
           if (child.nodeName == "translate") {
-            component.transformation.translate.push(tmpCoor);
+            component.transformation.steps.push(tmpCoor);
           } else {
-            component.transformation.scale.push(tmpCoor);
+            component.transformation.steps.push(tmpCoor);
           }
           break;
         case "rotate":
           var tmpRot = {
             axis: null,
-            angle: null
+            angle: null,
+            type: children[i].nodeName
           }
           this.parseChildrenRotation(tmpRot, children[i]);
-          component.transformation.rotate.push(tmpRot);
+          component.transformation.steps.push(tmpRot);
           break;
       }
     }
@@ -1526,9 +1531,7 @@ class MySceneGraph {
 
   componentErrCheck(component) {
     if (component.transformation.ref == null &&
-      component.transformation.translate.length +
-      component.transformation.rotate.length +
-      component.transformation.scale.length == 0)
+      component.transformation.steps.length == 0)
       return "Invalid number of transformations";
 
     if (component.materials.length == 0)
@@ -1549,9 +1552,7 @@ class MySceneGraph {
       id: null,
       transformation: { //if ref == null, is transformation, otherwise, is a reference
         ref: null,
-        translate: [],
-        rotate: [],
-        scale: []
+        steps: []
       },
       materials: [],
       materialID: 0,
@@ -1682,10 +1683,62 @@ class MySceneGraph {
     }
   }
 
+  transform(steps) {
+    if (steps == null) {
+      console.error("NULL");
+      return;
+    }
+    if (!(Symbol.iterator in Object(steps))) {
+      console.error("NOT ITERABLE");
+    }
+    for (let step of steps) {
+      switch (step.type) {
+        case "translate":
+          this.scene.translate(step.x, step.y, step.z);
+          break;
+        case "rotate":
+          let axis = {
+            x: 0,
+            y: 0,
+            z: 0
+          };
+
+          axis[step.axis] = 1;
+          this.scene.rotate(DEGREE_TO_RAD * step.angle, axis.x, axis.y, axis.z);
+          break;
+        case "scale":
+          this.scene.scale(step.x, step.y, step.z);
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  applyTransformation(component) {
+    let transf = component.transformation;
+    let steps = null;
+    if (transf.ref != null) {
+      if (this.transformations[transf.ref] != null) {
+        steps = this.transformations[transf.ref].steps;
+      }
+    } else {
+      steps = transf.steps;
+    }
+    if (steps == null) {
+      console.error("WILL NULL");
+    }
+    this.transform(steps);
+
+  }
+
   displayComponent(component) {
+
+    this.scene.pushMatrix();
 
     this.applyMaterial(component);
     this.applyTexture(component);
+    this.applyTransformation(component);
 
     let primRef = component.children.primitiveref;
     if (Object.keys(primRef).length != 0) {
@@ -1702,6 +1755,8 @@ class MySceneGraph {
         this.displayComponent(comp);
       });
     }
+
+    this.scene.popMatrix();
   }
 
   /**

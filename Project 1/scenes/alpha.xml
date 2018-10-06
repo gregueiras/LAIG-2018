@@ -68,24 +68,24 @@
         <transformation id="tf7">
             <translate x="3.25" y="1" z="0" />
         </transformation>
-        <transformation id="tf8"> <!-- table translation -->
+        <transformation id="tf8">            <!-- table translation -->
             <translate x="2" y="0" z="2.5" />
         </transformation>
-        <transformation id="tf9"> <!-- table side -->
+        <transformation id="tf9">            <!-- table side -->
             <translate x="2" y="0" z="0" />
             <rotate axis="y" angle="-90" />
         </transformation>
-         <transformation id="tf10"> <!-- table side -->
+        <transformation id="tf10">            <!-- table side -->
             <rotate axis="y" angle="-90" />
         </transformation>
-        <transformation id="tf11"> <!-- table back -->
+        <transformation id="tf11">            <!-- table back -->
             <translate x="0" y="0" z="1.2" />
         </transformation>
-        <transformation id="tf12"> <!-- table top -->
+        <transformation id="tf12">            <!-- table top -->
             <translate x="0" y="0.2" z="0" />
             <rotate axis="x" angle="-90" />
         </transformation>
-        <transformation id="tf13"> <!-- table bot -->
+        <transformation id="tf13">            <!-- table bot -->
             <rotate axis="x" angle="-90" />
         </transformation>
     </transformations>
@@ -222,7 +222,7 @@
         </component>
         <component id="table_base">
             <transformation>
-                <transformationref id="trf8" />
+                <transformationref id="tf8" />
             </transformation>
             <materials>
                 <material id="mat1" />
