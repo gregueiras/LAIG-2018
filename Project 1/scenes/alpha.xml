@@ -3,7 +3,7 @@
     <scene root="comp1" axis_length="3" />
     <views default="view1">
         <perspective id="view1" near="0.1" far="500" angle="60">
-            <from x="5" y="5" z="5" />
+            <from x="10" y="10" z="10" />
             <to x="0" y="0" z="0" />
         </perspective>
         <ortho id="view2" near="0.1" far="1000" left="-15" right="15" top="15" bottom="-15" />
@@ -133,18 +133,23 @@
         <transformation id="tf23">            <!-- table legs -->
             <translate x="0" y="0" z="0" />
         </transformation>
-        <transformation id="tf24">            <!-- lamp -->
+        <transformation id="tf24">            <!-- round lamp -->
             <translate x="0.5" y="0.5" z="-0.3" />
             <rotate axis="x" angle="-90" />
         </transformation>
-        <transformation id="tf25">            <!-- lamp base -->
+        <transformation id="tf25">            <!-- round lamp base -->
             <translate x="0" y="0" z="-0.15" />
             <scale x="0.1" y="0.1" z="0.1"/>
         </transformation>
-        <transformation id="tf26">            <!-- lamp base -->
+        <transformation id="tf26">            <!-- round lamp base -->
             <translate x="0" y="0" z="-0.30" />
             <scale x="0.25" y="0.25" z="0.01"/>
         </transformation>
+        <transformation id="tf27">            <!-- triangular lamp -->
+            <translate x="1.75" y="0.55" z="-0.3" />
+            <scale x="0.15" y="0.075" z="0.15" />
+        </transformation>
+
     </transformations>
     <primitives>
         <primitive id="rect1">
@@ -175,7 +180,19 @@
             <cylinder base="0.3" top="0.3" height="3" slices="30" stacks="30" />
         </primitive >
         <primitive id="tri">
-            <triangle x1="0" y1="0" z1="0" x2="0" y2="0" z2="0" x3="0" y3="0" z3="0" />
+            <triangle x1="0" y1="1" z1="0" x2="-1" y2="-1" z2="1" x3="1" y3="-1" z3="1" />
+        </primitive >
+        <primitive id="tri1">
+            <triangle x1="0" y1="1" z1="0" x2="-1" y2="-1" z2="1" x3="1" y3="-1" z3="1" />
+        </primitive >
+        <primitive id="tri2">
+            <triangle x1="0" y1="1" z1="0" x2="1" y2="-1" z2="1" x3="1" y3="-1" z3="-1" />
+        </primitive >
+        <primitive id="tri3">
+            <triangle x1="0" y1="1" z1="0" x2="1" y2="-1" z2="-1" x3="-1" y3="-1" z3="-1" />
+        </primitive >
+        <primitive id="tri4">
+            <triangle x1="0" y1="1" z1="0" x2="-1" y2="-1" z2="-1" x3="-1" y3="-1" z3="1" />
         </primitive >
         <primitive id = "lamp">
             <cylinder base = "0.15" top = "0.05" height="0.15" slices="30" stacks="30" />
@@ -191,7 +208,6 @@
             </materials>
             <texture id="text_wood" length_s="1" length_t="1" />
             <children>
-                <primitiveref id="tri" />
                 <componentref id="board_wall" />
                 <componentref id="window_wall" />
                 <componentref id="floor" />
@@ -297,10 +313,75 @@
             <children>
                 <componentref id="table_base" />
                 <componentref id="table_legs" />
-                <componentref id="table_lamp" />
+                <componentref id="table_round_lamp" />
+                <componentref id="table_triangular_lamp" />
             </children>
         </component>
-        <component id="table_lamp">
+        <component id="table_triangular_lamp">
+            <transformation>
+                <transformationref id="tf27" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="text_fabric" length_s="1" length_t="1" />
+            <children>
+                <componentref id="triang_1"/>
+                <componentref id="triang_2"/>
+                <componentref id="triang_3"/>
+                <componentref id="triang_4"/>
+
+            </children>
+        </component>
+        <component id="triang_1">
+            <transformation>
+                <transformationref id="tf1" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="tri1"/>
+            </children>
+        </component>
+        <component id="triang_2">
+            <transformation>
+                <transformationref id="tf1" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="tri2"/>
+            </children>
+        </component>
+        <component id="triang_3">
+            <transformation>
+                <transformationref id="tf1" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="tri3"/>
+            </children>
+        </component>
+        <component id="triang_4">
+            <transformation>
+                <transformationref id="tf1" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="tri4"/>
+            </children>
+        </component>
+        <component id="table_round_lamp">
             <transformation>
                 <transformationref id="tf24" />
             </transformation>
@@ -310,11 +391,11 @@
             <texture id="text_fabric" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="lamp" />
-                <componentref id="table_lamp_post" />
-                <componentref id="table_lamp_base" />
+                <componentref id="table_round_lamp_post" />
+                <componentref id="table_round_lamp_base" />
             </children>
         </component>
-        <component id="table_lamp_post">
+        <component id="table_round_lamp_post">
             <transformation>
                 <transformationref id="tf25" />
             </transformation>
@@ -326,7 +407,7 @@
                 <primitiveref id="cil1" />
             </children>
         </component>
-        <component id="table_lamp_base">
+        <component id="table_round_lamp_base">
             <transformation>
                 <transformationref id="tf26" />
             </transformation>

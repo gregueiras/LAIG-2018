@@ -86,6 +86,16 @@ class MySceneGraph {
             this.primitives[key].specs.top,
             this.primitives[key].specs.height);
           break;
+
+        case "torus":
+          this.primitives[key].shape = new MyTorus(
+            this.scene,
+            this.primitives[key].specs.outer,
+            this.primitives[key].specs.inner,
+            this.primitives[key].specs.slices,
+            this.primitives[key].specs.loops);
+          break;
+
         default:
           break;
       }
@@ -1328,7 +1338,7 @@ class MySceneGraph {
         primitive.specs = sphere;
         break;
       case "torus":
-        var cylinder = {
+        var torus = {
           inner: null,
           outer: null,
           slices: null,
@@ -1735,9 +1745,9 @@ class MySceneGraph {
 
   displayComponent(component, heritage = null) {
 
-    if(!component.isRoot && heritage == null)
+    if (!component.isRoot && heritage == null)
       return;
-    
+
     this.scene.pushMatrix();
 
     this.applyMaterial(component, heritage);
@@ -1761,7 +1771,7 @@ class MySceneGraph {
     }*/
     for (let i = 0; i < compRef.length; i++) {
       for (let j = 0; j < this.components.length; j++) {
-        if(this.components[j].id == compRef[i]) {
+        if (this.components[j].id == compRef[i]) {
           this.components[j].isRoot = false;
           this.displayComponent(this.components[j], component);
           break;
