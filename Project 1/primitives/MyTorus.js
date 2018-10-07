@@ -24,9 +24,10 @@ class MyTorus extends CGFobject {
     let arc = Math.PI * 2;
 
     for (let j = 0; j <= this.loops; j++) {
+      let theta = Math.PI * 2 * j / this.loops;
+
       for (let i = 0; i <= this.slices; i++) {
         let alpha = i / this.slices * arc;
-        let theta = Math.PI * 2 * j / this.loops;
 
         let v = {
           x: Math.cos(alpha) * (this.outRadius + this.inRadius * Math.cos(theta)),

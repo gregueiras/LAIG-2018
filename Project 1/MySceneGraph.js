@@ -52,7 +52,6 @@ class MySceneGraph {
   }
 
   buildComponents() {
-    //rectangles
     let keys = Object.keys(this.primitives);
     for (let key of keys) {
       switch (this.primitives[key].type) {
@@ -95,7 +94,13 @@ class MySceneGraph {
             this.primitives[key].specs.slices,
             this.primitives[key].specs.loops);
           break;
-
+        case "sphere":
+          this.primitives[key].shape = new MySphere(
+            this.scene,
+            this.primitives[key].specs.radius,
+            this.primitives[key].specs.slices,
+            this.primitives[key].specs.loops);
+          break;
         default:
           break;
       }
