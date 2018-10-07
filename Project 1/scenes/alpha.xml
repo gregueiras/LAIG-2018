@@ -33,6 +33,8 @@
         <texture id="text_soalho" file="./scenes/images/soalho2.jpg" />
         <texture id="text_fabric" file="./scenes/images/fabric.jpg" />
         <texture id="text_metal" file="./scenes/images/metal.jpg" />
+        <texture id="text_vidral" file="./scenes/images/vidral.jpg" />
+        <texture id="text_ball" file="./scenes/images/ball.jpg" />
     </textures>
     <materials>
         <material id="mat1" shininess = "0.1">
@@ -146,8 +148,20 @@
             <scale x="0.25" y="0.25" z="0.01"/>
         </transformation>
         <transformation id="tf27">            <!-- triangular lamp -->
-            <translate x="1.75" y="0.55" z="-0.3" />
+            <rotate axis="x" angle="90" />
             <scale x="0.15" y="0.075" z="0.15" />
+        </transformation>
+        <transformation id="tf28">            <!-- triangular lamp -->
+            <translate x="1.65" y="0.50" z="-0.3" />
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="tf29">            <!-- triangular lamp -->
+            <translate x="2.75" y="1.9" z="2" />
+        </transformation>
+        <transformation id="tf30">            <!-- cristal ball -->
+            <translate x="0" y="-0.17" z="0" />
+            <rotate axis="x" angle="-90" />
+            <scale x="1" y="1" z="0.5" />
         </transformation>
 
     </transformations>
@@ -196,6 +210,12 @@
         </primitive >
         <primitive id = "lamp">
             <cylinder base = "0.15" top = "0.05" height="0.15" slices="30" stacks="30" />
+        </primitive>
+        <primitive id = "sphere1">
+            <sphere radius="0.2" slices="20" stacks="20" />
+        </primitive>
+        <primitive id = "torus1">
+            <torus inner="0.05" outer="0.1" slices="20" loops="30" />
         </primitive>
     </primitives >
     <components>
@@ -315,22 +335,6 @@
                 <componentref id="table_legs" />
                 <componentref id="table_round_lamp" />
                 <componentref id="table_triangular_lamp" />
-            </children>
-        </component>
-        <component id="table_triangular_lamp">
-            <transformation>
-                <transformationref id="tf27" />
-            </transformation>
-            <materials>
-                <material id="mat1" />
-            </materials>
-            <texture id="text_fabric" length_s="1" length_t="1" />
-            <children>
-                <componentref id="triang_1"/>
-                <componentref id="triang_2"/>
-                <componentref id="triang_3"/>
-                <componentref id="triang_4"/>
-
             </children>
         </component>
         <component id="triang_1">
@@ -645,6 +649,96 @@
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="rect8" />
+            </children>
+        </component>
+        <component id="table_triangular_lamp">
+            <transformation>
+                <transformationref id="tf28" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="text_fabric" length_s="1" length_t="1" />
+            <children>
+                <componentref id="triangular_lamp"/>
+                <componentref id="table_triangular_lamp_post"/>
+                <componentref id="table_triangular_lamp_base"/>
+            </children>
+        </component>
+        <component id="triangular_lamp">
+            <transformation>
+                <transformationref id="tf27" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="text_fabric" length_s="1" length_t="1" />
+            <children>
+                <componentref id="triang_1"/>
+                <componentref id="triang_2"/>
+                <componentref id="triang_3"/>
+                <componentref id="triang_4"/>
+            </children>
+        </component>
+        <component id="table_triangular_lamp_post">
+            <transformation>
+                <transformationref id="tf25" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="text_metal" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="cil1" />
+            </children>
+        </component>
+        <component id="table_triangular_lamp_base">
+            <transformation>
+                <transformationref id="tf26" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="text_metal" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="cil1" />
+            </children>
+        </component>
+        <component id="cristal_ball">
+            <transformation>
+                <transformationref id="tf29" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="text_vidral" length_s="1" length_t="1" />
+            <children>
+                <componentref id="ball" />
+                <componentref id="ball_support" />
+            </children>
+        </component>
+        <component id="ball">
+            <transformation>
+                <transformationref id="tf1" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="text_vidral" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="sphere1" />
+            </children>
+        </component>
+        <component id="ball_support">
+            <transformation>
+                <transformationref id="tf30" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="text_metal" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="torus1" />
             </children>
         </component>
     </components>

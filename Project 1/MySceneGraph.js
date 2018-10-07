@@ -99,7 +99,7 @@ class MySceneGraph {
             this.scene,
             this.primitives[key].specs.radius,
             this.primitives[key].specs.slices,
-            this.primitives[key].specs.loops);
+            this.primitives[key].specs.stacks);
           break;
         default:
           break;
