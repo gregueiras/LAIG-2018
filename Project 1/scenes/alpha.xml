@@ -1,6 +1,6 @@
 <yas>
 
-    <scene root="comp1" axis_length="3" />
+    <scene root="room" axis_length="3" />
     <views default="view1">
         <perspective id="view1" near="0.1" far="500" angle="60">
             <from x="10" y="10" z="10" />
@@ -155,10 +155,10 @@
             <translate x="1.65" y="0.50" z="-0.3" />
             <rotate axis="x" angle="-90" />
         </transformation>
-        <transformation id="tf29">            <!-- triangular lamp -->
-            <translate x="2.75" y="1.9" z="2" />
+        <transformation id="tf29">            <!-- cristal ball -->
+            <translate x="1.25" y="0.38" z="-0.9" />
         </transformation>
-        <transformation id="tf30">            <!-- cristal ball -->
+        <transformation id="tf30">            
             <translate x="0" y="-0.17" z="0" />
             <rotate axis="x" angle="-90" />
             <scale x="1" y="1" z="0.5" />
@@ -219,7 +219,7 @@
         </primitive>
     </primitives >
     <components>
-        <component id="comp1">
+        <component id="room">
             <transformation>
                 <transformationref id="tf1" />
             </transformation>
@@ -231,11 +231,11 @@
                 <componentref id="board_wall" />
                 <componentref id="window_wall" />
                 <componentref id="floor" />
-                <componentred id="pilar1" />
-                <componentred id="pilar2" />
-                <componentred id="board1" />
-                <componentred id="board2" />
-                <componentred id="table" />
+                <componentref id="pilar1" />
+                <componentref id="pilar2" />
+                <componentref id="board1" />
+                <componentref id="board2" />
+                <componentref id="table" />
             </children>
         </component>
         <component id="board_wall">
@@ -333,8 +333,21 @@
             <children>
                 <componentref id="table_base" />
                 <componentref id="table_legs" />
+                <componentref id="table_objects" />
+            </children>
+        </component>
+        <component id="table_objects">
+            <transformation>
+                <transformationref id="tf1" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
                 <componentref id="table_round_lamp" />
                 <componentref id="table_triangular_lamp" />
+                <componentref id="cristal_ball" />
             </children>
         </component>
         <component id="triang_1">

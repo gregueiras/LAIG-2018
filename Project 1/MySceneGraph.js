@@ -1579,8 +1579,7 @@ class MySceneGraph {
       children: {
         componentref: [],
         primitiveref: []
-      },
-      isRoot: true
+      }
     }
 
     component.id = this.reader.getString(child, 'id');
@@ -1605,7 +1604,7 @@ class MySceneGraph {
     if ((reply = this.componentErrCheck(component)) != "OK")
       return reply;
 
-    this.components.push(component);
+    this.components[component.id] = component;
     return 0;
   }
 
@@ -1750,9 +1749,6 @@ class MySceneGraph {
 
   displayComponent(component, heritage = null) {
 
-    if (!component.isRoot && heritage == null)
-      return;
-
     this.scene.pushMatrix();
 
     this.applyMaterial(component, heritage);
@@ -1768,13 +1764,13 @@ class MySceneGraph {
     }
 
     let compRef = component.children.componentref;
-    /*if (Object.keys(compRef).length != 0) {
+    if (Object.keys(compRef).length != 0) {
       compRef.forEach(compID => {
         let comp = this.components[compID];
-        this.displayComponent(comp);
+        this.displayComponent(comp, component);
       });
-    }*/
-    for (let i = 0; i < compRef.length; i++) {
+    }
+    /*for (let i = 0; i < compRef.length; i++) {
       for (let j = 0; j < this.components.length; j++) {
         if (this.components[j].id == compRef[i]) {
           this.components[j].isRoot = false;
@@ -1782,7 +1778,7 @@ class MySceneGraph {
           break;
         }
       }
-    }
+    }*/
     this.scene.popMatrix();
   }
 
@@ -1796,10 +1792,11 @@ class MySceneGraph {
       this.primitives[i].shape.display();
     }
     */
-    //let rootNode = this.components[this.idRoot];
-    for (let i = 0; i < this.components.length; i++) {
+    let rootNode = this.components[this.idRoot];
+    this.displayComponent(rootNode);
+    /*for (let i = 0; i < this.components.length; i++) {
       this.displayComponent(this.components[i]);
-    }
+    }*/
   }
 
 }
