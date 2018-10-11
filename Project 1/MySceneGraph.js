@@ -1666,10 +1666,16 @@ class MySceneGraph {
   log(message) {
     console.log("   " + message);
   }
-  applyTexture(component, heritage = null) {
+  applyTexture(component, texture) {
     switch (component.texture.id) {
       case INHERIT:
-        component.texture = heritage.texture;
+        if (texture != undefined) {
+          let tex = this.textures[texture];
+          if (tex)
+            tex.bind();
+        } else {
+          console.error("No parent texture passed")
+        }
         break;
 
       case NONE:
@@ -1682,14 +1688,19 @@ class MySceneGraph {
     }
   }
 
-  applyMaterial(component, heritage = null) {
+  applyMaterial(component, material) {
     if (component.materialID >= component.materials.length) {
       component.materialID = 0;
     }
     let matID = component.materials[component.materialID];
     switch (matID) {
       case INHERIT:
-        //TODO: Acho que nao e preciso fazer nada
+        if (material != undefined) {
+
+          this.materials[material].apply();
+        } else {
+          console.error("No parent material passed")
+        }
         break;
 
       default:
@@ -1747,12 +1758,12 @@ class MySceneGraph {
 
   }
 
-  displayComponent(component, heritage = null) {
+  displayComponent(component, material, texture) {
 
     this.scene.pushMatrix();
 
-    this.applyMaterial(component, heritage);
-    this.applyTexture(component, heritage);
+    this.applyMaterial(component, material);
+    this.applyTexture(component, texture);
     this.applyTransformation(component);
 
     let primRef = component.children.primitiveref;
@@ -1764,21 +1775,23 @@ class MySceneGraph {
     }
 
     let compRef = component.children.componentref;
-    if (Object.keys(compRef).length != 0) {
-      compRef.forEach(compID => {
-        let comp = this.components[compID];
-        this.displayComponent(comp, component);
-      });
-    }
-    /*for (let i = 0; i < compRef.length; i++) {
-      for (let j = 0; j < this.components.length; j++) {
-        if (this.components[j].id == compRef[i]) {
-          this.components[j].isRoot = false;
-          this.displayComponent(this.components[j], component);
-          break;
-        }
-      }
-    }*/
+    compRef.forEach(reference => {
+      let child = this.components[reference];
+      let texID;
+      if (component.texture.id == "inherit")
+        texID = texture;
+      else
+        texID = component.texture.id;
+
+      let matID;
+      if (component.texture.id == "inherit")
+        matID = material;
+      else
+        matID = component.materials[component.materialID];
+
+      this.displayComponent(child, matID, texID);
+
+    });
     this.scene.popMatrix();
   }
 
@@ -1787,16 +1800,10 @@ class MySceneGraph {
    */
   displayScene() {
     // entry point for graph rendering
-    //TODO: Render loop starting at root of graph
-    /* for (let i = 0; i < this.primitives.length; i++) {
-      this.primitives[i].shape.display();
-    }
-    */
     let rootNode = this.components[this.idRoot];
+
     this.displayComponent(rootNode);
-    /*for (let i = 0; i < this.components.length; i++) {
-      this.displayComponent(this.components[i]);
-    }*/
+
   }
 
 }
