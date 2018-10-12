@@ -12,22 +12,21 @@
         </ortho >
     </views>
     <ambient>
-        <ambient r="0.3" g="0.3" b="0.3" a="1" />
+        <ambient r="0" g="0" b="0" a="1" />
         <background r="0.53" g="0.81" b="0.92" a="1" />
     </ambient>
     <lights>
         <omni id="l1" enabled="0">
-            <location x="7" y="5" z="2" w="0" />
+            <location x="7" y="3" z="2" w="0" />
             <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="0.7" g="0.7" b="0.7" a="1" />
-            <specular r="0.3" g="0.3" b="0.3" a="1" />
+            <diffuse r="255" g="255" b="255" a="1" />
+            <specular r="255" g="255" b="255" a="1" />
         </omni>
         <omni id="l2" enabled="0">
-            <location x="3" y="5" z="3" w="0" />
+            <location x="3" y="5" z="8" w="0" />
             <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="0.7" g="0.7" b="0.7" a="1" />
-            <specular r="0.3" g="0.3" b="0.3" a="1" />
-
+            <diffuse r="255" g="255" b="255" a="1" />
+            <specular r="255" g="255" b="255" a="1" />
         </omni>
     </lights>
     <textures>
@@ -232,14 +231,7 @@
             </materials>
             <texture id="text_wood" length_s="1" length_t="1" />
             <children>
-                <componentref id="board_wall" />
-                <componentref id="window_wall" />
-                <componentref id="floor" />
-                <componentref id="pilar1" />
-                <componentref id="pilar2" />
-                <componentref id="board1" />
-                <componentref id="board2" />
-                <componentref id="table" />
+                <primitiveref id="cil1" />
             </children>
         </component>
         <component id="board_wall">

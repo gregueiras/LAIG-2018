@@ -59,17 +59,18 @@ class XMLscene extends CGFscene {
       let dif = light.diffuse;
       let spe = light.specular;
       let l = this.lights[i];
+
       l.setPosition(pos.x, pos.y, pos.z, 1);
       l.setVisible(true);
       l.setAmbient(amb.r, amb.g, amb.b, amb.a);
       l.setDiffuse(dif.r, dif.g, dif.b, dif.a);
       l.setSpecular(spe.r, spe.g, spe.b, spe.a);
       l.setConstantAttenuation(0);
-      l.setLinearAttenuation(1);
+      l.setLinearAttenuation(0.1);
       l.setQuadraticAttenuation(0);
 
       //TODO: Fix disable light. Light is always enabled
-      if (l.enabled) {
+      if (light.enabled) {
         l.enable();
       } else {
         l.disable();
@@ -102,36 +103,43 @@ class XMLscene extends CGFscene {
   }
 
   /**
-   *  Apply camera loaded from XML
+   *  Apply default camera loaded from XML
    */
   loadCamera() {
     if (this.interface.cameras) {
       let selectedCamera = this.interface.cameras.activeCamera;
       //TODO: Launch error on XML parser when default camera is not loaded
-      let defOrtho = this.graph.views.orthos[selectedCamera];
-      let defPerspective = this.graph.views.perspectives[selectedCamera];
-      if (defOrtho != null) {
-        let cam = defOrtho;
-        let target = cam.to;
-        let from = cam.from;
-        this.camera = new CGFcameraOrtho(cam.left, cam.right, cam.bottom, cam.top, cam.near, cam.far,
-          vec3.fromValues(from.x, from.y, from.z), vec3.fromValues(target.x, target.y, target.z), vec3.fromValues(0, 1, 0));
-        this.interface.setActiveCamera(this.camera);
-
-      }
-      if (defPerspective != null) {
-        let cam = defPerspective;
-        let target = cam.to;
-        let from = cam.from;
-        //TODO: Fix FOV to respect angle provided
-        let newC = new CGFcamera(0.4, cam.near, cam.far, vec3.fromValues(from.x, from.y, from.z),
-          vec3.fromValues(target.x, target.y, target.z));
-        this.camera = newC;
-        this.interface.setActiveCamera(this.camera);
-      }
+      this.applyCamera(selectedCamera);
     }
   }
+  /**
+   * Apply camera
+   */
+  applyCamera(selectedCamera) {
+    let defOrtho = this.graph.views.orthos[selectedCamera];
+    let defPerspective = this.graph.views.perspectives[selectedCamera];
+    if (defOrtho != null) {
+      let cam = defOrtho;
+      let target = cam.to;
+      let from = cam.from;
+      this.camera = new CGFcameraOrtho(cam.left, cam.right, cam.bottom, cam.top, cam.near, cam.far,
+        vec3.fromValues(from.x, from.y, from.z), vec3.fromValues(target.x, target.y, target.z), vec3.fromValues(0, 1, 0));
+      this.camera.id = selectedCamera;
+      this.interface.setActiveCamera(this.camera);
 
+    }
+    if (defPerspective != null) {
+      let cam = defPerspective;
+      let target = cam.to;
+      let from = cam.from;
+      //TODO: Fix FOV to respect angle provided
+      let newC = new CGFcamera(0.4, cam.near, cam.far, vec3.fromValues(from.x, from.y, from.z),
+        vec3.fromValues(target.x, target.y, target.z));
+      this.camera = newC;
+      this.camera.id = selectedCamera;
+      this.interface.setActiveCamera(this.camera);
+    }
+  }
   /**
    * Apply background color loaded from XML
    */
@@ -153,6 +161,17 @@ class XMLscene extends CGFscene {
   }
 
   /**
+   * Changes active camera accordingly to interface
+   */
+  changeActiveCamera() {
+    if (this.interface.cameras) {
+      let interfaceCam = this.interface.cameras.activeCamera;
+      if (this.camera.id != interfaceCam) {
+        this.applyCamera(interfaceCam);
+      }
+    }
+  }
+  /**
    * Displays the scene.
    */
   display() {
@@ -162,7 +181,7 @@ class XMLscene extends CGFscene {
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-    this.loadCamera();
+    this.changeActiveCamera();
 
     // Initialize Model-View matrix as identity (no transformation
     this.updateProjectionMatrix();
