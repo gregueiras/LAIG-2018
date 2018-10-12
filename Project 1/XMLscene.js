@@ -36,7 +36,6 @@ class XMLscene extends CGFscene {
     this.axis = new CGFaxis(this);
 
     this.cube = new MyUnitCubeQuad(this);
-
   }
 
   /**
@@ -76,6 +75,8 @@ class XMLscene extends CGFscene {
         l.disable();
       }
 
+      l.update();
+
     }
   }
 
@@ -107,7 +108,7 @@ class XMLscene extends CGFscene {
    */
   loadCamera() {
     if (this.interface.cameras) {
-      let selectedCamera = this.interface.cameras.activeCamera;
+      let selectedCamera = this.interface.cameras[ACTIVE_CAMERA];
       //TODO: Launch error on XML parser when default camera is not loaded
       this.applyCamera(selectedCamera);
     }
@@ -165,7 +166,7 @@ class XMLscene extends CGFscene {
    */
   changeActiveCamera() {
     if (this.interface.cameras) {
-      let interfaceCam = this.interface.cameras.activeCamera;
+      let interfaceCam = this.interface.cameras[ACTIVE_CAMERA];
       if (this.camera.id != interfaceCam) {
         this.applyCamera(interfaceCam);
       }

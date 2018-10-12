@@ -1,3 +1,5 @@
+const ACTIVE_CAMERA = 'Active Camera';
+
 /**
  * MyInterface class, creating a GUI interface.
  */
@@ -37,14 +39,15 @@ class MyInterface extends CGFinterface {
         // add two check boxes to the group. The identifiers must be members variables of the scene initialized in scene.init as boolean
         // e.g. this.option1=true; this.option2=false;
 
-        let omniGroup = group.addFolder("Omnis");
-        omniGroup.open();
 
         for (let i = 0; i < lights.omnis.length; i++) {
             const light = lights.omnis[i];
-            this.scene.lightValues[light.id] = light;
+            this.scene.lightValues[light.id] = (light.enabled ? true : false);
+            let name = light.id;
+            group.add(this.scene.lightValues, name);
             //TODO: Add to GUI
             //omniGroup.add(this.scene.lightValues[light.id], light.enabled)
+
 
         }
 
@@ -61,7 +64,7 @@ class MyInterface extends CGFinterface {
 
     addCameraOptions(views) {
         this.cameras = {};
-        this.cameras.activeCamera = views.default;
+        this.cameras[ACTIVE_CAMERA] = views.default;
 
         let cameras = {};
 
@@ -77,6 +80,6 @@ class MyInterface extends CGFinterface {
             cameras[cam.id] = cam.id;
         }
 
-        this.gui.add(this.cameras, 'activeCamera', cameras);
+        this.gui.add(this.cameras, ACTIVE_CAMERA, cameras);
     }
 }
