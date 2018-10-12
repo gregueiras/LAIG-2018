@@ -24,6 +24,9 @@ class MyCylinderBase extends CGFobject {
 
   display() {
     this.scene.pushMatrix();
+    this.scene.translate(0, 0, this.height / 2);
+
+    this.scene.pushMatrix();
 
     this.scene.translate(0, 0, -this.height / 2);
     this.scene.rotate(Math.PI, 1, 0, 0);
@@ -42,5 +45,6 @@ class MyCylinderBase extends CGFobject {
     this.scene.popMatrix();
 
     this.cylinder.display();
+    this.scene.popMatrix();
   }
 };

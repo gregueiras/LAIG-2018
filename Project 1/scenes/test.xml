@@ -231,7 +231,7 @@
             </materials>
             <texture id="text_wood" length_s="1" length_t="1" />
             <children>
-                <primitiveref id="cil1" />
+                <primitiveref id="sphere1" />
             </children>
         </component>
         <component id="board_wall">
