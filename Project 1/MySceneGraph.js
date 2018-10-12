@@ -304,6 +304,16 @@ class MySceneGraph {
       right: null,
       top: null,
       bottom: null,
+      from: {
+        x: null,
+        y: null,
+        z: null
+      },
+      to: {
+        x: null,
+        y: null,
+        z: null
+      }
     }
 
     ortho.id = this.reader.getString(child, 'id');
@@ -347,6 +357,12 @@ class MySceneGraph {
     ortho.bottom = this.reader.getFloat(child, 'bottom');
     if (ortho.bottom == null || isNaN(ortho.bottom)) {
       return "unable to parse bottom value";
+    }
+
+    var grandchildren = child.children;
+
+    for (var j = 0; j < grandchildren.length; j++) {
+      this.parseViewPerspectiveChildren(grandchildren[j], ortho);
     }
 
     this.views.orthos[ortho.id] = ortho;

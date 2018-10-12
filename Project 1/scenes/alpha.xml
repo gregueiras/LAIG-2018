@@ -6,7 +6,10 @@
             <from x="10" y="10" z="10" />
             <to x="0" y="0" z="0" />
         </perspective>
-        <ortho id="view2" near="0.1" far="1000" left="-15" right="15" top="15" bottom="-15" />
+        <ortho id="view2" near="0.1" far="100" left="-5" right="5" top="5" bottom="-5">
+            <from x="10" y="10" z="10" />
+            <to x="0" y="0" z="0" />
+        </ortho >
     </views>
     <ambient>
         <ambient r="0" g="0" b="0" a="1" />
@@ -158,7 +161,7 @@
         <transformation id="tf29">            <!-- cristal ball -->
             <translate x="1.25" y="0.38" z="-0.9" />
         </transformation>
-        <transformation id="tf30">            
+        <transformation id="tf30">
             <translate x="0" y="-0.17" z="0" />
             <rotate axis="x" angle="-90" />
             <scale x="1" y="1" z="0.5" />
