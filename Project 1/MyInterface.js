@@ -45,21 +45,17 @@ class MyInterface extends CGFinterface {
             this.scene.lightValues[light.id] = (light.enabled ? true : false);
             let name = light.id;
             group.add(this.scene.lightValues, name);
-            //TODO: Add to GUI
-            //omniGroup.add(this.scene.lightValues[light.id], light.enabled)
 
+        }
+        for (let i = 0; i < lights.spots.length; i++) {
+            const light = lights.spots[i];
+            this.scene.lightValues[light.id] = (light.enabled ? true : false);
+            let name = light.id;
+            group.add(this.scene.lightValues, name);
 
         }
 
 
-        /*
-                for (var key in lights) {
-                    if (lights.hasOwnProperty(key)) {
-                        this.scene.lightValues[key] = lights[key][0];
-                        group.add(this.scene.lightValues, key);
-                    }
-                }
-                */
     }
 
     addCameraOptions(views) {

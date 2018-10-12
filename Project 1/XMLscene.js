@@ -48,8 +48,10 @@ class XMLscene extends CGFscene {
    * Initializes the scene lights with the values read from the XML file.
    */
   initLights() {
+    let index = 0;
+
     for (let i = 0;
-      (i < this.graph.light.omnis.length) && (i < 8); i++) {
+      (i < this.graph.light.omnis.length) && (index < 8); i++) {
       const light = this.graph.light.omnis[i];
       this.lightValues[light.id] = light;
 
@@ -57,7 +59,7 @@ class XMLscene extends CGFscene {
       let amb = light.ambient;
       let dif = light.diffuse;
       let spe = light.specular;
-      let l = this.lights[i];
+      let l = this.lights[index];
 
       l.setPosition(pos.x, pos.y, pos.z, 1);
       l.setVisible(true);
@@ -68,15 +70,35 @@ class XMLscene extends CGFscene {
       l.setLinearAttenuation(0.1);
       l.setQuadraticAttenuation(0);
 
-      //TODO: Fix disable light. Light is always enabled
-      if (light.enabled) {
-        l.enable();
-      } else {
-        l.disable();
-      }
+      index++;
+    }
 
-      l.update();
+    for (let i = 0;
+      (i < this.graph.light.spots.length) && (index < 8); i++) {
+      const light = this.graph.light.spots[i];
+      this.lightValues[light.id] = light;
 
+      let pos = light.location;
+      let to = light.target;
+      let amb = light.ambient;
+      let dif = light.diffuse;
+      let spe = light.specular;
+      let l = this.lights[index];
+
+      l.setPosition(pos.x, pos.y, pos.z, 1);
+      l.setVisible(true);
+      l.setAmbient(amb.r, amb.g, amb.b, amb.a);
+      l.setDiffuse(dif.r, dif.g, dif.b, dif.a);
+      l.setSpecular(spe.r, spe.g, spe.b, spe.a);
+      l.setSpotCutOff(light.angle);
+      l.setSpotExponent(light.exponent);
+      l.setSpotDirection(to.x - pos.x, to.y - pos.y, to.z - pos.z);
+
+      l.setConstantAttenuation(0);
+      l.setLinearAttenuation(0.1);
+      l.setQuadraticAttenuation(0);
+
+      index++;
     }
   }
 

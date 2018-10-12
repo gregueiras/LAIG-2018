@@ -27,8 +27,14 @@
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.7" g="0.7" b="0.7" a="1" />
             <specular r="0.3" g="0.3" b="0.3" a="1" />
-
         </omni>
+        <spot id="spot" enabled="0" angle="30" exponent="1">
+            <location x="3" y="3" z="3" w="0" />
+            <target x="0" y="0" z="0" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.7" g="0.7" b="0.7" a="1" />
+            <specular r="0.3" g="0.3" b="0.3" a="1" />
+        </spot>
     </lights>
     <textures>
         <texture id="text_wood" file="./scenes/images/table.png" />
