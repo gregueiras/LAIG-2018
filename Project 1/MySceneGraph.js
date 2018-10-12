@@ -450,11 +450,6 @@ class MySceneGraph {
       return "unable to parse angle value";
     }
 
-    perspective.angle = this.reader.getFloat(child, 'angle');
-    if (perspective.angle == null || isNaN(perspective.angle)) {
-      return "unable to parse angle value";
-    }
-
     var grandchildren = child.children;
 
     for (var j = 0; j < grandchildren.length; j++) {

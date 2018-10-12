@@ -58,4 +58,25 @@ class MyInterface extends CGFinterface {
                 }
                 */
     }
+
+    addCameraOptions(views) {
+        this.cameras = {};
+        this.cameras.activeCamera = views.default;
+
+        let cameras = {};
+
+        let keys = Object.keys(views.orthos);
+        for (let key of keys) {
+            let cam = views.orthos[key];
+            cameras[cam.id] = cam.id;
+        }
+
+        keys = Object.keys(views.perspectives);
+        for (let key of keys) {
+            let cam = views.perspectives[key];
+            cameras[cam.id] = cam.id;
+        }
+
+        this.gui.add(this.cameras, 'activeCamera', cameras);
+    }
 }

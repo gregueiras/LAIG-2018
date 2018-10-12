@@ -84,7 +84,6 @@ class XMLscene extends CGFscene {
    */
   onGraphLoaded() {
 
-    this.loadCamera();
 
     this.axis = new CGFaxis(this, this.graph.axis_length);
 
@@ -95,6 +94,10 @@ class XMLscene extends CGFscene {
     // Adds lights group.
     this.interface.addLightsGroup(this.graph.light);
 
+    // Adds camera options
+    this.interface.addCameraOptions(this.graph.views);
+
+    this.loadCamera();
     this.sceneInited = true;
   }
 
@@ -102,30 +105,30 @@ class XMLscene extends CGFscene {
    *  Apply camera loaded from XML
    */
   loadCamera() {
-    let defaultCamera = this.graph.views.default;
-    //TODO: Launch error on XML parser when default camera is not loaded
-    let defOrtho = this.graph.views.orthos[defaultCamera];
-    let defPerspective = this.graph.views.perspectives[defaultCamera];
-    if (defOrtho != null) {
-      let cam = defOrtho;
-      let target = cam.to;
-      let from = cam.from;
-      this.camera = new CGFcameraOrtho(cam.left, cam.right, cam.bottom, cam.top, cam.near, cam.far,
-        vec3.fromValues(from.x, from.y, from.z), vec3.fromValues(target.x, target.y, target.z), vec3.fromValues(0, 1, 0));
-      this.interface.setActiveCamera(this.camera);
-      console.log("Ortho camera applied!");
+    if (this.interface.cameras) {
+      let selectedCamera = this.interface.cameras.activeCamera;
+      //TODO: Launch error on XML parser when default camera is not loaded
+      let defOrtho = this.graph.views.orthos[selectedCamera];
+      let defPerspective = this.graph.views.perspectives[selectedCamera];
+      if (defOrtho != null) {
+        let cam = defOrtho;
+        let target = cam.to;
+        let from = cam.from;
+        this.camera = new CGFcameraOrtho(cam.left, cam.right, cam.bottom, cam.top, cam.near, cam.far,
+          vec3.fromValues(from.x, from.y, from.z), vec3.fromValues(target.x, target.y, target.z), vec3.fromValues(0, 1, 0));
+        this.interface.setActiveCamera(this.camera);
 
-    }
-    if (defPerspective != null) {
-      let cam = defPerspective;
-      let target = cam.to;
-      let from = cam.from;
-      //TODO: Fix FOV to respect angle provided
-      let newC = new CGFcamera(0.4, cam.near, cam.far, vec3.fromValues(from.x, from.y, from.z),
-        vec3.fromValues(target.x, target.y, target.z));
-      this.camera = newC;
-      this.interface.setActiveCamera(this.camera);
-      console.log("Perspective camera applied!");
+      }
+      if (defPerspective != null) {
+        let cam = defPerspective;
+        let target = cam.to;
+        let from = cam.from;
+        //TODO: Fix FOV to respect angle provided
+        let newC = new CGFcamera(0.4, cam.near, cam.far, vec3.fromValues(from.x, from.y, from.z),
+          vec3.fromValues(target.x, target.y, target.z));
+        this.camera = newC;
+        this.interface.setActiveCamera(this.camera);
+      }
     }
   }
 
@@ -158,6 +161,8 @@ class XMLscene extends CGFscene {
     // Clear image and depth buffer everytime we update the scene
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+
+    this.loadCamera();
 
     // Initialize Model-View matrix as identity (no transformation
     this.updateProjectionMatrix();
