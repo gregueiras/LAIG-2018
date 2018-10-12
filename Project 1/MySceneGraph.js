@@ -667,22 +667,22 @@ class MySceneGraph {
 
   parseChildrenColours(param, child) {
     param.r = this.reader.getFloat(child, 'r');
-    if (param.r == null || isNaN(param.r)) {
+    if (param.r == null || isNaN(param.r) || !isBetween(param.r, 0, 1)) {
       return "unable to parse r value";
     }
 
     param.g = this.reader.getFloat(child, 'g');
-    if (param.g == null || isNaN(param.g)) {
+    if (param.g == null || isNaN(param.g) || !isBetween(param.g, 0, 1)) {
       return "unable to parse g value";
     }
 
     param.b = this.reader.getFloat(child, 'b');
-    if (param.b == null || isNaN(param.b)) {
+    if (param.b == null || isNaN(param.b) || !isBetween(param.b, 0, 1)) {
       return "unable to parse b value";
     }
 
     param.a = this.reader.getFloat(child, 'a');
-    if (param.a == null || isNaN(param.a)) {
+    if (param.a == null || isNaN(param.a) || !isBetween(param.a, 0, 1)) {
       return "unable to parse a value";
     }
   }
