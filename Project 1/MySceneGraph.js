@@ -189,6 +189,8 @@ class MySceneGraph {
       return "root tag <yas> missing";
 
     var nodes = rootElement.children;
+    if (nodes[0].nodeName == 'parsererror')
+      return `invalid XML in ${nodes[nodes.length-1].nodeName} node`;
 
     // Reads the names of the nodes to an auxiliary buffer.
     var nodeNames = [];
@@ -466,13 +468,13 @@ class MySceneGraph {
     let def = this.views.default;
     let orthos = this.views.orthos;
 
-    if(orthos[def] != undefined) {
+    if (orthos[def] != undefined) {
       return true;
     }
 
     let persps = this.views.perspectives;
 
-    if(persps[def] != undefined) {
+    if (persps[def] != undefined) {
       return true;
     }
 
@@ -534,7 +536,7 @@ class MySceneGraph {
         this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
     }
 
-    if(!this.checkDefaultViewExistance()) {
+    if (!this.checkDefaultViewExistance()) {
       return "Nonexistent default view";
     }
     this.log("Parsed views");
