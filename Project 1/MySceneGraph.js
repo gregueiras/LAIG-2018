@@ -252,7 +252,7 @@ class MySceneGraph {
    * Parses the <INITIALS> block.
    */
   parseScene(sceneNode) {
-    console.log("Will parse scene");
+    this.log("Will parse scene");
     let attributes = sceneNode.attributes;
 
     let nodeNames = [];
@@ -290,7 +290,7 @@ class MySceneGraph {
       }
     }
 
-    console.log("Parsed scene");
+    this.log("Parsed scene");
 
     return null;
   }
@@ -461,6 +461,24 @@ class MySceneGraph {
     return 0;
   }
 
+  checkDefaultViewExistance() {
+
+    let def = this.views.default;
+    let orthos = this.views.orthos;
+
+    if(orthos[def] != undefined) {
+      return true;
+    }
+
+    let persps = this.views.perspectives;
+
+    if(persps[def] != undefined) {
+      return true;
+    }
+
+    return false;
+  }
+
   /**
    * Parses the <views> block.
    * @param {views block element} viewsNode
@@ -516,6 +534,9 @@ class MySceneGraph {
         this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
     }
 
+    if(!this.checkDefaultViewExistance()) {
+      return "Nonexistent default view";
+    }
     this.log("Parsed views");
     return null;
   }
@@ -1685,7 +1706,7 @@ class MySceneGraph {
           if (tex)
             tex.bind();
         } else {
-          console.error("No parent texture passed")
+          this.error("No parent texture passed")
         }
         break;
 
@@ -1710,7 +1731,7 @@ class MySceneGraph {
 
           this.materials[material].apply();
         } else {
-          console.error("No parent material passed")
+          this.error("No parent material passed")
         }
         break;
 

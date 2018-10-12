@@ -73,51 +73,6 @@ class MyPrism extends CGFobject {
           }
         }
       }
-      /* TAMPAS
-      for (var slice = 0; slice < this.slices; slice++) {
-  
-        this.vertices.push(0);
-        this.vertices.push(0);
-        this.vertices.push(0);
-  
-        this.vertices.push(Math.cos((slice + 1) * this.delta));
-        this.vertices.push(Math.sin((slice + 1) * this.delta));
-        this.vertices.push(0);
-  
-        this.vertices.push(Math.cos(slice * this.delta));
-        this.vertices.push(Math.sin(slice * this.delta));
-        this.vertices.push(0);
-  
-  
-        this.vertices.push(Math.cos(slice * this.delta));
-        this.vertices.push(Math.sin(slice * this.delta));
-        this.vertices.push(1);
-  
-        this.vertices.push(Math.cos((slice + 1) * this.delta));
-        this.vertices.push(Math.sin((slice + 1) * this.delta));
-        this.vertices.push(1);
-  
-        this.vertices.push(0);
-        this.vertices.push(0);
-        this.vertices.push(1);
-  
-        console.log(this.vertices);
-        for (var i = 6; i > 0; i--) {
-          this.indices.push((this.vertices.length / 3) - i);
-        }
-  
-        for (var i = 0; i < 3; i++) {
-          this.normals.push(0);
-          this.normals.push(0);
-          this.normals.push(-1);
-        }
-  
-        for (var i = 0; i < 3; i++) {
-          this.normals.push(0);
-          this.normals.push(0);
-          this.normals.push(1);
-        }
-      }*/
   
     };
   
