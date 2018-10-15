@@ -1502,6 +1502,9 @@ class MySceneGraph {
       if (id == null || !isString(id)) {
         return "unable to parse id value";
       }
+      if (id != "inherit" && !this.materials.hasOwnProperty(id)) {
+        return `material "${id}" is not defined in <materials> node`
+      }
       component.materials.push(id);
     }
     return 0;
@@ -1731,7 +1734,7 @@ class MySceneGraph {
           if (tex)
             tex.bind();
         } else {
-          this.error("No parent texture passed")
+          this.onXMLError("No parent texture passed")
         }
         break;
 
@@ -1746,9 +1749,7 @@ class MySceneGraph {
   }
 
   applyMaterial(component, material) {
-    if (component.materialID >= component.materials.length) {
-      component.materialID = 0;
-    }
+
     let matID = component.materials[component.materialID];
     switch (matID) {
       case INHERIT:
@@ -1756,7 +1757,7 @@ class MySceneGraph {
 
           this.materials[material].apply();
         } else {
-          this.error("No parent material passed")
+          this.onXMLError("No parent material passed")
         }
         break;
 

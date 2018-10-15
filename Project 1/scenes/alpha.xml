@@ -60,7 +60,49 @@
         <texture id="text_face" file="./scenes/images/face.jpg" />
     </textures>
     <materials>
-        <material id="mat1" shininess = "0.1">
+        <material id="default" shininess = "0.1">
+            <emission r="0" g="0" b="0" a="0" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1" />
+            <diffuse r="0.1" g="0.1" b="0.1" a="1" />
+            <specular r="0.1" g="0.1" b="0.1" a="1" />
+        </material>
+        <material id="fabric" shininess = "0.1">
+            <emission r="0" g="0" b="0" a="0" />
+            <ambient r="0.788" g="0.788" b="0.788" a="1" />
+            <diffuse r="0.1" g="0.1" b="0.1" a="1" />
+            <specular r="0.1" g="0.1" b="0.1" a="1" />
+        </material>
+        <material id="brass" shininess = "0.217949">            <!-- http://devernay.free.fr/cours/opengl/materials.html -->
+            <emission r="0" g="0" b="0" a="0" />
+            <ambient r="0.329412" g="0.223529" b="0.027451" a="1" />
+            <diffuse r="0.780392" g="0.568627" b="0.113725" a="1" />
+            <specular r="0.992157" g="0.941176" b="0.807843" a="1" />
+        </material>
+        <material id="copper" shininess = "0.4">            <!-- http://www.it.hiof.no/~borres/j3d/explain/light/p-materials.html-->
+            <emission r="0" g="0" b="0" a="0" />
+            <ambient r="0.2295" g="0.05502" b="0.0275" a="1" />
+            <diffuse r="0.5508" g="0.2118" b="0.066" a="1" />
+            <specular r="0.580594" g="0.223257" b="0.0695701" a="1" />
+        </material>
+        <material id="obsidian" shininess = "0.1">            <!-- http://www.it.hiof.no/~borres/j3d/explain/light/p-materials.html-->
+            <emission r="0" g="0" b="0" a="0" />
+            <ambient r="0.05375" g="0.05" b="0.06625" a="0.82" />
+            <diffuse r="0.18275" g="0.17" b="0.22525" a="0.82" />
+            <specular r="0.332741" g="0.328634" b="0.346435" a="0.82" />
+        </material>
+        <material id="wood" shininess = "0.1">
+            <emission r="0" g="0" b="0" a="0" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1" />
+            <diffuse r="0.1" g="0.1" b="0.1" a="1" />
+            <specular r="0.1" g="0.1" b="0.1" a="1" />
+        </material>
+        <material id="glass" shininess = "0.1">
+            <emission r="0" g="0" b="0" a="0" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1" />
+            <diffuse r="0.1" g="0.1" b="0.1" a="1" />
+            <specular r="0.1" g="0.1" b="0.1" a="1" />
+        </material>
+        <material id="stone" shininess = "0.1">
             <emission r="0" g="0" b="0" a="0" />
             <ambient r="0.1" g="0.1" b="0.1" a="1" />
             <diffuse r="0.1" g="0.1" b="0.1" a="1" />
@@ -250,15 +292,15 @@
                 <transformationref id="tf1" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="default" />
+                <material id="obsidian" />
             </materials>
             <texture id="text_wood" length_s="1" length_t="1" />
             <children>
                 <componentref id="board_wall" />
                 <componentref id="window_wall" />
                 <componentref id="floor" />
-                <componentref id="pilar1" />
-                <componentref id="pilar2" />
+                <componentref id="pilars" />
                 <componentref id="board1" />
                 <componentref id="board2" />
                 <componentref id="table" />
@@ -269,7 +311,7 @@
                 <transformationref id="tf1"/>
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="text_wallpaint" length_s="6" length_t="3" />
             <children>
@@ -281,7 +323,7 @@
                 <transformationref id="tf2" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="text_wallpaint" length_s="6" length_t="3" />
             <children>
@@ -293,11 +335,24 @@
                 <transformationref id="tf3" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="wood" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
                 <primitiveref id="rect3" />
+            </children>
+        </component>
+        <component id="pilars">
+            <transformation>
+                <transformationref id="tf1" />
+            </transformation>
+            <materials>
+                <material id="stone" />
+            </materials>
+            <texture id="text_rocks" length_s="1" length_t="1" />
+            <children>
+                <componentref id="pilar1" />
+                <componentref id="pilar2" />
             </children>
         </component>
         <component id="pilar1">
@@ -305,9 +360,9 @@
                 <transformationref id="tf4" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
-            <texture id="text_rocks" length_s="1" length_t="1" />
+            <texture id="inherit" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="cil1" />
             </children>
@@ -317,7 +372,7 @@
                 <transformationref id="tf5" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="text_rocks" length_s="1" length_t="1" />
             <children>
@@ -329,7 +384,7 @@
                 <transformationref id="tf6" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="default" />
             </materials>
             <texture id="text_face" length_s="2.23" length_t="1.65" />
             <children>
@@ -341,7 +396,7 @@
                 <transformationref id="tf7" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="default" />
             </materials>
             <texture id="text_face" length_s="2" length_t="1.5" />
             <children>
@@ -353,7 +408,7 @@
                 <transformationref id="tf8" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="wood" />
             </materials>
             <texture id="text_wood" length_s="1" length_t="1" />
             <children>
@@ -367,9 +422,9 @@
                 <transformationref id="tf1" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="default" />
             </materials>
-            <texture id="inherit" length_s="1" length_t="1" />
+            <texture id="none" length_s="1" length_t="1" />
             <children>
                 <componentref id="table_round_lamp" />
                 <componentref id="table_triangular_lamp" />
@@ -381,7 +436,7 @@
                 <transformationref id="tf1" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -393,7 +448,7 @@
                 <transformationref id="tf1" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -405,7 +460,7 @@
                 <transformationref id="tf1" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -417,7 +472,7 @@
                 <transformationref id="tf1" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -429,7 +484,7 @@
                 <transformationref id="tf24" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="fabric" />
             </materials>
             <texture id="text_fabric" length_s="1" length_t="1" />
             <children>
@@ -443,7 +498,8 @@
                 <transformationref id="tf25" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="brass" />
+                <material id="copper" />
             </materials>
             <texture id="text_metal" length_s="1" length_t="1" />
             <children>
@@ -455,7 +511,9 @@
                 <transformationref id="tf26" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="brass" />
+                <material id="copper" />
+
             </materials>
             <texture id="text_metal" length_s="1" length_t="1" />
             <children>
@@ -467,7 +525,7 @@
                 <transformationref id="tf1" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -484,7 +542,7 @@
                 <transformationref id="tf12" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="2" length_t="1.5" />
             <children>
@@ -496,7 +554,7 @@
                 <transformationref id="tf13" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -508,7 +566,7 @@
                 <transformationref id="tf9" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -520,7 +578,7 @@
                 <transformationref id="tf10" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -532,7 +590,7 @@
                 <transformationref id="tf1" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -544,7 +602,7 @@
                 <transformationref id="tf11" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -556,7 +614,7 @@
                 <transformationref id="tf23" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -571,7 +629,7 @@
                 <transformationref id="tf19" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -587,7 +645,7 @@
                 <transformationref id="tf20" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -603,7 +661,7 @@
                 <transformationref id="tf21" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -619,7 +677,7 @@
                 <transformationref id="tf22" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -635,7 +693,7 @@
                 <transformationref id="tf14" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -647,7 +705,7 @@
                 <transformationref id="tf15" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -659,7 +717,7 @@
                 <transformationref id="tf16" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -671,7 +729,7 @@
                 <transformationref id="tf17" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -683,7 +741,7 @@
                 <transformationref id="tf18" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
@@ -695,7 +753,7 @@
                 <transformationref id="tf28" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="fabric" />
             </materials>
             <texture id="text_fabric" length_s="1" length_t="1" />
             <children>
@@ -709,9 +767,9 @@
                 <transformationref id="tf27" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
-            <texture id="text_fabric" length_s="1" length_t="1" />
+            <texture id="inherit" length_s="1" length_t="1" />
             <children>
                 <componentref id="triang_1"/>
                 <componentref id="triang_2"/>
@@ -724,7 +782,8 @@
                 <transformationref id="tf25" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="brass" />
+                <material id="copper" />
             </materials>
             <texture id="text_metal" length_s="1" length_t="1" />
             <children>
@@ -736,7 +795,8 @@
                 <transformationref id="tf26" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="brass" />
+                <material id="copper" />
             </materials>
             <texture id="text_metal" length_s="1" length_t="1" />
             <children>
@@ -748,7 +808,7 @@
                 <transformationref id="tf29" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="glass" />
             </materials>
             <texture id="text_vidral" length_s="1" length_t="1" />
             <children>
@@ -761,9 +821,9 @@
                 <transformationref id="tf1" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="inherit" />
             </materials>
-            <texture id="text_vidral" length_s="1" length_t="1" />
+            <texture id="inherit" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="sphere1" />
             </children>
@@ -773,7 +833,8 @@
                 <transformationref id="tf30" />
             </transformation>
             <materials>
-                <material id="mat1" />
+                <material id="brass" />
+                <material id="copper" />
             </materials>
             <texture id="text_metal" length_s="1" length_t="1" />
             <children>
