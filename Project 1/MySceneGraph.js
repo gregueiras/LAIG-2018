@@ -1712,10 +1712,8 @@ class MySceneGraph {
       var length_t = component.texture.length_t;
       switch (this.primitives[key].type) {
         case "rectangle":
-          this.primitives[key].shape.setTexCoords(length_s, length_t); 
-          break;
         case "triangle":
-          //TODO
+          this.primitives[key].shape.setTexCoords(length_s, length_t); 
           break;
         default:
           break;

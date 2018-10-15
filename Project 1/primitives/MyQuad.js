@@ -70,8 +70,6 @@ class MyQuad extends CGFobject
 		this.maxS = this.x1 > this.x2 ? 1/(ls / (this.x1 - this.x2)) :  1/(ls / (this.x2 - this.x1));
 		this.maxT = this.y1 > this.y2 ? 1/(lt / (this.y1 - this.y2)) :  1/(lt / (this.y2 - this.y1));
 
-		if(this.maxS != 1) console.log(this.maxS);
-
 		this.minS = 0;
 		this.minT = 0;
 
