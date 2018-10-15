@@ -1500,6 +1500,9 @@ class MySceneGraph {
       if (id == null || !isString(id)) {
         return "unable to parse id value";
       }
+      if (id != "inherit" && !this.materials.hasOwnProperty(id)) {
+        return `material "${id}" is not defined in <materials> node`
+      }
       component.materials.push(id);
     }
     return 0;
