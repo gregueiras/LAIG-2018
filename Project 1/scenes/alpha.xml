@@ -60,11 +60,23 @@
             <diffuse r="0.1" g="0.1" b="0.1" a="1" />
             <specular r="0.1" g="0.1" b="0.1" a="1" />
         </material>
-        <material id="metal" shininess = "0.217949">
+        <material id="brass" shininess = "0.217949">            <!-- http://devernay.free.fr/cours/opengl/materials.html -->
             <emission r="0" g="0" b="0" a="0" />
             <ambient r="0.329412" g="0.223529" b="0.027451" a="1" />
             <diffuse r="0.780392" g="0.568627" b="0.113725" a="1" />
             <specular r="0.992157" g="0.941176" b="0.807843" a="1" />
+        </material>
+        <material id="copper" shininess = "0.4">            <!-- http://www.it.hiof.no/~borres/j3d/explain/light/p-materials.html-->
+            <emission r="0" g="0" b="0" a="0" />
+            <ambient r="0.2295" g="0.05502" b="0.0275" a="1" />
+            <diffuse r="0.5508" g="0.2118" b="0.066" a="1" />
+            <specular r="0.580594" g="0.223257" b="0.0695701" a="1" />
+        </material>
+        <material id="obsidian" shininess = "0.1">            <!-- http://www.it.hiof.no/~borres/j3d/explain/light/p-materials.html-->
+            <emission r="0" g="0" b="0" a="0" />
+            <ambient r="0.05375" g="0.05" b="0.06625" a="0.82" />
+            <diffuse r="0.18275" g="0.17" b="0.22525" a="0.82" />
+            <specular r="0.332741" g="0.328634" b="0.346435" a="0.82" />
         </material>
         <material id="wood" shininess = "0.1">
             <emission r="0" g="0" b="0" a="0" />
@@ -266,6 +278,7 @@
             </transformation>
             <materials>
                 <material id="default" />
+                <material id="obsidian" />
             </materials>
             <texture id="text_wood" length_s="1" length_t="1" />
             <children>
@@ -470,7 +483,8 @@
                 <transformationref id="tf25" />
             </transformation>
             <materials>
-                <material id="metal" />
+                <material id="brass" />
+                <material id="copper" />
             </materials>
             <texture id="text_metal" length_s="1" length_t="1" />
             <children>
@@ -482,7 +496,9 @@
                 <transformationref id="tf26" />
             </transformation>
             <materials>
-                <material id="metal" />
+                <material id="brass" />
+                <material id="copper" />
+
             </materials>
             <texture id="text_metal" length_s="1" length_t="1" />
             <children>
@@ -751,7 +767,8 @@
                 <transformationref id="tf25" />
             </transformation>
             <materials>
-                <material id="metal" />
+                <material id="brass" />
+                <material id="copper" />
             </materials>
             <texture id="text_metal" length_s="1" length_t="1" />
             <children>
@@ -763,7 +780,8 @@
                 <transformationref id="tf26" />
             </transformation>
             <materials>
-                <material id="metal" />
+                <material id="brass" />
+                <material id="copper" />
             </materials>
             <texture id="text_metal" length_s="1" length_t="1" />
             <children>
@@ -800,7 +818,8 @@
                 <transformationref id="tf30" />
             </transformation>
             <materials>
-                <material id="metal" />
+                <material id="brass" />
+                <material id="copper" />
             </materials>
             <texture id="text_metal" length_s="1" length_t="1" />
             <children>

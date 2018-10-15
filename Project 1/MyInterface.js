@@ -21,8 +21,7 @@ class MyInterface extends CGFinterface {
         //  http://workshop.chromeexperiments.com/examples/gui
 
         this.gui = new dat.GUI();
-
-        // add a group of controls (and open/expand by defult)
+        this.initKeys();
 
         return true;
     }
@@ -78,4 +77,22 @@ class MyInterface extends CGFinterface {
 
         this.gui.add(this.cameras, ACTIVE_CAMERA, cameras);
     }
+
+    
+  initKeys() {
+    this.processKeyboard = function() {};
+    this.activeKeys = {};
+  }
+  processKeyDown(event) {
+    this.activeKeys[event.code] = true;
+  };
+  processKeyUp(event) {
+    
+  };
+  releaseKey(event) {
+    this.activeKeys[event] = false;
+  };
+  isKeyPressed(keyCode) {
+    return this.activeKeys[keyCode] || false;
+  };
 }

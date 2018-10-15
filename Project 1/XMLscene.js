@@ -1,5 +1,5 @@
 var DEGREE_TO_RAD = Math.PI / 180;
-
+const CHANGE_MATERIAL = "KeyM";
 /**
  * XMLscene class, representing the scene that is to be rendered.
  */
@@ -243,5 +243,22 @@ class XMLscene extends CGFscene {
 
     this.popMatrix();
     // ---- END Background, camera and axis setup
+
+    this.checkKeys();
+  }
+
+  checkKeys() {
+    if (this.interface.isKeyPressed(CHANGE_MATERIAL)) {
+      let keys = Object.keys(this.graph.components);
+      for(let key of keys) {
+        let component = this.graph.components[key];
+        component.materialID++;
+        if (component.materialID >= component.materials.length) {
+          component.materialID = 0;
+        }
+      };
+      this.interface.releaseKey(CHANGE_MATERIAL);
+    }
+    
   }
 }

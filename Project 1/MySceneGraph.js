@@ -1736,7 +1736,7 @@ class MySceneGraph {
           if (tex)
             tex.bind();
         } else {
-          this.error("No parent texture passed")
+          this.onXMLError("No parent texture passed")
         }
         break;
 
@@ -1751,9 +1751,7 @@ class MySceneGraph {
   }
 
   applyMaterial(component, material) {
-    if (component.materialID >= component.materials.length) {
-      component.materialID = 0;
-    }
+
     let matID = component.materials[component.materialID];
     switch (matID) {
       case INHERIT:
@@ -1761,7 +1759,7 @@ class MySceneGraph {
 
           this.materials[material].apply();
         } else {
-          this.error("No parent material passed")
+          this.onXMLError("No parent material passed")
         }
         break;
 
