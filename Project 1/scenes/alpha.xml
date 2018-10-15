@@ -45,6 +45,7 @@
         <texture id="text_metal" file="./scenes/images/metal.jpg" />
         <texture id="text_vidral" file="./scenes/images/vidral.jpg" />
         <texture id="text_ball" file="./scenes/images/ball.jpg" />
+        <texture id="text_face" file="./scenes/images/face.jpg" />
     </textures>
     <materials>
         <material id="default" shininess = "0.1">
@@ -180,7 +181,7 @@
             <rotate axis="x" angle="-90" />
         </transformation>
         <transformation id="tf25">            <!-- round lamp base -->
-            <translate x="0" y="0" z="-0.3" />
+            <translate x="0" y="0" z="-0.27" />
             <scale x="0.1" y="0.1" z="0.1"/>
         </transformation>
         <transformation id="tf26">            <!-- round lamp base -->
@@ -284,7 +285,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="text_wallpaint" length_s="1" length_t="1" />
+            <texture id="text_wallpaint" length_s="6" length_t="3" />
             <children>
                 <primitiveref id="rect1" />
             </children>
@@ -296,7 +297,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="text_wallpaint" length_s="1" length_t="1" />
+            <texture id="text_wallpaint" length_s="6" length_t="3" />
             <children>
                 <primitiveref id="rect2" />
             </children>
@@ -308,7 +309,7 @@
             <materials>
                 <material id="wood" />
             </materials>
-            <texture id="text_soalho" length_s="1" length_t="1" />
+            <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
                 <primitiveref id="rect3" />
             </children>
@@ -369,7 +370,7 @@
             <materials>
                 <material id="default" />
             </materials>
-            <texture id="none" length_s="1" length_t="1" />
+            <texture id="text_face" length_s="2" length_t="1.5" />
             <children>
                 <primitiveref id="rect4" />
             </children>
@@ -512,7 +513,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit" length_s="1" length_t="1" />
+            <texture id="inherit" length_s="2" length_t="1.5" />
             <children>
                 <primitiveref id="rect4" />
             </children>

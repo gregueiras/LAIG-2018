@@ -1066,6 +1066,8 @@ class MySceneGraph {
     color = material.specular;
     newMaterial.setSpecular(color.r, color.g, color.b, color.a);
 
+    //newMaterial.setTextureWrap('CLAMP_TO_EDGE','CLAMP_TO_EDGE');
+
     this.materials[material.id] = newMaterial;
   }
 
@@ -1703,7 +1705,30 @@ class MySceneGraph {
   log(message) {
     console.log("   " + message);
   }
+
+  setTexturePosition(component) {
+    let prims = component.children.primitiveref;
+    if(prims == undefined) return;
+    for (let i = 0; i < prims.length; i++) {
+      var key = prims[i];
+      var length_s = component.texture.length_s;
+      var length_t = component.texture.length_t;
+      switch (this.primitives[key].type) {
+        case "rectangle":
+          this.primitives[key].shape.setTexCoords(length_s, length_t); 
+          break;
+        case "triangle":
+          //TODO
+          break;
+        default:
+          break;
+      }
+      
+    }
+  }
+
   applyTexture(component, texture) {
+    this.setTexturePosition(component);
     switch (component.texture.id) {
       case INHERIT:
         if (texture != undefined) {
