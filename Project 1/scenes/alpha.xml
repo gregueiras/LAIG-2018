@@ -57,7 +57,7 @@
         <texture id="text_metal" file="./scenes/images/metal.jpg" />
         <texture id="text_vidral" file="./scenes/images/vidral.jpg" />
         <texture id="text_ball" file="./scenes/images/ball.jpg" />
-        <texture id="text_face" file="./scenes/images/face.jpg" />
+        <texture id="text_face" file="./scenes/images/face2.jpg" />
     </textures>
     <materials>
         <material id="default" shininess = "0.1">
