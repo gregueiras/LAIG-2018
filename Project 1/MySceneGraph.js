@@ -1519,20 +1519,22 @@ class MySceneGraph {
 
     var ls;
     ls = this.reader.getFloat(child, 'length_s', false);
-    if (id != NONE && id != INHERIT && (ls == null || isNaN(ls))) {
-      return "unable to parse length_s value";
-    }
-    if (id == NONE || id == INHERIT) {
-      ls = 1;
+    if((ls == null || isNaN(ls))) {
+      if(id == INHERIT || id == NONE) {
+        ls = undefined;
+      } else {
+        return "unable to parse length_s value";
+      }
     }
 
     var lt;
     lt = this.reader.getFloat(child, 'length_t', false);
-    if (id != NONE && id != INHERIT && (lt == null || isNaN(lt))) {
-      return "unable to parse length_t value";
-    }
-    if (id == NONE || id == INHERIT) {
-      lt = 1;
+    if((lt == null || isNaN(lt))) {
+      if(id == INHERIT || id == NONE) {
+        lt = undefined;
+      } else {
+        return "unable to parse length_t value";
+      }
     }
 
     component.texture.id = id;
@@ -1591,7 +1593,7 @@ class MySceneGraph {
   }
 
   componentErrCheck(component) {
-    if (component.transformation.ref != null && component.transformation.steps != 0) 
+    if (component.transformation.ref != null && component.transformation.steps != 0)
       return `Component: ${component.id}. Invalid transformation`;
 
     if (component.materials.length == 0)
@@ -1714,7 +1716,7 @@ class MySceneGraph {
 
   setTexturePosition(component) {
     let prims = component.children.primitiveref;
-    if(prims == undefined) return;
+    if (prims == undefined) return;
     for (let i = 0; i < prims.length; i++) {
       var key = prims[i];
       var length_s = component.texture.length_s;
@@ -1722,17 +1724,17 @@ class MySceneGraph {
       switch (this.primitives[key].type) {
         case "rectangle":
         case "triangle":
-          this.primitives[key].shape.setTexCoords(length_s, length_t); 
+          this.primitives[key].shape.setTexCoords(length_s, length_t);
           break;
         default:
           break;
       }
-      
+
     }
   }
 
   applyTexture(component, texture) {
-    this.setTexturePosition(component);
+
     switch (component.texture.id) {
       case INHERIT:
         if (texture != undefined) {
@@ -1752,6 +1754,7 @@ class MySceneGraph {
         this.textures[component.texture.id].bind();
         break;
     }
+    this.setTexturePosition(component);
   }
 
   applyMaterial(component, material) {
@@ -1826,7 +1829,7 @@ class MySceneGraph {
 
   }
 
-  displayComponent(component, material, texture) {
+  displayComponent(component, material, texture, length_s, length_t) {
 
     this.scene.pushMatrix();
 
@@ -1846,10 +1849,18 @@ class MySceneGraph {
     compRef.forEach(reference => {
       let child = this.components[reference];
       let texID;
-      if (component.texture.id == "inherit")
+      let ls, lt;
+      if (component.texture.id == "inherit") {
         texID = texture;
-      else
+        if (component.texture.length_s == undefined)
+          component.texture.length_s = length_s;
+        if (component.texture.length_t == undefined)
+          component.texture.length_t = length_t;
+      } else {
         texID = component.texture.id;
+        ls = component.texture.length_s;
+        lt = component.texture.length_t;
+      }
 
       let matID;
       if (component.materials[0] == "inherit")
@@ -1857,7 +1868,7 @@ class MySceneGraph {
       else
         matID = component.materials[component.materialID];
 
-      this.displayComponent(child, matID, texID);
+      this.displayComponent(child, matID, texID, ls, lt);
 
     });
     this.scene.popMatrix();
