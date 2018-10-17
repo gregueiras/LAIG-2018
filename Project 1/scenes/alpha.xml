@@ -17,13 +17,13 @@
     </ambient>
     <lights>
         <omni id="l1" enabled="1">
-            <location x="7" y="5" z="2" w="0" />
+            <location x="3" y="5" z="3" w="0" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.7" g="0.7" b="0.7" a="1" />
             <specular r="0.3" g="0.3" b="0.3" a="1" />
         </omni>
-        <omni id="l2" enabled="1">
-            <location x="3" y="5" z="3" w="0" />
+        <omni id="Garden1" enabled="1">
+            <location x="-6" y="4" z="-4.5" w="0" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.7" g="0.7" b="0.7" a="1" />
             <specular r="0.3" g="0.3" b="0.3" a="1" />
@@ -46,6 +46,7 @@
             <diffuse r="0.6" g="0.6" b="0.6" a="1" />
             <specular r="0.3" g="0.3" b="0.3" a="1" />
         </omni>
+        
         <omni id="lamp1" enabled="0">
             <location x="2.5" y="2.005" z="2.7" w="0" />
             <ambient r="0" g="0" b="0" a="1" />
@@ -83,6 +84,7 @@
         <texture id="text_paint2" file="./scenes/images/van_gogh.png" />
         <texture id="text_paint3" file="./scenes/images/frame.jpg" />
         <texture id="text_tv" file="./scenes/images/tv.png" />
+        <texture id="text_grass" file="./scenes/images/grass2.jpg" />
     </textures>
     <materials>
         <material id="default" shininess = "0.1">
@@ -289,7 +291,21 @@
         <transformation id="tf41">
             <translate x="0.5" y="0.5" z="0.01" />
         </transformation>
-
+        <transformation id="tf42">
+            <translate x="5" y="4" z="0.9" />
+        </transformation>
+        <transformation id="tf43">
+            <translate x="-12" y="0" z="-3" />
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="tf44">
+            <translate x="12" y="0.01" z="0" />
+            <rotate axis="z" angle="180" />
+            <rotate axis="x" angle="90" />
+        </transformation>
+        <transformation id="tf45">
+            <translate x="3.5" y="8.5" z="0" />
+        </transformation>
     </transformations>
     <primitives>
         <primitive id="rect1">
@@ -334,6 +350,9 @@
         <primitive id="rect14">
             <rectangle x1="0" y1="0" x2="4" y2="2.25"/>
         </primitive >
+        <primitive id="rect15">
+            <rectangle x1="0" y1="0" x2="15" y2="12"/>
+        </primitive >
         <primitive id="cil1">
             <cylinder base="0.3" top="0.3" height="3" slices="30" stacks="30" />
         </primitive >
@@ -358,11 +377,17 @@
         <primitive id = "lamp">
             <cylinder base = "0.15" top = "0.05" height="0.15" slices="30" stacks="30" />
         </primitive>
+        <primitive id = "tree">
+            <cylinder base = "2.5" top = "0" height="5" slices="30" stacks="30" />
+        </primitive>
         <primitive id = "sphere1">
             <sphere radius="0.2" slices="20" stacks="20" />
         </primitive>
         <primitive id = "torus1">
             <torus inner="0.05" outer="0.1" slices="20" loops="30" />
+        </primitive>
+        <primitive id = "torus2">
+            <torus inner="1" outer="2" slices="20" loops="30" />
         </primitive>
     </primitives >
     <components>
@@ -378,6 +403,48 @@
             <children>
                 <componentref id="room" />
                 <componentref id="living_room" />
+                <componentref id="garden" />
+            </children>
+        </component>
+        <component id="garden">
+            <transformation>
+                <transformationref id="tf43" />
+            </transformation>
+            <materials>
+                <material id="default" />
+                <material id="obsidian" />
+            </materials>
+            <texture id="text_grass" length_s="15" length_t="12" />
+            <children>
+                <primitiveref id="rect15" />
+                <componentref id="tree1" />
+                <componentref id="outside_wall_garden" />
+            </children>
+        </component>
+        <component id="outside_wall_garden">
+            <transformation>
+                <transformationref id="tf44" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="text_rocks" length_s="6" length_t="3" />
+            <children>
+                <primitiveref id="rect11" />
+                <componentref id="outside_windows" />
+            </children>
+        </component>
+        <component id="tree1">
+            <transformation>
+                <transformationref id="tf45" />
+            </transformation>
+            <materials>
+                <material id="default" />
+                <material id="obsidian" />
+            </materials>
+            <texture id="text_wood" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="tree" />
             </children>
         </component>
         <component id="living_room">
@@ -496,6 +563,19 @@
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
                 <primitiveref id="rect9" />
+                <componentref id="random" /> 
+            </children>
+        </component>
+        <component id="random">
+            <transformation>
+                <transformationref id="tf42" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_metal" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="torus2" />
             </children>
         </component>
         <component id="outside_windows">
