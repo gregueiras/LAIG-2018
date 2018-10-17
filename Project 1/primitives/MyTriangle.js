@@ -39,14 +39,6 @@ class MyTriangle extends CGFobject
         this.z1 = z1;
         this.z2 = z2;
 		this.z3 = z3;
-		
-		this.a = Math.sqrt(Math.pow(x1-x3, 2) + Math.pow(y1-y3, 2) + Math.pow(z1-z3, 2));
-		this.b = Math.sqrt(Math.pow(x2-x3, 2) + Math.pow(y2-y3, 2) + Math.pow(z2-z3, 2));
-		this.c = Math.sqrt(Math.pow(x3-x2, 2) + Math.pow(y3-y2, 2) + Math.pow(z3-z2, 2));
-
-		this.alpha = Math.acos((- Math.pow(this.a, 2) + Math.pow(this.b, 2) + Math.pow(this.c, 2)) / (2*this.b*this.c));
-		this.beta = Math.acos((Math.pow(this.a, 2) - Math.pow(this.b, 2) + Math.pow(this.c, 2)) / (2*this.a*this.c));
-		this.upsilon = Math.acos((Math.pow(this.a, 2) + Math.pow(this.b, 2) - Math.pow(this.c, 2)) / (2*this.a*this.b));
 
 		this.initBuffers();
 	};
@@ -83,16 +75,21 @@ class MyTriangle extends CGFobject
 
 	setTexCoords(ls, lt) {
 
-		var u = 1;
-		var v = 1;
+		var a = Math.sqrt(Math.pow(this.x1-this.x3, 2) + Math.pow(this.y1-this.y3, 2) + Math.pow(this.z1-this.z3, 2));
+		var b = Math.sqrt(Math.pow(this.x2-this.x3, 2) + Math.pow(this.y2-this.y3, 2) + Math.pow(this.z2-this.z3, 2));
+		var c = Math.sqrt(Math.pow(this.x3-this.x2, 2) + Math.pow(this.y3-this.y2, 2) + Math.pow(this.z3-this.z2, 2));
 
-		var h = this.a * Math.sin(this.beta);
-		var b = this.c;
+		//var alpha = Math.acos((- Math.pow(a, 2) + Math.pow(b, 2) + Math.pow(c, 2)) / (2*b*c));
+		var beta = Math.acos((Math.pow(a, 2) - Math.pow(b, 2) + Math.pow(c, 2)) / (2*a*c));
+		//var upsilon = Math.acos((Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2)) / (2*a*b));
+
+		var x0 = c - a * Math.cos(beta);
+		var y0 = lt - a * Math.sin(beta);
 
 		this.texCoords = [
-			0,v,
-			u/(ls/b),v,
-			0,v-(h/lt)
+			0, 1,
+			c/ls, 1,
+			x0/ls, y0/lt
 		];
 
 		this.updateTexCoordsGLBuffers();
