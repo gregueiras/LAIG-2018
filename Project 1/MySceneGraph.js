@@ -1852,7 +1852,7 @@ class MySceneGraph {
         texID = component.texture.id;
 
       let matID;
-      if (component.texture.id == "inherit")
+      if (component.materials[0] == "inherit")
         matID = material;
       else
         matID = component.materials[component.materialID];
