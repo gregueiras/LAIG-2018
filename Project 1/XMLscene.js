@@ -155,8 +155,7 @@ class XMLscene extends CGFscene {
       let cam = defPerspective;
       let target = cam.to;
       let from = cam.from;
-      //TODO: Fix FOV to respect angle provided
-      let newC = new CGFcamera(0.4, cam.near, cam.far, vec3.fromValues(from.x, from.y, from.z),
+      let newC = new CGFcamera(DEGREE_TO_RAD * cam.angle, cam.near, cam.far, vec3.fromValues(from.x, from.y, from.z),
         vec3.fromValues(target.x, target.y, target.z));
       this.camera = newC;
       this.camera.id = selectedCamera;

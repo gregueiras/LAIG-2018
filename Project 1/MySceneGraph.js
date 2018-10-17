@@ -282,7 +282,6 @@ class MySceneGraph {
     this.axis_length = 100;
     var indexAxisLength = nodeNames.indexOf("axis_length");
     if (indexAxisLength == null) {
-      // TODO: gregueiras test dollar string 
       this.onXMLMinorError(`axis length missing; assuming ${this.axis_length}`);
     } else {
       this.axis_length = this.reader.getFloat(sceneNode, 'axis_length');
@@ -777,7 +776,7 @@ class MySceneGraph {
     if ((reply = this.checkForRepeatedId(omni.id, this.light.spots)) != "OK")
       return reply;
 
-    omni.enabled = this.reader.getFloat(child, 'enabled');
+    omni.enabled = this.reader.getBoolean(child, 'enabled');
     if (omni.enabled == null || !isBoolean(omni.enabled)) {
       return "unable to parse enabled value";
     }
@@ -865,7 +864,7 @@ class MySceneGraph {
     if ((reply = this.checkForRepeatedId(spot.id, this.light.spots)) != "OK")
       return reply;
 
-    spot.enabled = this.reader.getFloat(child, 'enabled');
+    spot.enabled = this.reader.getBoolean(child, 'enabled');
     if (spot.enabled == null || !isBoolean(spot.enabled)) {
       return "unable to parse enabled value";
     }
@@ -1490,6 +1489,7 @@ class MySceneGraph {
           break;
       }
     }
+
     return 0;
   }
 
@@ -1518,16 +1518,23 @@ class MySceneGraph {
     }
 
     var ls;
-    ls = this.reader.getFloat(child, 'length_s');
-    if (ls == null || isNaN(ls)) {
+    ls = this.reader.getFloat(child, 'length_s', false);
+    if (id != NONE && id != INHERIT && (ls == null || isNaN(ls))) {
       return "unable to parse length_s value";
+    }
+    if (id == NONE || id == INHERIT) {
+      ls = 1;
     }
 
     var lt;
-    lt = this.reader.getFloat(child, 'length_t');
-    if (lt == null || isNaN(lt)) {
+    lt = this.reader.getFloat(child, 'length_t', false);
+    if (id != NONE && id != INHERIT && (lt == null || isNaN(lt))) {
       return "unable to parse length_t value";
     }
+    if (id == NONE || id == INHERIT) {
+      lt = 1;
+    }
+
     component.texture.id = id;
     component.texture.length_s = ls;
     component.texture.length_t = lt;
@@ -1584,9 +1591,8 @@ class MySceneGraph {
   }
 
   componentErrCheck(component) {
-    if (component.transformation.ref == null &&
-      component.transformation.steps.length == 0)
-      return "Invalid number of transformations";
+    if (component.transformation.ref != null && component.transformation.steps != 0) 
+      return `Component: ${component.id}. Invalid transformation`;
 
     if (component.materials.length == 0)
       return "Invalid number of materials";
@@ -1754,16 +1760,20 @@ class MySceneGraph {
     switch (matID) {
       case INHERIT:
         if (material != undefined) {
-
-          this.materials[material].apply();
+          try {
+            this.materials[material].apply();
+            return null;
+          } catch (error) {
+            return ` ${component.id} material error. ${material}`;
+          }
         } else {
-          this.onXMLError("No parent material passed")
+          return "No parent material passed";
         }
         break;
 
       default:
         this.materials[matID].apply();
-        break;
+        return null;
     }
   }
 

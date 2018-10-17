@@ -1,0 +1,1014 @@
+<yas>
+
+  <scene root="root" axis_length="10"/>
+
+  <views default="general_view">
+    <perspective id="general_view" near="0.1" far="500" angle="30">
+      <from x="50" y="33" z="55" />
+      <to x="0" y="0" z="0" />
+    </perspective>
+
+    <perspective id="closer_table" near="0.1" far="500" angle="30">
+      <from x="30" y="6" z="30" />
+      <to x="15" y="6" z="15" />
+    </perspective>
+
+    <perspective id="table_and_van_gogh" near="0.1" far="500" angle="30">
+      <from x="15" y="8" z="30" />
+      <to x="15" y="8" z="0" />
+    </perspective>
+
+    <perspective id="table_and_monet" near="0.1" far="500" angle="30">
+      <from x="30" y="8" z="15" />
+      <to x="0" y="8" z="15" />
+    </perspective>
+
+    <ortho id="ortho_view" near="0.1" far="100" left="-100" right="100" top="100" bottom="-50">
+      <from x="30" y="8" z="15" />
+      <to x="0" y="8" z="15" />
+    </ortho>
+  </views>
+
+  <ambient>
+    <ambient r="0" g="0" b="0" a="1"/>
+    <background r="0.2" g="0.2" b="0.2" a="1"/>
+  </ambient>
+
+
+  <lights>
+    <omni id="front_left" enabled="1">
+      <location x="1" y="20" z="30" w="1" />
+      <ambient r="0" g="0" b="0" a="1" />
+      <diffuse r="0.4" g="0.4" b="0.4" a="1" />
+      <specular r="0.4" g="0.4" b="0.4" a="1" />
+    </omni>
+    <omni id="back_left" enabled="1">
+      <location x="1" y="20" z="1" w="1" />
+      <ambient r="0" g="0" b="0" a="1" />
+      <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+      <specular r="0.5" g="0.5" b="0.5" a="1" />
+    </omni>
+    <omni id="back_right" enabled="1">
+      <location x="30" y="20" z="1" w="1" />
+      <ambient r="0" g="0" b="0" a="1" />
+      <diffuse r="0.4" g="0.4" b="0.4" a="1" />
+      <specular r="0.4" g="0.4" b="0.4" a="1" />
+    </omni>
+    <omni id="front_right" enabled="1">
+      <location x="30" y="20" z="30" w="1" />
+      <ambient r="0" g="0" b="0" a="1" />
+      <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+      <specular r="0.5" g="0.5" b="0.5" a="1" />
+    </omni>
+    <spot id="van_gogh" enabled="1" angle="30" exponent="5">
+      <location x="30" y="20" z="30" w="1" />
+      <target x="15" y="10" z="0" />
+      <ambient r="0" g="0" b="0" a="1" />
+      <diffuse r="0.8" g="0.8" b="0.8" a="1" />
+      <specular r="0.2" g="0.2" b="0.2" a="1" />
+    </spot>
+  </lights>
+
+  <textures>
+    <texture id="water" file="scenes/images/textura_agua.png" />
+    <texture id="rug" file="scenes/images/rug.jpg" />
+    <texture id="darkWood" file="scenes/images/wood.jpg" />
+    <texture id="van_gogh" file="scenes/images/van_gogh.png" />
+    <texture id="monet" file="scenes/images/monet.png" />
+
+    <!--TODO remove -->
+    <texture id="galaxy" file="scenes/images/milkyWay.jpg" />
+  </textures>
+
+  <materials>
+    <material id="metal" shininess = "70">
+      <emission r="0" g="0" b="0" a="1" />
+      <ambient r="0.4" g="0.4" b="0.4" a="1" />
+      <diffuse r="0.4" g="0.4" b="0.4" a="1" />
+      <specular r="0.7" g="0.7" b="0.7" a="1" />
+    </material>
+
+    <material id="dim" shininess = "10">
+      <emission r="0" g="0" b="0" a="1" />
+      <ambient r="0.5" g="0.5" b="0.5" a="1" />
+      <diffuse r="0.6" g="0.6" b="0.6" a="1" />
+      <specular r="0.3" g="0.3" b="0.3" a="1" />
+    </material>
+
+    <material id="red" shininess = "20">
+      <emission r="0" g="0" b="0" a="1" />
+      <ambient r="0.7" g="0.2" b="0.2" a="1" />
+      <diffuse r="0.7" g="0.2" b="0.2" a="1" />
+      <specular r="0.7" g="0.1" b="0.1" a="1" />
+    </material>
+
+    <material id="yellow" shininess = "20">
+      <emission r="0" g="0" b="0" a="1" />
+      <ambient r="0.5" g="0.5" b="0.5" a="1" />
+      <diffuse r="0.6" g="0.6" b="0.2" a="1" />
+      <specular r="0.6" g="0.6" b="0.1" a="1" />
+    </material>
+
+    <material id="green" shininess = "20">
+      <emission r="0" g="0" b="0" a="1" />
+      <ambient r="0.5" g="0.5" b="0.5" a="1" />
+      <diffuse r="0.1" g="0.6" b="0.1" a="1" />
+      <specular r="0.1" g="0.6" b="0.1" a="1" />
+    </material>
+
+    <material id="brown" shininess = "10">
+      <emission r="0" g="0" b="0" a="1" />
+      <ambient r="0.5" g="0.5" b="0.5" a="1" />
+      <diffuse r="0.170" g="0.1" b="0.1" a="1" />
+      <specular r="0.170" g="0.1" b="0.1" a="1" />
+    </material>
+
+    <material id="blue" shininess = "10">
+      <emission r="0" g="0" b="0" a="1" />
+      <ambient r="0.1" g="0.1" b="0.7" a="1" />
+      <diffuse r="0.1" g="0.1" b="0.5" a="1" />
+      <specular r="0.1" g="0.1" b="0.5" a="1" />
+    </material>
+  </materials>
+
+
+  <transformations>
+
+    <transformation id="none">
+      <translate x="0" y="0" z="0" />
+    </transformation>
+
+    <!-- OBJECTS TRANSFORMATIONS -->
+
+    <!-- MUG -->
+
+    <transformation id="cup">
+      <rotate axis="x" angle="-90" />
+    </transformation>
+
+    <transformation id="wing">
+      <translate x="-0.2" y="0.4" z="0" />
+    </transformation>
+
+    <transformation id="mug">
+      <translate x="17" y="5.6" z="15" />
+    </transformation>
+
+    <!-- END MUG -->
+
+
+    <!-- VAN GOGH -->
+
+    <transformation id="van_gogh">
+      <translate x="15" y="10" z="0.01" />
+      <rotate axis="z" angle="180" />
+      <scale x="8" y="6" z="1" />
+    </transformation>
+
+    <!-- END VAN GOGH -->
+
+
+    <!-- MONET -->
+
+    <transformation id="monet">
+      <translate x="0.01" y="10" z="15" />
+      <rotate axis="y" angle="90" />
+      <rotate axis="z" angle="180" />
+      <scale x="8" y="6" z="1" />
+    </transformation>
+
+    <!-- END MONET -->
+
+
+    <!-- PLATE -->
+
+    <transformation id="plate">
+      <translate x="13" y="5.6" z="13" />
+      <rotate axis="x" angle="-90" />
+    </transformation>
+
+    <!-- END PLATE-->
+
+
+    <!-- APPLE -->
+
+    <transformation id="leaf">
+      <translate x="0" y="0.08" z="0" />
+    </transformation>
+
+    <transformation id="fruit">
+      <translate x="0" y="0" z="0" />
+    </transformation>
+
+    <transformation id="apple">
+      <translate x="13" y="5.92" z="13" />
+    </transformation>
+
+    <!-- END APPLE -->
+
+
+    <!-- BOTTLE -->
+
+    <transformation id="bottle_body">
+      <rotate axis="y" angle="120"/>
+      <rotate axis="x" angle="-90" />
+    </transformation>
+
+    <transformation id="bottle_neck">
+      <translate x="0" y="1" z="0" />
+      <rotate axis="x" angle="-90" />
+    </transformation>
+
+    <transformation id="bottle_cap">
+      <translate x="0" y="1.3" z="0" />
+      <rotate axis="x" angle="-90" />
+    </transformation>
+
+    <transformation id="bottle">
+      <translate x="10" y="5.61" z="15" />
+    </transformation>
+
+    <!-- END BOTTLE -->
+
+    <!-- RUG -->
+    <transformation id="rug">
+      <translate x="13" y="0.01" z="13" />
+      <rotate axis="x" angle="-90" />
+      <scale x="10" y="8" z="1" />
+    </transformation>
+    <!-- END RUG -->
+
+    <!-- END OBJECTS TRANSFORMATIONS -->
+
+
+    <!-- ROOM TRANSFORMATIONS -->
+
+    <transformation id="floor">
+      <translate x="15" y="0" z="15" />
+      <scale x="15" y="1" z="15" />
+      <rotate axis="x" angle="-90" />
+    </transformation>
+
+    <transformation id="back_wall">
+      <translate x="15" y="10" z="0" />
+      <scale x="15" y="10" z="1" />
+    </transformation>
+
+    <transformation id="left_wall">
+      <translate x="0" y="10" z="15" />
+      <scale x="1" y="10" z="15" />
+      <rotate axis="y" angle="90" />
+    </transformation>
+
+    <!-- END ROOM TRANSFORMATIONS -->
+
+
+    <!-- BOX TRANSFORMATIONS -->
+
+    <transformation id="box_bottom">
+      <rotate axis="x" angle="90" />
+    </transformation>
+
+    <transformation id="box_top">
+      <translate x="0" y="2" z="0" />
+      <rotate axis="x" angle="-90" />
+    </transformation>
+
+    <transformation id="box_front">
+      <translate x="0" y="1" z="1" />
+    </transformation>
+
+    <transformation id="box_back">
+      <translate x="0" y="1" z="-1" />
+      <rotate axis="x" angle="-180" />
+    </transformation>
+
+    <transformation id="box_left">
+      <translate x="-1" y="1" z="0" />
+      <rotate axis="y" angle="-90" />
+    </transformation>
+
+    <transformation id="box_right">
+      <translate x="1" y="1" z="0" />
+      <rotate axis="y" angle="90" />
+    </transformation>
+
+    <!-- END BOX TRANSFORMATIONS -->
+
+
+    <!-- TABLE TRANSFORMATIONS -->
+
+    <transformation id="table">
+      <translate x="13" y="0" z="13" />
+    </transformation>
+
+    <transformation id="table_top">
+      <translate x="0" y="5" z="0" />
+      <scale x="7" y="0.3" z="4" />
+    </transformation>
+
+    <transformation id="front_right_leg">
+      <translate x="6.8" y="0" z="3.8" />
+      <scale x="0.2" y="2.5" z="0.2" />
+    </transformation>
+
+    <transformation id="front_left_leg">
+      <translate x="-6.8" y="0" z="3.8" />
+      <scale x="0.2" y="2.5" z="0.2" />
+    </transformation>
+
+    <transformation id="back_right_leg">
+      <translate x="6.8" y="0" z="-3.8" />
+      <scale x="0.2" y="2.5" z="0.2" />
+    </transformation>
+
+    <transformation id="back_left_leg">
+      <translate x="-6.8" y="0" z="-3.8" />
+      <scale x="0.2" y="2.5" z="0.2" />
+    </transformation>
+
+    <!-- END TABLE TRANSFORMATIONS -->
+
+  </transformations>
+
+
+
+  <primitives>
+
+    <!-- WALLS/FLOOR -->
+    <primitive id="rectangle">
+      <rectangle x1="1" y1="1" x2="-1" y2="-1"/>
+    </primitive>
+    <!-- END WALLS/FLOOR -->
+
+
+    <!-- RUG -->
+    <primitive id="rug">
+      <rectangle x1="1" y1="1" x2="-1" y2="-1"/>
+    </primitive>
+    <!-- END RUG -->
+
+
+    <!-- VAN GOGH -->
+    <primitive id="van_gogh">
+      <rectangle x1="1" y1="1" x2="-1" y2="-1"/>
+    </primitive>
+    <!-- END VAN GOGH -->
+
+
+    <!-- MONET -->
+    <primitive id="monet">
+      <rectangle x1="1" y1="1" x2="-1" y2="-1"/>
+    </primitive>
+    <!-- END MONET -->
+
+
+    <!-- MUG -->
+    <primitive id="cup">
+      <cylinder base="0.2" top="0.25" height="0.8" slices="20" stacks="5" />
+    </primitive>
+
+    <primitive id="wing">
+      <torus inner="0.05" outer="0.3" slices="20" loops="20" />
+    </primitive>
+    <!-- END MUG -->
+
+    <!-- PLATE -->
+    <primitive id="plate_top">
+      <cylinder base="0.8" top="1.2" height="0.1" slices="20" stacks="5" />
+    </primitive>
+    <!-- END PLATE -->
+
+
+    <!-- APPLE -->
+    <primitive id="fruit">
+      <sphere radius="0.25" slices="20" stacks="20" />
+    </primitive>
+
+    <primitive id="leaf">
+      <triangle x1="0" y1="0" z1="0" x2="0.1" y2="0.4" z2="0" x3="0" y3="0.6" z3="0" />
+    </primitive>
+    <!-- END APPLE -->
+
+
+    <!-- BOTTLE -->
+    <primitive id="bottle_body">
+      <cylinder base="0.25" top="0.25" height="1" slices="20" stacks="5" />
+    </primitive>
+
+    <primitive id="bottle_neck">
+      <cylinder base="0.25" top="0.09" height="0.3" slices="20" stacks="5" />
+    </primitive>
+
+    <primitive id="bottle_cap">
+      <cylinder base="0.1" top="0.1" height="0.1" slices="20" stacks="5" />
+    </primitive>
+    <!-- END BOTTLE -->
+
+
+  </primitives>
+
+
+  <components>
+
+    <!-- RUG -->
+
+    <component id="rug">
+
+      <transformation>
+        <transformationref id="rug"/>
+      </transformation>
+
+      <materials>
+        <material id="dim"/>
+      </materials>
+
+      <texture id="rug" length_s="1" length_t="1" />
+
+      <children>
+        <primitiveref id="rug" />
+      </children>
+    </component>
+
+    <!-- END RUG -->
+
+
+    <!-- VAN GOGH -->
+
+    <component id="van_gogh">
+
+      <transformation>
+        <transformationref id="van_gogh"/>
+      </transformation>
+
+      <materials>
+        <material id="dim"/>
+      </materials>
+
+      <texture id="van_gogh" length_s="1" length_t="1" />
+
+      <children>
+        <primitiveref id="van_gogh" />
+      </children>
+    </component>
+
+    <!-- END VAN GOGH -->
+
+
+    <!-- MONET -->
+
+    <component id="monet">
+
+      <transformation>
+        <transformationref id="monet"/>
+      </transformation>
+
+      <materials>
+        <material id="dim"/>
+      </materials>
+
+      <texture id="monet" length_s="2" length_t="2" />
+
+      <children>
+        <primitiveref id="monet" />
+      </children>
+    </component>
+
+    <!-- END MONET -->
+
+
+    <!-- APPLE -->
+
+    <component id="apple">
+
+      <transformation>
+        <transformationref id="apple"/>
+      </transformation>
+
+      <materials>
+        <material id="red"/>
+        <material id="blue"/>
+      </materials>
+
+      <texture id="none" length_s="1" length_t="1" />
+
+      <children>
+        <componentref id="leaf" />
+        <componentref id="fruit" />
+      </children>
+    </component>
+
+
+    <component id="leaf">
+
+      <transformation>
+        <transformationref id="leaf"/>
+      </transformation>
+
+      <materials>
+        <material id="green"/>
+        <material id="dim"/>
+      </materials>
+
+      <!--TODO remove texture -->
+      <texture id="galaxy" length_s="0.1" length_t="0.1" />
+
+      <children>
+        <primitiveref id="leaf" />
+      </children>
+    </component>
+
+
+    <component id="fruit">
+
+      <transformation>
+        <transformationref id="fruit"/>
+      </transformation>
+
+      <materials>
+        <material id="inherit"/>
+      </materials>
+
+      <texture id="none" length_s="1" length_t="1" />
+
+      <children>
+        <primitiveref id="fruit" />
+      </children>
+    </component>
+
+    <!-- END APPLE -->
+
+
+    <!-- ROOM -->
+
+    <component id="floor">
+
+      <transformation>
+        <transformationref id="floor"/>
+      </transformation>
+
+      <materials>
+        <material id="dim"/>
+      </materials>
+
+      <texture id="none" length_s="1" length_t="1" />
+
+      <children>
+        <primitiveref id="rectangle" />
+      </children>
+    </component>
+
+    <component id="back_wall">
+
+      <transformation>
+        <transformationref id="back_wall"/>
+      </transformation>
+
+      <materials>
+        <material id="dim"/>
+      </materials>
+
+      <texture id="none" length_s="1" length_t="1" />
+
+      <children>
+        <primitiveref id="rectangle" />
+      </children>
+    </component>
+
+    <component id="left_wall">
+
+      <transformation>
+        <transformationref id="left_wall"/>
+      </transformation>
+
+      <materials>
+        <material id="dim"/>
+      </materials>
+
+      <texture id="none" length_s="1" length_t="1" />
+
+      <children>
+        <primitiveref id="rectangle" />
+      </children>
+    </component>
+
+    <!-- END ROOM -->
+
+
+    <!-- BOX -->
+
+    <component id="box_bottom">
+      <transformation>
+        <transformationref id="box_bottom" />
+      </transformation>
+
+      <materials>
+        <material id="inherit" />
+      </materials>
+
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="rectangle" />
+      </children>
+    </component>
+
+    <component id="box_top">
+      <transformation>
+        <transformationref id="box_top" />
+      </transformation>
+
+      <materials>
+        <material id="inherit" />
+      </materials>
+
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="rectangle" />
+      </children>
+    </component>
+
+    <component id="box_front">
+      <transformation>
+        <transformationref id="box_front" />
+      </transformation>
+
+      <materials>
+        <material id="inherit" />
+      </materials>
+
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="rectangle" />
+      </children>
+    </component>
+
+    <component id="box_back">
+      <transformation>
+        <transformationref id="box_back" />
+      </transformation>
+
+      <materials>
+        <material id="inherit" />
+      </materials>
+
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="rectangle" />
+      </children>
+    </component>
+
+    <component id="box_left">
+      <transformation>
+        <transformationref id="box_left" />
+      </transformation>
+
+      <materials>
+        <material id="inherit" />
+      </materials>
+
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="rectangle" />
+      </children>
+    </component>
+
+    <component id="box_right">
+      <transformation>
+        <transformationref id="box_right" />
+      </transformation>
+
+      <materials>
+        <material id="inherit" />
+      </materials>
+
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="rectangle" />
+      </children>
+    </component>
+
+
+    <component id="box">
+
+      <transformation>
+        <transformationref id="none" />
+      </transformation>
+
+      <materials>
+        <material id="inherit" />
+      </materials>
+
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <componentref id="box_bottom" />
+        <componentref id="box_top" />
+        <componentref id="box_left" />
+        <componentref id="box_right" />
+        <componentref id="box_front" />
+        <componentref id="box_back" />
+      </children>
+    </component>
+
+    <!-- END BOX -->
+
+
+    <!-- TABLE -->
+
+    <component id="table">
+
+      <transformation>
+        <transformationref id="table" />
+      </transformation>
+
+      <materials>
+        <material id="brown" />
+      </materials>
+
+      <texture id="darkWood" length_s="1" length_t="1" />
+      <children>
+        <componentref id="table_top" />
+        <componentref id="front_right_leg" />
+        <componentref id="front_left_leg" />
+        <componentref id="back_right_leg" />
+        <componentref id="back_left_leg" />
+      </children>
+    </component>
+
+
+    <component id="table_top">
+      <transformation>
+        <transformationref id="table_top" />
+      </transformation>
+
+      <materials>
+        <material id="inherit" />
+      </materials>
+
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <componentref id="box" />
+      </children>
+    </component>
+
+
+    <component id="front_right_leg">
+      <transformation>
+        <transformationref id="front_right_leg" />
+      </transformation>
+
+      <materials>
+        <material id="inherit" />
+      </materials>
+
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <componentref id="box" />
+      </children>
+    </component>
+
+
+    <component id="front_left_leg">
+      <transformation>
+        <transformationref id="front_left_leg" />
+      </transformation>
+
+      <materials>
+        <material id="inherit" />
+      </materials>
+
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <componentref id="box" />
+      </children>
+    </component>
+
+
+    <component id="back_right_leg">
+      <transformation>
+        <transformationref id="back_right_leg" />
+      </transformation>
+
+      <materials>
+        <material id="inherit" />
+      </materials>
+
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <componentref id="box" />
+      </children>
+    </component>
+
+
+    <component id="back_left_leg">
+      <transformation>
+        <transformationref id="back_left_leg" />
+      </transformation>
+
+      <materials>
+        <material id="inherit" />
+      </materials>
+
+      <texture id="inherit" length_s="1" length_t="1" />
+      <children>
+        <componentref id="box" />
+      </children>
+    </component>
+
+    <!-- END TABLE -->
+
+    <!-- MUG -->
+
+    <component id="cup">
+
+      <transformation>
+        <transformationref id="cup"/>
+      </transformation>
+
+      <materials>
+        <material id="inherit"/>
+      </materials>
+
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="cup" />
+      </children>
+    </component>
+
+    <component id="wing">
+
+      <transformation>
+        <transformationref id="wing"/>
+      </transformation>
+
+      <materials>
+        <material id="inherit"/>
+      </materials>
+
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="wing" />
+      </children>
+    </component>
+
+    <component id="mug">
+
+      <transformation>
+        <transformationref id="mug"/>
+      </transformation>
+
+      <materials>
+        <material id="yellow"/>
+        <material id="red"/>
+        <material id="blue"/>
+      </materials>
+
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <componentref id="cup" />
+        <componentref id="wing" />
+      </children>
+    </component>
+
+    <!-- END MUG -->
+
+    <!-- PLATE -->
+
+    <component id="plate">
+
+      <transformation>
+        <transformationref id="plate"/>
+      </transformation>
+
+      <materials>
+        <material id="dim"/>
+      </materials>
+
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <componentref id="plate_top" />
+      </children>
+    </component>
+
+    <component id="plate_top">
+
+      <transformation>
+        <transformationref id="none"/>
+      </transformation>
+
+      <materials>
+        <material id="dim"/>
+      </materials>
+
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="plate_top" />
+      </children>
+    </component>
+
+    <!-- END PLATE -->
+
+
+    <!-- BOTTLE -->
+
+    <component id="bottle_body">
+
+      <transformation>
+        <transformationref id="bottle_body"/>
+      </transformation>
+
+      <materials>
+        <material id="dim"/>
+      </materials>
+
+      <texture id="water" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="bottle_body" />
+      </children>
+    </component>
+
+    <component id="bottle_neck">
+
+      <transformation>
+        <transformationref id="bottle_neck"/>
+      </transformation>
+
+      <materials>
+        <material id="dim"/>
+      </materials>
+
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="bottle_neck" />
+      </children>
+    </component>
+
+    <component id="bottle_cap">
+
+      <transformation>
+        <transformationref id="bottle_cap"/>
+      </transformation>
+
+      <materials>
+        <material id="blue"/>
+      </materials>
+
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="bottle_cap" />
+      </children>
+    </component>
+
+    <component id="bottle">
+
+      <transformation>
+        <transformationref id="bottle"/>
+      </transformation>
+
+      <materials>
+        <material id="blue"/>
+      </materials>
+
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <componentref id="bottle_body" />
+        <componentref id="bottle_neck" />
+        <componentref id="bottle_cap" />
+      </children>
+    </component>
+
+    <!-- END BOTTLE -->
+
+
+    <!-- ROOT COMPONENT -->
+
+    <component id="root">
+
+      <transformation>
+        <transformationref id="none"/>
+      </transformation>
+
+      <materials>
+        <material id="metal"/>
+      </materials>
+
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <componentref id="monet"/>
+        <componentref id="van_gogh"/>
+        <componentref id="rug"/>
+        <componentref id="bottle"/>
+        <componentref id="apple"/>
+        <componentref id="plate"/>
+        <componentref id="mug"/>
+        <componentref id="left_wall"/>
+        <componentref id="back_wall"/>
+        <componentref id="floor" />
+        <componentref id="table" />
+      </children>
+    </component>
+
+  </components>
+
+
+</yas>
+
