@@ -1834,6 +1834,8 @@ class MySceneGraph {
       } else {
         return "unable to parse length_s value";
       }
+    } else if (ls <= 0) {
+      return `Component ${component.id}: length_s must be bigger than 0`;
     }
 
     var lt;
@@ -1844,6 +1846,8 @@ class MySceneGraph {
       } else {
         return "unable to parse length_t value";
       }
+    } else if (lt <= 0) {
+      return `Component ${component.id}: length_t must be bigger than 0`;
     }
 
     component.texture.id = id;
