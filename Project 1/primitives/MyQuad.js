@@ -67,8 +67,8 @@ class MyQuad extends CGFobject
 
 	setTexCoords(ls, lt) {
 
-		this.maxS = this.x1 > this.x2 ? 1/(ls / (this.x1 - this.x2)) :  1/(ls / (this.x2 - this.x1));
-		this.maxT = this.y1 > this.y2 ? 1/(lt / (this.y1 - this.y2)) :  1/(lt / (this.y2 - this.y1));
+		this.maxS = this.x1 > this.x2 ? ((this.x1 - this.x2) / ls) :  ((this.x2 - this.x1) / ls);
+		this.maxT = this.y1 > this.y2 ? 1/((this.y1 - this.y2) / lt) :  ((this.y2 - this.y1) / lt);
 
 		this.minS = 0;
 		this.minT = 0;
