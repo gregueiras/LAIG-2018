@@ -16,6 +16,8 @@ const COMPONENTS_INDEX = 8;
 const INHERIT = "inherit";
 const NONE = "none";
 
+const ERROR = "ERROR";
+
 /**
  * MySceneGraph class, representing the scene graph.
  */
@@ -2229,6 +2231,14 @@ class MySceneGraph {
     // entry point for graph rendering
     let rootNode = this.components[this.idRoot];
 
+    if(rootNode == undefined) {
+      if(this.idRoot != ERROR) {
+        this.onXMLError("Non-existent root");
+        this.idRoot = ERROR;
+      } 
+      return;
+    }
+      
     this.displayComponent(rootNode);
 
   }
