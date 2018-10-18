@@ -1,4 +1,32 @@
-/*jshint esversion: 6 */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: MySceneGraph.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: MySceneGraph.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*jshint esversion: 6 */
 
 // Order of the groups in the XML document.
 const YAS_INDEX = 0;
@@ -198,10 +226,10 @@ class MySceneGraph {
   processTag(node, nodeNames, tag, tagIndex) {
     var index;
     if ((index = nodeNames.indexOf(tag)) == null)
-      return "tag <" + tag + "> missing";
+      return "tag &lt;" + tag + "> missing";
     else {
       if (index != tagIndex)
-        this.onXMLMinorError("tag <" + tag + "> out of order");
+        this.onXMLMinorError("tag &lt;" + tag + "> out of order");
 
       //Parse block
       var error;
@@ -216,7 +244,7 @@ class MySceneGraph {
    */
   parseXMLFile(rootElement) {
     if (rootElement.nodeName != "yas")
-      return "root tag <yas> missing";
+      return "root tag &lt;yas> missing";
 
     var nodes = rootElement.children;
     if (nodes[0].nodeName == 'parsererror')
@@ -225,7 +253,7 @@ class MySceneGraph {
     // Reads the names of the nodes to an auxiliary buffer.
     var nodeNames = [];
 
-    for (var i = 0; i < nodes.length; i++) {
+    for (var i = 0; i &lt; nodes.length; i++) {
       nodeNames.push(nodes[i].nodeName);
     }
 
@@ -233,47 +261,47 @@ class MySceneGraph {
 
     // Processes each node, verifying errors.
 
-    // <scene>
+    // &lt;scene>
     error = this.processTag(nodes[SCENE_INDEX], nodeNames, "scene", SCENE_INDEX);
     if (error != null)
       return error;
 
-    // <views>
+    // &lt;views>
     error = this.processTag(nodes[VIEWS_INDEX], nodeNames, "views", VIEWS_INDEX);
     if (error != null)
       return error;
 
-    // <lights>
+    // &lt;lights>
     error = this.processTag(nodes[LIGHTS_INDEX], nodeNames, "lights", LIGHTS_INDEX);
     if (error != null)
       return error;
 
-    // <textures>
+    // &lt;textures>
     error = this.processTag(nodes[TEXTURES_INDEX], nodeNames, "textures", TEXTURES_INDEX);
     if (error != null)
       return error;
 
-    // <materials>
+    // &lt;materials>
     error = this.processTag(nodes[MATERIALS_INDEX], nodeNames, "materials", MATERIALS_INDEX);
     if (error != null)
       return error;
 
-    // <transformations>
+    // &lt;transformations>
     error = this.processTag(nodes[TRANSFORMATIONS_INDEX], nodeNames, "transformations", TRANSFORMATIONS_INDEX);
     if (error != null)
       return error;
 
-    // <ambient>
+    // &lt;ambient>
     error = this.processTag(nodes[AMBIENT_INDEX], nodeNames, "ambient", AMBIENT_INDEX);
     if (error != null)
       return error;
 
-    // <primitives>
+    // &lt;primitives>
     error = this.processTag(nodes[PRIMITIVES_INDEX], nodeNames, "primitives", PRIMITIVES_INDEX);
     if (error != null)
       return error;
 
-    // <components>
+    // &lt;components>
     error = this.processTag(nodes[COMPONENTS_INDEX], nodeNames, "components", COMPONENTS_INDEX);
     if (error != null)
       return error;
@@ -281,7 +309,7 @@ class MySceneGraph {
   }
 
   /**
-   *  Parses the <scene> block.
+   *  Parses the &lt;scene> block.
    *
    * @param {Object} sceneNode XML scene element
    * @returns null on sucess, error message on failure
@@ -293,7 +321,7 @@ class MySceneGraph {
 
     let nodeNames = [];
 
-    for (let i = 0; i < attributes.length; i++) {
+    for (let i = 0; i &lt; attributes.length; i++) {
       nodeNames.push(attributes[i].nodeName);
     }
 
@@ -304,7 +332,7 @@ class MySceneGraph {
     } else {
       this.idRoot = this.reader.getString(sceneNode, 'root');
 
-      if (!(this.idRoot != -1 && isString(this.idRoot))) {
+      if (!(this.idRoot != -1 &amp;&amp; isString(this.idRoot))) {
         return "unable to parse root value";
       }
 
@@ -319,7 +347,7 @@ class MySceneGraph {
       this.onXMLMinorError(`axis length missing; assuming ${this.axis_length}`);
     } else {
       this.axis_length = this.reader.getFloat(sceneNode, 'axis_length');
-      if (!(this.axis_length != null && !isNaN(this.axis_length))) {
+      if (!(this.axis_length != null &amp;&amp; !isNaN(this.axis_length))) {
         this.axis_length = 100;
         this.onXMLMinorError(`unable to parse value for axis length; assuming ${this.axis_length}`);
       }
@@ -415,7 +443,7 @@ class MySceneGraph {
 
     var grandchildren = child.children;
 
-    for (var j = 0; j < grandchildren.length; j++) {
+    for (var j = 0; j &lt; grandchildren.length; j++) {
       this.parseViewPerspectiveChildren(grandchildren[j], ortho);
     }
 
@@ -467,7 +495,7 @@ class MySceneGraph {
         return "unable to parse to/z value";
       }
     } else
-      this.onXMLMinorError("unknown tag <" + child.nodeName + "/" + child.nodeName + ">");
+      this.onXMLMinorError("unknown tag &lt;" + child.nodeName + "/" + child.nodeName + ">");
   }
 
   /**
@@ -533,7 +561,7 @@ class MySceneGraph {
 
     var grandchildren = child.children;
 
-    for (var j = 0; j < grandchildren.length; j++) {
+    for (var j = 0; j &lt; grandchildren.length; j++) {
       this.parseViewPerspectiveChildren(grandchildren[j], perspective);
     }
 
@@ -570,7 +598,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parses the <views> block.
+   * Parses the &lt;views> block.
    * 
    * @param {Object} viewsNode XML view element
    * @returns null on success, error message on failure
@@ -582,7 +610,7 @@ class MySceneGraph {
     let attributes = viewsNode.attributes;
     let viewsNames = [];
 
-    for (let i = 0; i < attributes.length; i++) {
+    for (let i = 0; i &lt; attributes.length; i++) {
       viewsNames.push(attributes[i].nodeName);
     }
 
@@ -605,10 +633,10 @@ class MySceneGraph {
     }
 
     //Any number of Views
-    if (children.length < 1)
+    if (children.length &lt; 1)
       return "no views available";
 
-    for (var i = 0; i < children.length; i++) {
+    for (var i = 0; i &lt; children.length; i++) {
 
       if (children[i].nodeName == "perspective") {
         let error = this.parseViewPerspective(children[i]);
@@ -624,7 +652,7 @@ class MySceneGraph {
         else
           return error;
       } else
-        this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+        this.onXMLMinorError("unknown tag &lt;" + children[i].nodeName + ">");
     }
 
     if (!this.checkDefaultViewExistance()) {
@@ -635,7 +663,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parses the <ambient> node.
+   * Parses the &lt;ambient> node.
    * 
    * @param {Object} ambientNode XML ambient element
    * @returns error message on failure
@@ -771,9 +799,9 @@ class MySceneGraph {
   }
 
   /**
-   * Parses the <views>\<perspective> node.
+   * Parses the &lt;views>\&lt;perspective> node.
    *
-   * @param {*} child The <perspective> node subparameters
+   * @param {*} child The &lt;perspective> node subparameters
    * @param {*} omni The holder of parsed information from child
    * @returns 0 on sucess, error message on failure
    * @memberof MySceneGraph
@@ -793,15 +821,15 @@ class MySceneGraph {
         return this.parseChildrenColours(omni.specular, child);
 
       default:
-        this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
+        this.onXMLMinorError("unknown tag &lt;" + child.nodeName + ">");
         return -1;
     }
   }
 
   /**
-   * Parses the <ligths>\<omni> node.
+   * Parses the &lt;ligths>\&lt;omni> node.
    *
-   * @param {*} child The <omni> node
+   * @param {*} child The &lt;omni> node
    * @returns 0 on sucess, error message on failure
    * @memberof MySceneGraph
    */
@@ -855,7 +883,7 @@ class MySceneGraph {
 
     var grandchildren = child.children;
 
-    for (var j = 0; j < grandchildren.length; j++) {
+    for (var j = 0; j &lt; grandchildren.length; j++) {
       reply = this.parseLightsOmniChildren(grandchildren[j], omni);
       if (reply != 0)
         return reply;
@@ -866,7 +894,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parses one of the <spot> sub-blocks
+   * Parses one of the &lt;spot> sub-blocks
    * @param {Object} child - sub-block to be parsed
    * @param {Object} spot - spot to be populated
    * @returns -1 in case of child being a unknown tag and an error message if there was an error
@@ -894,14 +922,14 @@ class MySceneGraph {
         return this.parseChildrenColours(spot.specular, child);
 
       default:
-        this.onXMLMinorError("unknown tag <" + child.nodeName + "/" + child.nodeName + ">");
+        this.onXMLMinorError("unknown tag &lt;" + child.nodeName + "/" + child.nodeName + ">");
         return -1;
     }
   }
 
   /**
-   * Parse <spot> block
-   * @param {Object} child - <spot> block to be parsed
+   * Parse &lt;spot> block
+   * @param {Object} child - &lt;spot> block to be parsed
    * @returns null if run with sucess, an error message if there was an error
    * @memberof MySceneGraph
    */
@@ -972,14 +1000,14 @@ class MySceneGraph {
 
     var grandchildren = child.children;
 
-    for (var j = 0; j < grandchildren.length; j++) {
+    for (var j = 0; j &lt; grandchildren.length; j++) {
       reply = this.parseLightsSpotChildren(grandchildren[j], spot);
       if (reply != 0)
         return reply;
     }
 
     let l = spot.location, t = spot.target;
-    if (l.x == t.x && l.y == t.y && l.z == t.z) {
+    if (l.x == t.x &amp;&amp; l.y == t.y &amp;&amp; l.z == t.z) {
       return `Spot ${spot.id}: Location can't be the same as target`;
     }
     this.light.spots.push(spot);
@@ -987,7 +1015,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parses the <ligths> block. 
+   * Parses the &lt;ligths> block. 
    * 
    * @param {Object} lightsNode
    * @returns null if run with sucess, an error message if there was an error
@@ -1002,9 +1030,9 @@ class MySceneGraph {
     }
 
     //Any number of Lights
-    if (children.length < 1)
+    if (children.length &lt; 1)
       return "no lights available"
-    for (var i = 0; i < children.length; i++) {
+    for (var i = 0; i &lt; children.length; i++) {
 
       if (children[i].nodeName == "omni") {
         let error = this.parseLightsOmni(children[i]);
@@ -1019,7 +1047,7 @@ class MySceneGraph {
         else
           return error;
       } else
-        this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+        this.onXMLMinorError("unknown tag &lt;" + children[i].nodeName + ">");
     }
 
     this.log("Parsed lights");
@@ -1027,7 +1055,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parse <texture> block
+   * Parse &lt;texture> block
    * @param {Object} child - block to be parsed
    * @returns 0 if run with sucess, an error message if there was an error
    * @memberof MySceneGraph
@@ -1068,7 +1096,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parses the <textures> block.
+   * Parses the &lt;textures> block.
    * @param {Object} texturesNode
    * @returns null if run with sucess, an error message if there was an error
    * @memberof MySceneGraph
@@ -1077,9 +1105,9 @@ class MySceneGraph {
     var children = texturesNode.children;
 
     this.textures = [];
-    if (children.length < 1)
+    if (children.length &lt; 1)
       return "no textures available"
-    for (var i = 0; i < children.length; i++) {
+    for (var i = 0; i &lt; children.length; i++) {
       let error = this.parseTexturesTexture(children[i]);
       if (error != 0)
         return error;
@@ -1091,7 +1119,7 @@ class MySceneGraph {
 
   /**
    *
-   * Parses one of the <material> sub-blocks
+   * Parses one of the &lt;material> sub-blocks
    * @param {Object} child - sub-block to be parsed
    * @param {Object} material - material to be populated
    * @memberof MySceneGraph
@@ -1111,13 +1139,13 @@ class MySceneGraph {
         this.parseChildrenColours(material.specular, child);
         break;
       default:
-        this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
+        this.onXMLMinorError("unknown tag &lt;" + child.nodeName + ">");
         break;
     }
   }
 
   /**
-   * Parse a <material> block and add it to the graph
+   * Parse a &lt;material> block and add it to the graph
    * @param {Object} child - material block to be parsed
    * @returns 0 if run with sucess, an error message if there was an error
    */
@@ -1168,7 +1196,7 @@ class MySceneGraph {
 
     var grandchildren = child.children;
 
-    for (var j = 0; j < grandchildren.length; j++) {
+    for (var j = 0; j &lt; grandchildren.length; j++) {
       this.parseMaterialsMaterialChildren(grandchildren[j], material);
     }
 
@@ -1202,7 +1230,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parses the <materials> block.
+   * Parses the &lt;materials> block.
    * @param {Object} materialsNode
    * @returns null if run with sucess, an error message if there is an error
    * @memberof MySceneGraph
@@ -1213,9 +1241,9 @@ class MySceneGraph {
     this.materials = [];
 
     //Any number of Materials
-    if (children.length < 1)
+    if (children.length &lt; 1)
       return "no materials available"
-    for (var i = 0; i < children.length; i++) {
+    for (var i = 0; i &lt; children.length; i++) {
       let error = this.parseMaterial(children[i]);
       if (error != 0)
         return error;
@@ -1226,7 +1254,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parse a <rotate> block
+   * Parse a &lt;rotate> block
    * @param {Object} param - block to be parsed
    * @param {Object} child - object to be populated
    * @returns Undefined if run with sucess, an error message if there is an error
@@ -1245,7 +1273,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parse one of the <tranformation> sub-blocks
+   * Parse one of the &lt;tranformation> sub-blocks
    * @param {Object} child - block to be parsed
    * @param {Object} tranformation - tranformation object to be populated
    * @memberof MySceneGraph
@@ -1280,13 +1308,13 @@ class MySceneGraph {
         tranformation.steps.push(tmpRot);
         break;
       default:
-        this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
+        this.onXMLMinorError("unknown tag &lt;" + child.nodeName + ">");
         break;
     }
   }
 
   /**
-   * Parse a <transformation> block and add it to the graph
+   * Parse a &lt;transformation> block and add it to the graph
    * @param {Object} child - transformation block to be parsed
    * @returns 0 if run with sucess, an error message if there was an error
    * @memberof MySceneGraph
@@ -1309,7 +1337,7 @@ class MySceneGraph {
 
     var grandchildren = child.children;
 
-    for (var j = 0; j < grandchildren.length; j++) {
+    for (var j = 0; j &lt; grandchildren.length; j++) {
       this.parseTransformationsTransformationChildren(grandchildren[j], transformation);
     }
 
@@ -1318,7 +1346,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parses the <transformations> block.
+   * Parses the &lt;transformations> block.
    * @param {Object} transformationsNode
    * @returns null if run with sucess, an error message if there was an error
    * @memberof MySceneGraph
@@ -1329,9 +1357,9 @@ class MySceneGraph {
     this.transformations = [];
 
     //Any number of transformations
-    if (children.length < 1)
+    if (children.length &lt; 1)
       return "no transformations available"
-    for (var i = 0; i < children.length; i++) {
+    for (var i = 0; i &lt; children.length; i++) {
       let error = this.parseTransformation(children[i]);
       if (error != 0)
         return error;
@@ -1342,7 +1370,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parse a <rectangle> block
+   * Parse a &lt;rectangle> block
    * @param {Object} rectangle - primitive object to be populated
    * @param {Object} child - child node to be parsed
    * @returns {number} an error message if there was an error
@@ -1370,7 +1398,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parse a <triangle> block
+   * Parse a &lt;triangle> block
    * @param {Object} triangle - primitive object to be populated
    * @param {Object} child - child node to be parsed
    * @returns {number} an error message if there was an error
@@ -1423,7 +1451,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parse a <cylinder> block
+   * Parse a &lt;cylinder> block
    * @param {Object} cylinder - primitive object to be populated
    * @param {Object} child - child node to be parsed
    * @returns {number} an error message if there was an error
@@ -1456,7 +1484,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parse a <sphere> block
+   * Parse a &lt;sphere> block
    * @param {Object} sphere - primitive object to be populated
    * @param {Object} child - child node to be parsed
    * @returns {number} an error message if there was an error
@@ -1479,7 +1507,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parse a <torus> block
+   * Parse a &lt;torus> block
    * @param {Object} torus - primitive object to be populated
    * @param {Object} child - child node to be parsed
    * @returns {number} an error message if there was an error
@@ -1507,7 +1535,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parse a sub-block of a <primitive> block
+   * Parse a sub-block of a &lt;primitive> block
    * @param {Object} child - child node to be parsed
    * @param {Object} primitive - primitive object to be populated
    * @returns {number} 0 if run with sucess, -1 if there was an error
@@ -1579,7 +1607,7 @@ class MySceneGraph {
         primitive.specs = torus;
         break;
       default:
-        this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
+        this.onXMLMinorError("unknown tag &lt;" + child.nodeName + ">");
         break;
     }
 
@@ -1588,7 +1616,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parse <primitive> block
+   * Parse &lt;primitive> block
    * @param {Object} node - node to be parsed
    * @returns 0 if run with sucess, an error message if there was an error
    */
@@ -1612,7 +1640,7 @@ class MySceneGraph {
 
     var grandchildren = node.children;
 
-    for (var j = 0; j < grandchildren.length; j++) {
+    for (var j = 0; j &lt; grandchildren.length; j++) {
       let error = this.parsePrimitivesPrimitiveChildren(grandchildren[j], primitive);
       if (error != 0) {
         return error;
@@ -1624,7 +1652,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parses the <primitives> block.
+   * Parses the &lt;primitives> block.
    * @param {Object} primitivesNode
    * @returns null if run with sucess, an error message ig there was an error
    * @memberof MySceneGraph
@@ -1635,9 +1663,9 @@ class MySceneGraph {
     this.primitives = [];
 
     //Any number of primitives
-    if (children.length < 1)
+    if (children.length &lt; 1)
       return "no primitives available"
-    for (var i = 0; i < children.length; i++) {
+    for (var i = 0; i &lt; children.length; i++) {
       let error = this.parsePrimitive(children[i]);
       if (error != 0)
         return error;
@@ -1648,7 +1676,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parse <transformation> sub-block of a component
+   * Parse &lt;transformation> sub-block of a component
    * @param {Object} child - child node to be parsed
    * @param {Object} component - component object to be populated
    * @returns 0 if run with sucess, an error message if there was an error
@@ -1656,7 +1684,7 @@ class MySceneGraph {
   parseChildrenTransformation(child, component) {
     let children = child.children;
 
-    for (let i = 0; i < children.length; i++) {
+    for (let i = 0; i &lt; children.length; i++) {
       switch (children[i].nodeName) {
         case "transformationref":
           let transfID = this.reader.getString(children[i], 'id');
@@ -1701,7 +1729,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parse <materials> sub-block of a component
+   * Parse &lt;materials> sub-block of a component
    * @param {Object} child - child node to be parsed
    * @param {Object} component - component object to be populated
    * @returns 0 if run with sucess, an error message if there was an error
@@ -1710,14 +1738,14 @@ class MySceneGraph {
   parseChildrenMaterials(child, component) {
     let children = child.children;
 
-    for (let i = 0; i < children.length; i++) {
+    for (let i = 0; i &lt; children.length; i++) {
       var id;
       id = this.reader.getString(children[i], 'id');
       if (id == null || !isString(id)) {
         return `Component "${component.id}: unable to parse id value`;
       }
-      if (id != "inherit" && !this.materials.hasOwnProperty(id)) {
-        return `material "${id}" is not defined in <materials> node`
+      if (id != "inherit" &amp;&amp; !this.materials.hasOwnProperty(id)) {
+        return `material "${id}" is not defined in &lt;materials> node`
       }
       component.materials.push(id);
     }
@@ -1725,7 +1753,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parse <texture> sub-block of a component
+   * Parse &lt;texture> sub-block of a component
    * @param {Object} child - child node to be parsed
    * @param {Object} component - component object to be populated
    * @returns 0 if run with sucess, an error message if there was an error
@@ -1745,7 +1773,7 @@ class MySceneGraph {
       } else {
         return "unable to parse length_s value";
       }
-    } else if (ls <= 0) {
+    } else if (ls &lt;= 0) {
       return `Component "${component.id}": length_s must be bigger than 0`;
     }
 
@@ -1757,12 +1785,12 @@ class MySceneGraph {
       } else {
         return "unable to parse length_t value";
       }
-    } else if (lt <= 0) {
+    } else if (lt &lt;= 0) {
       return `Component "${component.id}": length_t must be bigger than 0`;
     }
 
     //Find if id was defined before
-    if (id != INHERIT && id != NONE && Object.keys(this.textures).indexOf(id) == -1) {
+    if (id != INHERIT &amp;&amp; id != NONE &amp;&amp; Object.keys(this.textures).indexOf(id) == -1) {
       return `Component "${component.id}": texture "${id}" doesn't exist`;
     }
 
@@ -1774,7 +1802,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parses the sub-blocks of a <children> block
+   * Parses the sub-blocks of a &lt;children> block
    * @param {Object} child - child node to be parsed
    * @param {Object} component - component object to be populated
    * @returns 0 if run with sucess, an error message if there was an error
@@ -1783,7 +1811,7 @@ class MySceneGraph {
   parseChildrenChildren(child, component) {
     let children = child.children;
 
-    for (let i = 0; i < children.length; i++) {
+    for (let i = 0; i &lt; children.length; i++) {
       switch (children[i].nodeName) {
         case "componentref":
           var id;
@@ -1833,7 +1861,7 @@ class MySceneGraph {
         return this.parseChildrenChildren(child, component);
 
       default:
-        this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
+        this.onXMLMinorError("unknown tag &lt;" + child.nodeName + ">");
         return 0;
 
     }
@@ -1846,7 +1874,7 @@ class MySceneGraph {
    * @memberof MySceneGraph
    */
   componentErrCheck(component) {
-    if (component.transformation.ref != null && component.transformation.steps != 0)
+    if (component.transformation.ref != null &amp;&amp; component.transformation.steps != 0)
       return `Component: ${component.id}. Invalid transformation`;
 
     if (component.materials.length == 0)
@@ -1863,7 +1891,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parse the <component> block.
+   * Parse the &lt;component> block.
    * @param {Object} child
    * @returns 0 if run with sucess, an error message if there was an error
    * @memberof MySceneGraph
@@ -1900,7 +1928,7 @@ class MySceneGraph {
 
     var grandchildren = child.children;
 
-    for (var j = 0; j < grandchildren.length; j++) {
+    for (var j = 0; j &lt; grandchildren.length; j++) {
       let error = this.parseComponentsComponentChildren(grandchildren[j], component);
       if (error != 0)
         return error;
@@ -1915,7 +1943,7 @@ class MySceneGraph {
   }
 
   /**
-   * Parses the <components> block.
+   * Parses the &lt;components> block.
    * 
    * @param {Object} componentsNode
    * @returns null if run with sucess, an error message if there was an error
@@ -1927,9 +1955,9 @@ class MySceneGraph {
     this.components = [];
 
     //Any number of components
-    if (children.length < 1)
+    if (children.length &lt; 1)
       return "no components available"
-    for (var i = 0; i < children.length; i++) {
+    for (var i = 0; i &lt; children.length; i++) {
       let error = this.parseComponent(children[i]);
       if (error != 0) {
         return error;
@@ -1939,7 +1967,7 @@ class MySceneGraph {
     let keys = Object.keys(this.components);
     for (let key of keys) {
       let compChildren = this.components[key].children.componentref;
-      for (let i = 0; i < compChildren.length; i++) {
+      for (let i = 0; i &lt; compChildren.length; i++) {
         const child = compChildren[i];
         if (keys.indexOf(child) == -1) {
           return `Component "${child}" doesn't exist`;
@@ -1987,7 +2015,7 @@ class MySceneGraph {
   setTexturePosition(component) {
     let prims = component.children.primitiveref;
     if (prims == undefined) return;
-    for (let i = 0; i < prims.length; i++) {
+    for (let i = 0; i &lt; prims.length; i++) {
       var key = prims[i];
       var length_s = component.texture.length_s;
       var length_t = component.texture.length_t;
@@ -2200,7 +2228,7 @@ class MySceneGraph {
  * @returns true if value is a boolean, false if it isn't
  */
 function isBoolean(value) {
-  if (isNaN(value) || value < 0 || value > 1)
+  if (isNaN(value) || value &lt; 0 || value > 1)
     return false;
   return true;
 }
@@ -2242,7 +2270,7 @@ function isString(string) {
  * @return true if it is an integer, false if not
  */
 function isInteger(number) {
-  return (!isNaN(number) && number % 1 == 0);
+  return (!isNaN(number) &amp;&amp; number % 1 == 0);
 }
 
 /**
@@ -2251,5 +2279,27 @@ function isInteger(number) {
  * @return true if value is between the two, false if not
  */
 function isBetween(a, min, max) {
-  return ((a >= min) && (a <= max));
-}
+  return ((a >= min) &amp;&amp; (a &lt;= max));
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MyInterface.html">MyInterface</a></li><li><a href="MySceneGraph.html">MySceneGraph</a></li><li><a href="XMLscene.html">XMLscene</a></li></ul><h3>Global</h3><ul><li><a href="global.html#isAxis">isAxis</a></li><li><a href="global.html#isBetween">isBetween</a></li><li><a href="global.html#isBoolean">isBoolean</a></li><li><a href="global.html#isInteger">isInteger</a></li><li><a href="global.html#isString">isString</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Oct 18 2018 20:19:13 GMT+0100 (GMT Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
