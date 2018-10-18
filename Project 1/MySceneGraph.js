@@ -781,6 +781,8 @@ class MySceneGraph {
     if (param.a == null || isNaN(param.a) || !isBetween(param.a, 0, 1)) {
       return "unable to parse a value";
     }
+
+    return 0;
   }
 
   /**
@@ -842,8 +844,7 @@ class MySceneGraph {
 
       default:
         this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
-        return 0;
-
+        return -1;
     }
   }
 
@@ -905,7 +906,9 @@ class MySceneGraph {
     var grandchildren = child.children;
 
     for (var j = 0; j < grandchildren.length; j++) {
-      this.parseLightsOmniChildren(grandchildren[j], omni);
+      reply = this.parseLightsOmniChildren(grandchildren[j], omni);
+      if(reply != 0) 
+        return reply;
     }
 
     this.light.omnis.push(omni);
@@ -920,25 +923,40 @@ class MySceneGraph {
    * @memberof MySceneGraph
    */
   parseLightsSpotChildren(child, spot) {
+    var reply;
+    let lx = spot.location.x;
+    let ly = spot.location.y;
+    let lz = spot.location.z;
+    let tx = spot.target.x;
+    let ty = spot.target.y;
+    let tz = spot.target.z;
     switch (child.nodeName) {
       case "location":
-        this.parseChildrenCoordinates(spot.location, child, 1);
-        break;
+        reply = this.parseChildrenCoordinates(spot.location, child, 1);
+        if(lx == tx && ly == ty && lz == tz && reply == 0) {
+          return "Spot ligth location is the same as the target";
+        }
+        return reply;
+
       case "target":
-        this.parseChildrenCoordinates(spot.target, child, 0);
-        break;
+        reply = this.parseChildrenCoordinates(spot.target, child, 0);
+        if(lx == tx && ly == ty && lz == tz && reply == 0) {
+          return "Spot ligth location is the same as the target";
+        }
+        return reply;
+        
       case "ambient":
-        this.parseChildrenColours(spot.ambient, child);
-        break;
+        return this.parseChildrenColours(spot.ambient, child);
+        
       case "diffuse":
-        this.parseChildrenColours(spot.diffuse, child);
-        break;
+        return this.parseChildrenColours(spot.diffuse, child);
+        
       case "specular":
-        this.parseChildrenColours(spot.specular, child);
-        break;
+        return this.parseChildrenColours(spot.specular, child);
+        
       default:
         this.onXMLMinorError("unknown tag <" + child.nodeName + "/" + child.nodeName + ">");
-        break;
+        return -1;
     }
   }
 
@@ -1017,7 +1035,9 @@ class MySceneGraph {
     var grandchildren = child.children;
 
     for (var j = 0; j < grandchildren.length; j++) {
-      this.parseLightsSpotChildren(grandchildren[j], spot);
+      reply = this.parseLightsSpotChildren(grandchildren[j], spot);
+      if(reply != 0) 
+        return reply;
     }
 
     this.light.spots.push(spot);
