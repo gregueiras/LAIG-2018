@@ -760,7 +760,7 @@ class MySceneGraph {
     let keys = Object.keys(arr);
     for (let key of keys) {
       if (id == arr[key].id)
-        return "repeated id value";
+        return `id "${id}" is repeated`;
     }
     return "OK";
   }
@@ -936,25 +936,14 @@ class MySceneGraph {
    */
   parseLightsSpotChildren(child, spot) {
     var reply;
-    let lx = spot.location.x;
-    let ly = spot.location.y;
-    let lz = spot.location.z;
-    let tx = spot.target.x;
-    let ty = spot.target.y;
-    let tz = spot.target.z;
+
     switch (child.nodeName) {
       case "location":
         reply = this.parseChildrenCoordinates(spot.location, child, 1);
-        if(lx == tx && ly == ty && lz == tz && reply == 0) {
-          return "Spot ligth location is the same as the target";
-        }
         return reply;
 
       case "target":
         reply = this.parseChildrenCoordinates(spot.target, child, 0);
-        if(lx == tx && ly == ty && lz == tz && reply == 0) {
-          return "Spot ligth location is the same as the target";
-        }
         return reply;
         
       case "ambient":
@@ -1052,6 +1041,10 @@ class MySceneGraph {
         return reply;
     }
 
+    let l = spot.location, t = spot.target;
+    if (l.x == t.x && l.y == t.y && l.z == t.z) {
+      return `Spot ${spot.id}: Location can't be the same as target`;
+    }
     this.light.spots.push(spot);
     return 0;
   }

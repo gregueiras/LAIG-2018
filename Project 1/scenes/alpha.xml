@@ -46,7 +46,7 @@
             <diffuse r="0.6" g="0.6" b="0.6" a="1" />
             <specular r="0.3" g="0.3" b="0.3" a="1" />
         </omni>
-        
+
         <omni id="lamp1" enabled="0">
             <location x="2.5" y="2.005" z="2.7" w="0" />
             <ambient r="0" g="0" b="0" a="1" />
@@ -306,6 +306,8 @@
         <transformation id="tf45">
             <translate x="3.5" y="8.5" z="0" />
         </transformation>
+        <transformation id="tf46">
+        </transformation>
     </transformations>
     <primitives>
         <primitive id="rect1">
@@ -344,7 +346,7 @@
         <primitive id="rect12">
             <rectangle x1="0" y1="0" x2="10" y2="2.5"/>
         </primitive >
-         <primitive id="rect13">
+        <primitive id="rect13">
             <rectangle x1="0" y1="0" x2="1.2" y2="2.5"/>
         </primitive >
         <primitive id="rect14">
@@ -502,7 +504,7 @@
                 <primitiveref id="rect10" />
                 <componentref id="painting1" />
                 <componentref id="painting2" />
-                <componentref id="painting3" /> 
+                <componentref id="painting3" />
             </children>
         </component>
         <component id="tv_livingroom">
@@ -563,7 +565,7 @@
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
                 <primitiveref id="rect9" />
-                <componentref id="random" /> 
+                <componentref id="random" />
             </children>
         </component>
         <component id="random">
