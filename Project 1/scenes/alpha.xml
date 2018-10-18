@@ -395,7 +395,6 @@
     <components>
         <component id="house">
             <transformation>
-                <transformationref id="tf1" />
             </transformation>
             <materials>
                 <material id="default" />

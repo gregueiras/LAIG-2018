@@ -359,7 +359,7 @@ class MySceneGraph {
 
     ortho.id = this.reader.getString(child, 'id');
     if (ortho.id == null || !isString(ortho.id)) {
-      return "unable to parse id value";
+      return "Ortho Camera: unable to parse id value";
     }
 
     // Check for repeated id
@@ -496,7 +496,7 @@ class MySceneGraph {
 
     perspective.id = this.reader.getString(child, 'id');
     if (perspective.id == null || !isString(perspective.id)) {
-      return "unable to parse id value";
+      return "Perspective Camera: unable to parse id value";
     }
 
     // Check for repeated id
@@ -899,7 +899,7 @@ class MySceneGraph {
 
     omni.id = this.reader.getString(child, 'id');
     if (omni.id == null || !isString(omni.id)) {
-      return "unable to parse id value";
+      return "Omni Light: unable to parse id value";
     }
 
     // Check for repeated id
@@ -919,7 +919,7 @@ class MySceneGraph {
 
     for (var j = 0; j < grandchildren.length; j++) {
       reply = this.parseLightsOmniChildren(grandchildren[j], omni);
-      if(reply != 0) 
+      if (reply != 0)
         return reply;
     }
 
@@ -945,16 +945,16 @@ class MySceneGraph {
       case "target":
         reply = this.parseChildrenCoordinates(spot.target, child, 0);
         return reply;
-        
+
       case "ambient":
         return this.parseChildrenColours(spot.ambient, child);
-        
+
       case "diffuse":
         return this.parseChildrenColours(spot.diffuse, child);
-        
+
       case "specular":
         return this.parseChildrenColours(spot.specular, child);
-        
+
       default:
         this.onXMLMinorError("unknown tag <" + child.nodeName + "/" + child.nodeName + ">");
         return -1;
@@ -1007,7 +1007,7 @@ class MySceneGraph {
 
     spot.id = this.reader.getString(child, 'id');
     if (spot.id == null || !isString(spot.id)) {
-      return "unable to parse id value";
+      return "Spot Light: unable to parse id value";
     }
 
     // Check for repeated id
@@ -1037,7 +1037,7 @@ class MySceneGraph {
 
     for (var j = 0; j < grandchildren.length; j++) {
       reply = this.parseLightsSpotChildren(grandchildren[j], spot);
-      if(reply != 0) 
+      if (reply != 0)
         return reply;
     }
 
@@ -1103,7 +1103,7 @@ class MySceneGraph {
 
     texture.id = this.reader.getString(child, 'id');
     if (texture.id == null || !isString(texture.id)) {
-      return "unable to parse id value";
+      return "Texture: unable to parse id value";
     }
 
     //Check for repeated Id
@@ -1221,7 +1221,7 @@ class MySceneGraph {
 
     material.id = this.reader.getString(child, 'id');
     if (material.id == null || !isString(material.id)) {
-      return "unable to parse id value";
+      return "Material: unable to parse id value";
     }
 
     // Check for repeated id
@@ -1373,7 +1373,7 @@ class MySceneGraph {
 
     transformation.id = this.reader.getString(child, 'id');
     if (transformation.id == null || !isString(transformation.id)) {
-      return "unable to parse id value";
+      return "Transformation: unable to parse id value";
     }
 
     // Check for repeated id
@@ -1690,7 +1690,7 @@ class MySceneGraph {
 
     primitive.id = this.reader.getString(child, 'id');
     if (primitive.id == null || !isString(primitive.id)) {
-      return "unable to parse id value";
+      return "Primitive: unable to parse id value";
     }
 
     // Check for repeated id
@@ -1749,10 +1749,14 @@ class MySceneGraph {
     for (let i = 0; i < children.length; i++) {
       switch (children[i].nodeName) {
         case "transformationref":
-          component.transformation.ref = this.reader.getString(children[i], 'id');
-          if (component.transformation.ref == null || !isString(component.transformation.ref)) {
-            return "unable to parse id value";
+          let transfID = this.reader.getString(children[i], 'id');
+          if (transfID == null || !isString(transfID)) {
+            return `Component "${component.id}": unable to parse transformation id value`;
           }
+          if (Object.keys(this.transformations).indexOf(transfID) == -1) {
+            return `Component "${component.id}": transformation "${transfID}" doesn't exist`;
+          }
+          component.transformation.ref = transfID;
           return 0;
         case "translate":
         case "scale":
@@ -1801,7 +1805,7 @@ class MySceneGraph {
       var id;
       id = this.reader.getString(children[i], 'id');
       if (id == null || !isString(id)) {
-        return "unable to parse id value";
+        return `Component "${component.id}: unable to parse id value`;
       }
       if (id != "inherit" && !this.materials.hasOwnProperty(id)) {
         return `material "${id}" is not defined in <materials> node`
@@ -1823,7 +1827,7 @@ class MySceneGraph {
     var id;
     id = this.reader.getString(child, 'id');
     if (id == null || !isString(id)) {
-      return "unable to parse id value";
+      return `Component "${component.id}: unable to parse id value`;
     }
 
     var ls;
@@ -1835,7 +1839,7 @@ class MySceneGraph {
         return "unable to parse length_s value";
       }
     } else if (ls <= 0) {
-      return `Component ${component.id}: length_s must be bigger than 0`;
+      return `Component "${component.id}": length_s must be bigger than 0`;
     }
 
     var lt;
@@ -1847,7 +1851,12 @@ class MySceneGraph {
         return "unable to parse length_t value";
       }
     } else if (lt <= 0) {
-      return `Component ${component.id}: length_t must be bigger than 0`;
+      return `Component "${component.id}": length_t must be bigger than 0`;
+    }
+
+    //Find if id was defined before
+    if (id != INHERIT && id != NONE && Object.keys(this.textures).indexOf(id) == -1) {
+      return `Component "${component.id}": texture "${id}" doesn't exist`;
     }
 
     component.texture.id = id;
@@ -1874,7 +1883,7 @@ class MySceneGraph {
           var id;
           id = this.reader.getString(children[i], 'id');
           if (id == null || !isString(id)) {
-            return "unable to parse id value";
+            return `Component "${component.id}: unable to parse id value`;
           }
           component.children.componentref.push(id);
           break;
@@ -1882,7 +1891,10 @@ class MySceneGraph {
           var id;
           id = this.reader.getString(children[i], 'id');
           if (id == null || !isString(id)) {
-            return "unable to parse id value";
+            return `Component "${component.id}: unable to parse id value`;
+          }
+          if (Object.keys(this.primitives).indexOf(id) == -1) {
+            return `Component "${component.id}": primitive ${id} doesn't exist`;
           }
           component.children.primitiveref.push(id);
           break;
@@ -2018,6 +2030,18 @@ class MySceneGraph {
         return error;
       }
     }
+
+    let keys = Object.keys(this.components);
+    for (let key of keys) {
+      let compChildren = this.components[key].children.componentref;
+      for (let i = 0; i < compChildren.length; i++) {
+        const child = compChildren[i];
+        if (keys.indexOf(child) == -1) {
+          return `Component "${child}" doesn't exist`;
+        }
+      }
+    }
+
     this.log("Parsed components");
     return null;
 
@@ -2159,7 +2183,6 @@ class MySceneGraph {
    */
   transform(steps) {
     if (steps == null) {
-      console.error("NULL");
       return;
     }
     if (!(Symbol.iterator in Object(steps))) {
@@ -2204,9 +2227,6 @@ class MySceneGraph {
       }
     } else {
       steps = transf.steps;
-    }
-    if (steps == null) {
-      console.error("WILL NULL");
     }
     this.transform(steps);
 
@@ -2275,14 +2295,14 @@ class MySceneGraph {
     // entry point for graph rendering
     let rootNode = this.components[this.idRoot];
 
-    if(rootNode == undefined) {
-      if(this.idRoot != ERROR) {
+    if (rootNode == undefined) {
+      if (this.idRoot != ERROR) {
         this.onXMLError("Non-existent root");
         this.idRoot = ERROR;
-      } 
+      }
       return;
     }
-      
+
     this.displayComponent(rootNode);
 
   }
