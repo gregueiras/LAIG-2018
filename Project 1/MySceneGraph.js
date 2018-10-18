@@ -380,6 +380,9 @@ class MySceneGraph {
       return "unable to parse far value";
     }
 
+    if(ortho.near >= ortho.far)
+      return "Ortho view parameters Error";
+
     ortho.left = this.reader.getFloat(child, 'left');
     if (ortho.left == null || isNaN(ortho.left)) {
       return "unable to parse left value";
@@ -390,6 +393,9 @@ class MySceneGraph {
       return "unable to parse right value";
     }
 
+    if(ortho.left >= ortho.right)
+      return "Ortho view parameters Error";
+
     ortho.top = this.reader.getFloat(child, 'top');
     if (ortho.top == null || isNaN(ortho.top)) {
       return "unable to parse top value";
@@ -399,6 +405,9 @@ class MySceneGraph {
     if (ortho.bottom == null || isNaN(ortho.bottom)) {
       return "unable to parse bottom value";
     }
+
+    if(ortho.bottom >= ortho.top)
+    return "Ortho view parameters Error";
 
     var grandchildren = child.children;
 
@@ -501,10 +510,16 @@ class MySceneGraph {
       return "unable to parse far value";
     }
 
+    if(perspective.near >= perspective.far)
+      return "Perspective view parameters Error";
+
     perspective.angle = this.reader.getFloat(child, 'angle');
     if (perspective.angle == null || isNaN(perspective.angle)) {
       return "unable to parse angle value";
     }
+
+    if(perspective.angle > 360)
+      return "Perspective view parameters Error";
 
     var grandchildren = child.children;
 
