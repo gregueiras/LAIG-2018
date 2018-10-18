@@ -21,7 +21,10 @@ const NONE = "none";
  */
 class MySceneGraph {
   /**
-   * @constructor
+   *Creates an instance of MySceneGraph.
+   * @param {*} filename
+   * @param {*} scene
+   * @memberof MySceneGraph
    */
   constructor(filename, scene) {
     this.loadedOk = null;
@@ -51,6 +54,11 @@ class MySceneGraph {
     this.reader.open('scenes/' + filename, this);
   }
 
+  /**
+   *
+   *
+   * @memberof MySceneGraph
+   */
   buildComponents() {
     let keys = Object.keys(this.primitives);
     for (let key of keys) {
@@ -108,8 +116,9 @@ class MySceneGraph {
     }
   }
 
-  /*
+  /**
    * Callback to be executed after successful reading
+   * @memberof MySceneGraph
    */
   onXMLReady() {
     this.log("XML Loading finished.");
@@ -130,6 +139,14 @@ class MySceneGraph {
   }
 
 
+  /**
+   *
+   *
+   * @param {*} node
+   * @param {*} index
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseBlock(node, index) {
     var error;
     switch (index) {
@@ -165,6 +182,16 @@ class MySceneGraph {
     return error;
   }
 
+  /**
+   *
+   *
+   * @param {*} node
+   * @param {*} nodeNames
+   * @param {*} tag
+   * @param {*} tagIndex
+   * @returns
+   * @memberof MySceneGraph
+   */
   processTag(node, nodeNames, tag, tagIndex) {
     var index;
     if ((index = nodeNames.indexOf(tag)) == null)
@@ -190,7 +217,7 @@ class MySceneGraph {
 
     var nodes = rootElement.children;
     if (nodes[0].nodeName == 'parsererror')
-      return `invalid XML in ${nodes[nodes.length-1].nodeName} node`;
+      return `invalid XML in ${nodes[nodes.length - 1].nodeName} node`;
 
     // Reads the names of the nodes to an auxiliary buffer.
     var nodeNames = [];
@@ -251,7 +278,11 @@ class MySceneGraph {
   }
 
   /**
-   * Parses the <INITIALS> block.
+   *
+   *
+   * @param {*} sceneNode
+   * @returns
+   * @memberof MySceneGraph
    */
   parseScene(sceneNode) {
     this.log("Will parse scene");
@@ -296,6 +327,13 @@ class MySceneGraph {
     return null;
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseViewOrtho(child) {
     var ortho = {
       id: null,
@@ -370,6 +408,14 @@ class MySceneGraph {
     return 0;
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @param {*} perspective
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseViewPerspectiveChildren(child, perspective) {
     if (child.nodeName == "from") {
       perspective.from.x = this.reader.getFloat(child, 'x');
@@ -405,6 +451,13 @@ class MySceneGraph {
       this.onXMLMinorError("unknown tag <" + child.nodeName + "/" + child.nodeName + ">");
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseViewPerspective(child) {
     var perspective = {
       id: null,
@@ -462,6 +515,12 @@ class MySceneGraph {
     return 0;
   }
 
+  /**
+   *
+   *
+   * @returns
+   * @memberof MySceneGraph
+   */
   checkDefaultViewExistance() {
 
     let def = this.views.default;
@@ -481,8 +540,11 @@ class MySceneGraph {
   }
 
   /**
+   *
    * Parses the <views> block.
    * @param {views block element} viewsNode
+   * @returns
+   * @memberof MySceneGraph
    */
   parseViews(viewsNode) {
     this.log("Will parse views");
@@ -546,6 +608,8 @@ class MySceneGraph {
   /**
    * Parses the <ambient> node.
    * @param {ambient block element} ambientNode
+   * @returns
+   * @memberof MySceneGraph
    */
   parseAmbient(ambientNode) {
 
@@ -655,6 +719,14 @@ class MySceneGraph {
     }
   }
 
+  /**
+   *
+   *
+   * @param {*} id
+   * @param {*} arr
+   * @returns
+   * @memberof MySceneGraph
+   */
   checkForRepeatedId(id, arr) {
     let keys = Object.keys(arr);
     for (let key of keys) {
@@ -664,6 +736,14 @@ class MySceneGraph {
     return "OK";
   }
 
+  /**
+   *
+   *
+   * @param {*} param
+   * @param {*} child
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseChildrenColours(param, child) {
     param.r = this.reader.getFloat(child, 'r');
     if (param.r == null || isNaN(param.r) || !isBetween(param.r, 0, 1)) {
@@ -686,6 +766,15 @@ class MySceneGraph {
     }
   }
 
+  /**
+   *
+   *
+   * @param {*} param
+   * @param {*} child
+   * @param {*} forthCoor
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseChildrenCoordinates(param, child, forthCoor) {
     param.x = this.reader.getFloat(child, 'x');
     if (param.x == null || isNaN(param.x)) {
@@ -712,6 +801,14 @@ class MySceneGraph {
     return 0;
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @param {*} omni
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseLightsOmniChildren(child, omni) {
     switch (child.nodeName) {
       case "location":
@@ -733,6 +830,13 @@ class MySceneGraph {
     }
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseLightsOmni(child) {
     var omni = {
       id: null,
@@ -791,6 +895,13 @@ class MySceneGraph {
     return 0;
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @param {*} spot
+   * @memberof MySceneGraph
+   */
   parseLightsSpotChildren(child, spot) {
     switch (child.nodeName) {
       case "location":
@@ -814,6 +925,13 @@ class MySceneGraph {
     }
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseLightsSpot(child) {
     var spot = {
       id: null,
@@ -892,6 +1010,8 @@ class MySceneGraph {
   /**
    * Parses the <LIGHTS> block. 
    * @param {lights block element} lightsNode
+     * @returns
+   * @memberof MySceneGraph
    */
   parseLights(lightsNode) {
     var children = lightsNode.children;
@@ -926,6 +1046,13 @@ class MySceneGraph {
     return null;
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseTexturesTexture(child) {
     var texture = {
       id: null,
@@ -951,11 +1078,24 @@ class MySceneGraph {
     return 0;
   }
 
+  /**
+   *
+   *
+   * @param {*} texture
+   * @memberof MySceneGraph
+   */
   createTexture(texture) {
     let tex = new CGFtexture(this.scene, texture.file);
     this.textures[texture.id] = tex;
   }
 
+  /**
+   *
+   *
+   * @param {*} texturesNode
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseTextures(texturesNode) {
     var children = texturesNode.children;
 
@@ -973,6 +1113,13 @@ class MySceneGraph {
     return null;
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @param {*} material
+   * @memberof MySceneGraph
+   */
   parseMaterialsMaterialChildren(child, material) {
     switch (child.nodeName) {
       case "emission":
@@ -993,6 +1140,13 @@ class MySceneGraph {
     }
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseMaterial(child) {
     var material = {
       id: null,
@@ -1049,6 +1203,12 @@ class MySceneGraph {
     return 0;
   }
 
+  /**
+   *
+   *
+   * @param {*} material
+   * @memberof MySceneGraph
+   */
   createMaterial(material) {
     let newMaterial = new CGFappearance(this.scene);
     newMaterial.setShininess(material.shininess);
@@ -1073,6 +1233,8 @@ class MySceneGraph {
   /**
    * Parses the <MATERIALS> node.
    * @param {materials block element} materialsNode
+     * @returns
+   * @memberof MySceneGraph
    */
   parseMaterials(materialsNode) {
     var children = materialsNode.children;
@@ -1092,6 +1254,14 @@ class MySceneGraph {
 
   }
 
+  /**
+   *
+   *
+   * @param {*} param
+   * @param {*} child
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseChildrenRotation(param, child) {
     param.axis = this.reader.getString(child, 'axis');
     if (param.axis == null || !isAxis(param.axis)) {
@@ -1104,6 +1274,13 @@ class MySceneGraph {
     }
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @param {*} material
+   * @memberof MySceneGraph
+   */
   parseTransformationsTransformationChildren(child, material) {
     switch (child.nodeName) {
       case "translate":
@@ -1139,6 +1316,13 @@ class MySceneGraph {
     }
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseTransformation(child) {
     var transformation = {
       id: null,
@@ -1168,6 +1352,8 @@ class MySceneGraph {
   /**
    * Parses the <TRANSFORMATIONS> node.
    * @param {transformations block element} transformationsNode
+      * @returns
+   * @memberof MySceneGraph
    */
   parseTransformations(transformationsNode) {
     var children = transformationsNode.children;
@@ -1187,6 +1373,14 @@ class MySceneGraph {
 
   }
 
+  /**
+   *
+   *
+   * @param {*} rectangle
+   * @param {*} child
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseChildrenRectangle(rectangle, child) {
     rectangle.x1 = this.reader.getFloat(child, 'x1');
     if (rectangle.x1 == null || isNaN(rectangle.x1)) {
@@ -1209,6 +1403,14 @@ class MySceneGraph {
     }
   }
 
+  /**
+   *
+   *
+   * @param {*} triangle
+   * @param {*} child
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseChildrenTriangle(triangle, child) {
     triangle.x1 = this.reader.getFloat(child, 'x1');
     if (triangle.x1 == null || isNaN(triangle.x1)) {
@@ -1256,6 +1458,14 @@ class MySceneGraph {
     }
   }
 
+  /**
+   *
+   *
+   * @param {*} cylinder
+   * @param {*} child
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseChildrenCylinder(cylinder, child) {
     cylinder.base = this.reader.getFloat(child, 'base');
     if (cylinder.base == null || isNaN(cylinder.base)) {
@@ -1283,6 +1493,14 @@ class MySceneGraph {
     }
   }
 
+  /**
+   *
+   *
+   * @param {*} sphere
+   * @param {*} child
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseChildrenSphere(sphere, child) {
     sphere.radius = this.reader.getFloat(child, 'radius');
     if (sphere.radius == null || isNaN(sphere.radius)) {
@@ -1300,6 +1518,14 @@ class MySceneGraph {
     }
   }
 
+  /**
+   *
+   *
+   * @param {*} torus
+   * @param {*} child
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseChildrenTorus(torus, child) {
     torus.inner = this.reader.getFloat(child, 'inner');
     if (torus.inner == null || isNaN(torus.inner)) {
@@ -1322,6 +1548,14 @@ class MySceneGraph {
     }
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @param {*} primitive
+   * @returns
+   * @memberof MySceneGraph
+   */
   parsePrimitivesPrimitiveChildren(child, primitive) {
 
     if (primitive.type != null)
@@ -1397,6 +1631,13 @@ class MySceneGraph {
 
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @returns
+   * @memberof MySceneGraph
+   */
   parsePrimitive(child) {
     var primitive = {
       id: null,
@@ -1431,6 +1672,8 @@ class MySceneGraph {
   /**
    * Parses the <PRIMITIVES> node.
    * @param {primitives block element} primitivesNode
+      * @returns
+   * @memberof MySceneGraph
    */
   parsePrimitives(primitivesNode) {
     var children = primitivesNode.children;
@@ -1450,6 +1693,14 @@ class MySceneGraph {
 
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @param {*} component
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseChildrenTransformation(child, component) {
     let children = child.children;
 
@@ -1493,6 +1744,14 @@ class MySceneGraph {
     return 0;
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @param {*} component
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseChildrenMaterials(child, component) {
     let children = child.children;
 
@@ -1510,6 +1769,14 @@ class MySceneGraph {
     return 0;
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @param {*} component
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseChildrenTexture(child, component) {
     var id;
     id = this.reader.getString(child, 'id');
@@ -1519,8 +1786,8 @@ class MySceneGraph {
 
     var ls;
     ls = this.reader.getFloat(child, 'length_s', false);
-    if((ls == null || isNaN(ls))) {
-      if(id == INHERIT || id == NONE) {
+    if ((ls == null || isNaN(ls))) {
+      if (id == INHERIT || id == NONE) {
         ls = undefined;
       } else {
         return "unable to parse length_s value";
@@ -1529,8 +1796,8 @@ class MySceneGraph {
 
     var lt;
     lt = this.reader.getFloat(child, 'length_t', false);
-    if((lt == null || isNaN(lt))) {
-      if(id == INHERIT || id == NONE) {
+    if ((lt == null || isNaN(lt))) {
+      if (id == INHERIT || id == NONE) {
         lt = undefined;
       } else {
         return "unable to parse length_t value";
@@ -1544,6 +1811,14 @@ class MySceneGraph {
     return 0;
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @param {*} component
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseChildrenChildren(child, component) {
     let children = child.children;
 
@@ -1571,6 +1846,14 @@ class MySceneGraph {
     return 0;
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @param {*} component
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseComponentsComponentChildren(child, component) {
     switch (child.nodeName) {
       case "transformation":
@@ -1592,6 +1875,13 @@ class MySceneGraph {
     }
   }
 
+  /**
+   *
+   *
+   * @param {*} component
+   * @returns
+   * @memberof MySceneGraph
+   */
   componentErrCheck(component) {
     if (component.transformation.ref != null && component.transformation.steps != 0)
       return `Component: ${component.id}. Invalid transformation`;
@@ -1609,6 +1899,13 @@ class MySceneGraph {
     return "OK";
   }
 
+  /**
+   *
+   *
+   * @param {*} child
+   * @returns
+   * @memberof MySceneGraph
+   */
   parseComponent(child) {
     var component = {
       id: null,
@@ -1658,6 +1955,8 @@ class MySceneGraph {
   /**
    * Parses the <COMPONENTS> node.
    * @param {components block element} componentsNode
+      * @returns
+   * @memberof MySceneGraph
    */
   parseComponents(componentsNode) {
     var children = componentsNode.children;
@@ -1681,6 +1980,8 @@ class MySceneGraph {
   /**
    * Parses the <NODES> block.
    * @param {nodes block element} nodesNode
+      * @returns
+   * @memberof MySceneGraph
    */
   parseNodes(nodesNode) {
     // TODO: Parse block
@@ -1714,6 +2015,14 @@ class MySceneGraph {
     console.log("   " + message);
   }
 
+
+  /**
+   *
+   *
+   * @param {*} component
+   * @returns
+   * @memberof MySceneGraph
+   */
   setTexturePosition(component) {
     let prims = component.children.primitiveref;
     if (prims == undefined) return;
@@ -1733,6 +2042,13 @@ class MySceneGraph {
     }
   }
 
+  /**
+   *
+   *
+   * @param {*} component
+   * @param {*} texture
+   * @memberof MySceneGraph
+   */
   applyTexture(component, texture) {
 
     switch (component.texture.id) {
@@ -1757,6 +2073,14 @@ class MySceneGraph {
     this.setTexturePosition(component);
   }
 
+  /**
+   *
+   *
+   * @param {*} component
+   * @param {*} material
+   * @returns
+   * @memberof MySceneGraph
+   */
   applyMaterial(component, material) {
 
     let matID = component.materials[component.materialID];
@@ -1780,6 +2104,13 @@ class MySceneGraph {
     }
   }
 
+  /**
+   *
+   *
+   * @param {*} steps
+   * @returns
+   * @memberof MySceneGraph
+   */
   transform(steps) {
     if (steps == null) {
       console.error("NULL");
@@ -1812,6 +2143,12 @@ class MySceneGraph {
     }
   }
 
+  /**
+   *
+   *
+   * @param {*} component
+   * @memberof MySceneGraph
+   */
   applyTransformation(component) {
     let transf = component.transformation;
     let steps = null;
@@ -1829,6 +2166,16 @@ class MySceneGraph {
 
   }
 
+  /**
+   *
+   *
+   * @param {*} component
+   * @param {*} material
+   * @param {*} texture
+   * @param {*} length_s
+   * @param {*} length_t
+   * @memberof MySceneGraph
+   */
   displayComponent(component, material, texture, length_s, length_t) {
 
     this.scene.pushMatrix();
@@ -1876,6 +2223,7 @@ class MySceneGraph {
 
   /**
    * Displays the scene, processing each node, starting in the root node.
+    * @memberof MySceneGraph
    */
   displayScene() {
     // entry point for graph rendering
@@ -1889,12 +2237,24 @@ class MySceneGraph {
 
 
 
+/**
+ *
+ *
+ * @param {*} value
+ * @returns
+ */
 function isBoolean(value) {
   if (isNaN(value) || value < 0 || value > 1)
     return false;
   return true;
 }
 
+/**
+ *
+ *
+ * @param {*} axis
+ * @returns
+ */
 function isAxis(axis) {
 
   switch (axis) {

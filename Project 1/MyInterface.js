@@ -57,6 +57,12 @@ class MyInterface extends CGFinterface {
 
     }
 
+    /**
+     *
+     *
+     * @param {*} views
+     * @memberof MyInterface
+     */
     addCameraOptions(views) {
         this.cameras = {};
         this.cameras[ACTIVE_CAMERA] = views.default;
@@ -78,21 +84,26 @@ class MyInterface extends CGFinterface {
         this.gui.add(this.cameras, ACTIVE_CAMERA, cameras);
     }
 
-    
-  initKeys() {
-    this.processKeyboard = function() {};
-    this.activeKeys = {};
-  }
-  processKeyDown(event) {
-    this.activeKeys[event.code] = true;
-  };
-  processKeyUp(event) {
-    
-  };
-  releaseKey(event) {
-    this.activeKeys[event] = false;
-  };
-  isKeyPressed(keyCode) {
-    return this.activeKeys[keyCode] || false;
-  };
+
+    /**
+     *
+     *
+     * @memberof MyInterface
+     */
+    initKeys() {
+        this.processKeyboard = function () { };
+        this.activeKeys = {};
+    }
+    processKeyDown(event) {
+        this.activeKeys[event.code] = true;
+    };
+    processKeyUp(event) {
+
+    };
+    releaseKey(event) {
+        this.activeKeys[event] = false;
+    };
+    isKeyPressed(keyCode) {
+        return this.activeKeys[keyCode] || false;
+    };
 }

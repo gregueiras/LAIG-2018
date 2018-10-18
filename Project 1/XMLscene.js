@@ -4,9 +4,11 @@ const CHANGE_MATERIAL = "KeyM";
  * XMLscene class, representing the scene that is to be rendered.
  */
 class XMLscene extends CGFscene {
+
   /**
-   * @constructor
-   * @param {MyInterface} myInterface 
+   *Creates an instance of XMLscene.
+   * @param {*} myInterface
+   * @memberof XMLscene
    */
   constructor(myInterface) {
     super();
@@ -135,8 +137,12 @@ class XMLscene extends CGFscene {
       this.applyCamera(selectedCamera);
     }
   }
+
   /**
-   * Apply camera
+   *
+   *
+   * @param {*} selectedCamera
+   * @memberof XMLscene
    */
   applyCamera(selectedCamera) {
     let defOrtho = this.graph.views.orthos[selectedCamera];
@@ -246,10 +252,15 @@ class XMLscene extends CGFscene {
     this.checkKeys();
   }
 
+  /**
+   *
+   *
+   * @memberof XMLscene
+   */
   checkKeys() {
     if (this.interface.isKeyPressed(CHANGE_MATERIAL)) {
       let keys = Object.keys(this.graph.components);
-      for(let key of keys) {
+      for (let key of keys) {
         let component = this.graph.components[key];
         component.materialID++;
         if (component.materialID >= component.materials.length) {
@@ -258,6 +269,6 @@ class XMLscene extends CGFscene {
       };
       this.interface.releaseKey(CHANGE_MATERIAL);
     }
-    
+
   }
 }
