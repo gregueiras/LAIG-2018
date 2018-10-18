@@ -380,8 +380,9 @@ class MySceneGraph {
       return "unable to parse far value";
     }
 
-    if(ortho.near >= ortho.far)
-      return "Ortho view parameters Error";
+    if (ortho.near >= ortho.far) {
+      return `Camera ${ortho.id}: near component must less than far component`;
+    }
 
     ortho.left = this.reader.getFloat(child, 'left');
     if (ortho.left == null || isNaN(ortho.left)) {
@@ -393,9 +394,6 @@ class MySceneGraph {
       return "unable to parse right value";
     }
 
-    if(ortho.left >= ortho.right)
-      return "Ortho view parameters Error";
-
     ortho.top = this.reader.getFloat(child, 'top');
     if (ortho.top == null || isNaN(ortho.top)) {
       return "unable to parse top value";
@@ -406,13 +404,22 @@ class MySceneGraph {
       return "unable to parse bottom value";
     }
 
-    if(ortho.bottom >= ortho.top)
-    return "Ortho view parameters Error";
+    if (ortho.bottom >= ortho.top) {
+      return `Camera ${ortho.id}: bottom component must be less than the top component`;
+    }
+
+    if (ortho.left >= ortho.right) {
+      return `Camera ${ortho.id}: left component must be less than the right component`;
+    }
 
     var grandchildren = child.children;
 
     for (var j = 0; j < grandchildren.length; j++) {
       this.parseViewPerspectiveChildren(grandchildren[j], ortho);
+    }
+
+    if (JSON.stringify(ortho.from) === JSON.stringify(ortho.to)) {
+      return `Camera ${ortho.id}: from component must be different than the to component`;
     }
 
     this.views.orthos[ortho.id] = ortho;
@@ -510,16 +517,18 @@ class MySceneGraph {
       return "unable to parse far value";
     }
 
-    if(perspective.near >= perspective.far)
-      return "Perspective view parameters Error";
+    if (perspective.near >= perspective.far) {
+      return `Camera ${perspective.id}: near component must be less than the far component`;
+    }
 
     perspective.angle = this.reader.getFloat(child, 'angle');
     if (perspective.angle == null || isNaN(perspective.angle)) {
       return "unable to parse angle value";
     }
 
-    if(perspective.angle > 360)
-      return "Perspective view parameters Error";
+    if (!isBetween(perspective.angle, 0, 360)) {
+      return `Camera ${perspective.id}: angle must be between 0 and 360 degrees`;
+    }
 
     var grandchildren = child.children;
 
@@ -527,7 +536,10 @@ class MySceneGraph {
       this.parseViewPerspectiveChildren(grandchildren[j], perspective);
     }
 
-    //this.views.perspectives.push(perspective);
+    if (JSON.stringify(perspective.from) === JSON.stringify(perspective.to)) {
+      return `Camera ${perspective.id}: from component must be different than the to component`;
+    }
+
     this.views.perspectives[perspective.id] = perspective;
     return 0;
   }
