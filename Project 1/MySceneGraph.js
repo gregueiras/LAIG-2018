@@ -57,8 +57,10 @@ class MySceneGraph {
   }
 
   /**
+   * Builds the corresponding graphic object that allows visual representation accordingly to
+   * the primitives' parameters
    *
-   *
+   * @see CGFobject
    * @memberof MySceneGraph
    */
   buildComponents() {
@@ -142,15 +144,15 @@ class MySceneGraph {
 
 
   /**
+   * Directs the node to the specific parser
    *
-   *
-   * @param {*} node
-   * @param {*} index
-   * @returns
+   * @param {XML root element child} node
+   * @param {int} index
+   * @returns 0 on sucess, error message on failure
    * @memberof MySceneGraph
    */
   parseBlock(node, index) {
-    var error;
+    var error = 0;
     switch (index) {
       case SCENE_INDEX:
         error = this.parseScene(node);
@@ -185,12 +187,12 @@ class MySceneGraph {
   }
 
   /**
+   * Parses information from XML YAS about a specific tag/block
    *
-   *
-   * @param {*} node
-   * @param {*} nodeNames
-   * @param {*} tag
-   * @param {*} tagIndex
+   * @param {XML root element child} node
+   * @param {string[]} nodeNames
+   * @param {string} tag
+   * @param {int} tagIndex
    * @returns
    * @memberof MySceneGraph
    */
@@ -280,10 +282,10 @@ class MySceneGraph {
   }
 
   /**
+   *  Parses XML file scene tag
    *
-   *
-   * @param {*} sceneNode
-   * @returns
+   * @param {XML root element child} sceneNode
+   * @returns null on sucess, error message on failure
    * @memberof MySceneGraph
    */
   parseScene(sceneNode) {
