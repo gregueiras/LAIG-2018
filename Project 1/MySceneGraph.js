@@ -376,9 +376,17 @@ class MySceneGraph {
       return "unable to parse near value";
     }
 
+    if(ortho.near < 0) {
+      return "near component is less than 0.";
+    }
+
     ortho.far = this.reader.getFloat(child, 'far');
     if (ortho.far == null || isNaN(ortho.far)) {
       return "unable to parse far value";
+    }
+
+    if(ortho.far < 0) {
+      return "far component is less than 0.";
     }
 
     if (ortho.near >= ortho.far) {
