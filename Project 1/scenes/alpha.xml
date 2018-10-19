@@ -1,67 +1,79 @@
 <yas>
 
     <scene root="house" axis_length="3" />
-    <views default="view1">
-        <perspective id="view1" near="0.1" far="500" angle="60">
+    <views default="Garden">
+        <perspective id="Default" near="0.01" far="500" angle="60">
             <from x="10" y="10" z="10" />
             <to x="0" y="0" z="0" />
         </perspective>
-        <ortho id="view2" near="0.1" far="100" left="-5" right="5" top="5" bottom="-5">
+        <ortho id="Office" near="0.01" far="100" left="-5" right="5" top="5" bottom="-5">
             <from x="10" y="10" z="10" />
             <to x="0" y="0" z="0" />
         </ortho >
+        <ortho id="TV" near="0.01" far="100" left="-12" right="5" top="5" bottom="-8">
+            <from x="-8.5" y="10" z="10" />
+            <to x="0" y="0" z="0" />
+        </ortho >
+        <ortho id="Art" near="0.001" far="100" left="-10" right="6" top="9" bottom="-6.5">
+            <from x="-2.5" y="6" z="6" />
+            <to x="-8" y="0" z="0" />
+        </ortho >
+        <perspective id="Garden" near="0.01" far="500" angle="90">
+            <from x="8.5" y="5" z="-8.5" />
+            <to x="0" y="0" z="0" />
+        </perspective>
     </views>
     <ambient>
         <ambient r="0.3" g="0.3" b="0.3" a="1" />
         <background r="0.53" g="0.81" b="0.92" a="1" />
     </ambient>
     <lights>
-        <omni id="l1" enabled="1">
+        <omni id="Office" enabled="1">
             <location x="3" y="5" z="3" w="0" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.7" g="0.7" b="0.7" a="1" />
             <specular r="0.3" g="0.3" b="0.3" a="1" />
         </omni>
-        <omni id="Garden1" enabled="1">
+        <omni id="Garden" enabled="1">
             <location x="-6" y="4" z="-4.5" w="0" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.7" g="0.7" b="0.7" a="1" />
             <specular r="0.3" g="0.3" b="0.3" a="1" />
         </omni>
-        <omni id="LivingRoom1" enabled="1">
+        <omni id="Living Room 1" enabled="1">
             <location x="-3" y="5" z="1.5" w="0" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.6" g="0.6" b="0.6" a="1" />
             <specular r="0.3" g="0.3" b="0.3" a="1" />
         </omni>
-        <omni id="LivingRoom2" enabled="1">
+        <omni id="Living Room 2" enabled="1">
             <location x="-6" y="5" z="1.5" w="0" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.6" g="0.6" b="0.6" a="1" />
             <specular r="0.3" g="0.3" b="0.3" a="1" />
         </omni>
-        <omni id="LivingRoom3" enabled="1">
+        <omni id="Living Room 3" enabled="1">
             <location x="-9" y="5" z="1.5" w="0" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.6" g="0.6" b="0.6" a="1" />
             <specular r="0.3" g="0.3" b="0.3" a="1" />
         </omni>
 
-        <omni id="lamp1" enabled="0">
+        <omni id="Round Lamp" enabled="0">
             <location x="2.5" y="2.005" z="2.7" w="0" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.7" g="0.7" b="0.7" a="1" />
             <specular r="0.3" g="0.3" b="0.3" a="1" />
         </omni>
-        <omni id="lamp2" enabled="0">
+        <omni id="Pyramid Lamp" enabled="0">
             <location x="3.65" y="1.9" z="2.72" w="0" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.7" g="0.7" b="0.7" a="1" />
             <specular r="0.3" g="0.3" b="0.3" a="1" />
         </omni>
-        <spot id="spot" enabled="0" angle="30" exponent="1">
-            <location x="3" y="3" z="3" w="0" />
-            <target x="0" y="0" z="0" />
+        <spot id="Monroe Spot" enabled="0" angle="30" exponent="1">
+            <location x="4.2" y="2.5" z="0.5" w="0" />
+            <target x="4.2" y="1.5" z="0" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.7" g="0.7" b="0.7" a="1" />
             <specular r="0.3" g="0.3" b="0.3" a="1" />
@@ -75,16 +87,16 @@
         <texture id="text_soalho" file="./scenes/images/soalho2.jpg" />
         <texture id="text_fabric" file="./scenes/images/fabric.jpg" />
         <texture id="text_metal" file="./scenes/images/metal.jpg" />
-        <texture id="text_vidral" file="./scenes/images/vidral.jpg" />
-        <texture id="text_ball" file="./scenes/images/ball.jpg" />
+        <texture id="text_space" file="./scenes/images/space.jpg" />
         <texture id="text_face" file="./scenes/images/mhm.jpg" />
         <texture id="text_outWindows" file="./scenes/images/window.jpg" />
         <texture id="text_door" file="./scenes/images/door.jpg" />
-        <texture id="text_paint1" file="./scenes/images/pontedluis.jpg" />
-        <texture id="text_paint2" file="./scenes/images/van_gogh.png" />
-        <texture id="text_paint3" file="./scenes/images/frame.jpg" />
-        <texture id="text_tv" file="./scenes/images/tv.png" />
+        <texture id="text_paint1" file="./scenes/images/sunset.jpg" />
+        <texture id="text_paint2" file="./scenes/images/banksy.jpg" />
+        <texture id="text_paint3" file="./scenes/images/art.jpg" />
+        <texture id="text_tv" file="./scenes/images/tv.jpg" />
         <texture id="text_grass" file="./scenes/images/grass2.jpg" />
+        <texture id="seamless_stone" file="./scenes/images/stone.jpg" />
     </textures>
     <materials>
         <material id="default" shininess = "0.1">
@@ -679,7 +691,7 @@
                 <material id="stone" />
                 <material id="inherit" />
             </materials>
-            <texture id="text_rocks" length_s="1" length_t="1" />
+            <texture id="seamless_stone" length_s="1" length_t="1" />
             <children>
                 <componentref id="pilar1" />
                 <componentref id="pilar2" />
@@ -704,7 +716,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="text_rocks" length_s="1" length_t="1" />
+            <texture id="inherit" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="cil1" />
             </children>
@@ -728,7 +740,7 @@
             <materials>
                 <material id="default" />
             </materials>
-            <texture id="text_face" length_s="1" length_t="1" />
+            <texture id="text_face" length_s="1" length_t="0.75" />
             <children>
                 <primitiveref id="rect4" />
             </children>
@@ -1140,7 +1152,7 @@
             <materials>
                 <material id="glass" />
             </materials>
-            <texture id="text_vidral" length_s="1" length_t="1" />
+            <texture id="text_space" length_s="1" length_t="1" />
             <children>
                 <componentref id="ball" />
                 <componentref id="ball_support" />
