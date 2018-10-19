@@ -356,7 +356,7 @@ class MySceneGraph {
         y: null,
         z: null
       }
-    }
+    };
 
     ortho.id = this.reader.getString(child, 'id');
     if (ortho.id == null || !isString(ortho.id)) {
@@ -493,7 +493,7 @@ class MySceneGraph {
         y: null,
         z: null
       },
-    }
+    };
 
     perspective.id = this.reader.getString(child, 'id');
     if (perspective.id == null || !isString(perspective.id)) {
@@ -590,7 +590,7 @@ class MySceneGraph {
       default: null,
       perspectives: [],
       orthos: []
-    }
+    };
 
     // Views default
     let viewsDefault = viewsNames.indexOf("default");
@@ -833,7 +833,7 @@ class MySceneGraph {
         b: null,
         a: null
       }
-    }
+    };
 
     omni.id = this.reader.getString(child, 'id');
     if (omni.id == null || !isString(omni.id)) {
@@ -1562,7 +1562,7 @@ class MySceneGraph {
           radius: null,
           slices: null,
           stacks: null
-        }
+        };
         this.parseChildrenSphere(sphere, child);
         primitive.type = "sphere";
         primitive.specs = sphere;
@@ -1573,7 +1573,7 @@ class MySceneGraph {
           outer: null,
           slices: null,
           loops: null
-        }
+        };
         this.parseChildrenTorus(torus, child);
         primitive.type = "torus";
         primitive.specs = torus;
@@ -1598,7 +1598,7 @@ class MySceneGraph {
       type: null,
       specs: null,
       shape: null
-    }
+    };
 
     primitive.id = this.reader.getString(node, 'id');
     if (primitive.id == null || !isString(primitive.id)) {
@@ -1636,7 +1636,7 @@ class MySceneGraph {
 
     //Any number of primitives
     if (children.length < 1)
-      return "no primitives available"
+      return "no primitives available";
     for (var i = 0; i < children.length; i++) {
       let error = this.parsePrimitive(children[i]);
       if (error != 0)
@@ -1690,7 +1690,7 @@ class MySceneGraph {
             axis: null,
             angle: null,
             type: children[i].nodeName
-          }
+          };
           this.parseChildrenRotation(tmpRot, children[i]);
           component.transformation.steps.push(tmpRot);
           break;
@@ -1717,7 +1717,7 @@ class MySceneGraph {
         return `Component "${component.id}: unable to parse id value`;
       }
       if (id != "inherit" && !this.materials.hasOwnProperty(id)) {
-        return `material "${id}" is not defined in <materials> node`
+        return `material "${id}" is not defined in <materials> node`;
       }
       component.materials.push(id);
     }
@@ -1782,11 +1782,10 @@ class MySceneGraph {
    */
   parseChildrenChildren(child, component) {
     let children = child.children;
-
+    var id;
     for (let i = 0; i < children.length; i++) {
       switch (children[i].nodeName) {
         case "componentref":
-          var id;
           id = this.reader.getString(children[i], 'id');
           if (id == null || !isString(id)) {
             return `Component "${component.id}: unable to parse id value`;
@@ -1794,7 +1793,6 @@ class MySceneGraph {
           component.children.componentref.push(id);
           break;
         case "primitiveref":
-          var id;
           id = this.reader.getString(children[i], 'id');
           if (id == null || !isString(id)) {
             return `Component "${component.id}: unable to parse id value`;
@@ -1886,7 +1884,7 @@ class MySceneGraph {
         componentref: [],
         primitiveref: []
       }
-    }
+    };
 
     component.id = this.reader.getString(child, 'id');
     if (component.id == null || !isString(component.id)) {
@@ -1906,7 +1904,6 @@ class MySceneGraph {
         return error;
     }
 
-    var reply;
     if ((reply = this.componentErrCheck(component)) != "OK")
       return reply;
 
@@ -1928,7 +1925,7 @@ class MySceneGraph {
 
     //Any number of components
     if (children.length < 1)
-      return "no components available"
+      return "no components available";
     for (var i = 0; i < children.length; i++) {
       let error = this.parseComponent(children[i]);
       if (error != 0) {
@@ -2018,7 +2015,7 @@ class MySceneGraph {
           if (tex)
             tex.bind();
         } else {
-          this.onXMLError("No parent texture passed")
+          this.onXMLError("No parent texture passed");
         }
         break;
 
@@ -2054,7 +2051,7 @@ class MySceneGraph {
         } else {
           return "No parent material passed";
         }
-
+        break;
       default:
         this.materials[matID].apply();
         return null;
@@ -2220,10 +2217,8 @@ function isAxis(axis) {
     case "z":
     case "Z":
       return true;
-      break;
     default:
       return false;
-      break;
   }
 }
 

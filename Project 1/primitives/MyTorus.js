@@ -1,10 +1,22 @@
-/**
- * MyObject
- * @param gl {WebGLRenderingContext}
- * @constructor
- */
 
+
+/**
+ * Creates a torus centered on origin with interior radius on XY
+ *
+ * @class MyTorus
+ * @extends {CGFobject}
+ */
 class MyTorus extends CGFobject {
+
+  /**
+   *Creates an instance of MyTorus.
+   * @param {CGFscene} scene
+   * @param {number} outRadius the outer radius 
+   * @param {number} inRadius the inner radius
+   * @param {number} slices the number of radial segments
+   * @param {number} loops the number of radial segments centered on outer radius
+   * @memberof MyTorus
+   */
   constructor(scene, outRadius, inRadius, slices, loops) {
     super(scene);
 
@@ -20,6 +32,12 @@ class MyTorus extends CGFobject {
     this.initBuffers();
   };
 
+
+  /**
+   * Initializes this instance vertices, indices, normals and texture coordinates.
+   *
+   * @memberof MyTorus
+   */
   initVIN() {
     let arc = Math.PI * 2;
 
@@ -73,6 +91,11 @@ class MyTorus extends CGFobject {
   }
 
 
+  /**
+   * Initializes this instance buffers.
+   *
+   * @memberof MyTorus
+   */
   initBuffers() {
     this.initVIN();
     this.primitiveType = this.scene.gl.TRIANGLES;
