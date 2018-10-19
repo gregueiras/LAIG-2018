@@ -445,7 +445,7 @@
         <material id="dim"/>
       </materials>
 
-      <texture id="van_gogh" length_s="1" length_t="1" />
+      <texture id="van_gogh" length_s="2" length_t="2" />
 
       <children>
         <primitiveref id="van_gogh" />
