@@ -20,7 +20,7 @@
 	</ambient>
 
 	<lights>
-		<spot id="light4" enabled="0.0" angle="2.0" exponent="2.0">
+		<spot id="light4" enabled="0" angle="2.0" exponent="2.0">
 			<location x="2.0" y="3.0" z="4.0" w="1.0" />
 			<target x="5.0" y="5.0" z="7.0" />
 			<ambient r="0.22" g="0.33" b="0.44" a="0.55" />
@@ -28,14 +28,14 @@
 			<specular r="0.4" g="0.3" b="0.2" a="0.1" />
 		</spot>
 
-		<omni id="light1" enabled="1.0">
+		<omni id="light1" enabled="1">
 			<location x="10.5" y="6.0" z="10.0" w="1.0" />
 			<ambient r="0.0" g="0.0" b="0.0" a="1.0" />
 			<diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
 			<specular r="0.0" g="0.0" b="0.0" a="1.0" />
 		</omni>
 
-		<spot id="light2" enabled="0.0" angle="2.0" exponent="2.0">
+		<spot id="light2" enabled="0" angle="2.0" exponent="2.0">
 			<location x="2.0" y="3.0" z="4.0" w="1.0" />
 			<target x="5.0" y="5.0" z="7.0" />
 			<ambient r="0.22" g="0.33" b="0.44" a="0.55" />
@@ -43,7 +43,7 @@
 			<specular r="0.4" g="0.3" b="0.2" a="0.1" />
 		</spot>
 
-		<omni id="light3" enabled="0.0">
+		<omni id="light3" enabled="0">
 			<location x="4.0" y="6.0" z="5.0" w="1.0" />
 			<ambient r="0.0" g="0.0" b="0.0" a="1.0" />
 			<diffuse r="1.0" g="1.0" b="1.0" a="1.0" />

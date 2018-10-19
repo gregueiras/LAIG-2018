@@ -721,23 +721,31 @@ class MySceneGraph {
    */
   parseChildrenColours(param, child) {
     param.r = this.reader.getFloat(child, 'r');
-    if (param.r == null || isNaN(param.r) || !isBetween(param.r, 0, 1)) {
+    if (param.r == null || isNaN(param.r)) {
       return "unable to parse r value";
+    } else if (!isBetween(param.r, 0, 1)) {
+      return "r value must be between 0 and 1";
     }
 
     param.g = this.reader.getFloat(child, 'g');
-    if (param.g == null || isNaN(param.g) || !isBetween(param.g, 0, 1)) {
+    if (param.g == null || isNaN(param.g)) {
       return "unable to parse g value";
+    } else if (!isBetween(param.g, 0, 1)) {
+      return "g value must be between 0 and 1";
     }
 
     param.b = this.reader.getFloat(child, 'b');
-    if (param.b == null || isNaN(param.b) || !isBetween(param.b, 0, 1)) {
+    if (param.b == null || isNaN(param.b)) {
       return "unable to parse b value";
+    } else if (!isBetween(param.b, 0, 1)) {
+      return "b value must be between 0 and 1";
     }
 
     param.a = this.reader.getFloat(child, 'a');
-    if (param.a == null || isNaN(param.a) || !isBetween(param.a, 0, 1)) {
+    if (param.a == null || isNaN(param.a)) {
       return "unable to parse a value";
+    } else if (!isBetween(param.a, 0, 1)) {
+      return "a value must be between 0 and 1";
     }
 
     return 0;

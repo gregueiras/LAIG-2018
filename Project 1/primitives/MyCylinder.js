@@ -51,7 +51,7 @@ class MyCylinder extends CGFobject {
     var alt = this.height / this.stacks;
     for (var stack = 0; stack <= this.stacks; stack++) {
 
-      for (var slice = 0; slice < this.slices; slice++) {
+      for (var slice = 0; slice <= this.slices; slice++) {
         this.vertices.push(Math.cos(slice * this.delta) * (this.base - (this.b2tRatePstack * stack)));
         this.vertices.push(Math.sin(slice * this.delta) * (this.base - (this.b2tRatePstack * stack)));
         this.vertices.push(stack * alt - this.height / 2);
@@ -60,35 +60,25 @@ class MyCylinder extends CGFobject {
         this.normals.push(Math.sin(slice * this.delta) * (this.base - (this.b2tRatePstack * stack)));
         this.normals.push(0);
 
+        this.texCoords.push(slice / this.slices, stack / this.stacks);
       }
     }
 
-    for (var i = 0; i < this.slices * (this.stacks); i++) {
-
-      this.indices.push(i);
-      this.indices.push(i + 1);
-      this.indices.push(i + this.slices);
-
-      this.indices.push(i);
-      this.indices.push(i + this.slices);
-      this.indices.push(i + this.slices - 1);
-
-    }
-
-    var s = 0;
-    var t = 0;
-
-    for (var i = 0; i <= this.stacks; i++) {
+    for (var i = 0; i < this.stacks; i++) {
       for (var j = 0; j < this.slices; j++) {
-        this.texCoords.push(s, t);
-        s += 1 / this.slices;
+        this.indices.push(
+          i * (this.slices + 1) + j,
+          i * (this.slices + 1) + (j + 1),
+          (i + 1) * (this.slices + 1) + (j + 1)
+        );
+        this.indices.push(
+          (i + 1) * (this.slices + 1) + (j + 1),
+          (i + 1) * (this.slices + 1) + j,
+          i * (this.slices + 1) + j
+        );
       }
-      s = 0;
-      t += 1 / this.stacks;
     }
-
-
-  };
+  }
 
 
   /**
