@@ -205,7 +205,7 @@ class MySceneGraph {
 
       //Parse block
       var error;
-      if ((error = this.parseBlock(node, tagIndex)) != null)
+      if ((error = this.parseBlock(node, tagIndex)) != 0)
         return error;
     }
   }
@@ -327,7 +327,7 @@ class MySceneGraph {
 
     this.log("Parsed scene");
 
-    return null;
+    return 0;
   }
 
   /**
@@ -365,10 +365,10 @@ class MySceneGraph {
 
     // Check for repeated id
     var reply;
-    if ((reply = this.checkForRepeatedId(ortho.id, this.views.perspectives)) != null)
+    if ((reply = this.checkForRepeatedId(ortho.id, this.views.perspectives)) != 0)
       return reply;
 
-    if ((reply = this.checkForRepeatedId(ortho.id, this.views.orthos)) != null)
+    if ((reply = this.checkForRepeatedId(ortho.id, this.views.orthos)) != 0)
       return reply;
 
     ortho.near = this.reader.getFloat(child, 'near');
@@ -510,10 +510,10 @@ class MySceneGraph {
 
     // Check for repeated id
     var reply;
-    if ((reply = this.checkForRepeatedId(perspective.id, this.views.perspectives)) != null)
+    if ((reply = this.checkForRepeatedId(perspective.id, this.views.perspectives)) != 0)
       return reply;
 
-    if ((reply = this.checkForRepeatedId(perspective.id, this.views.orthos)) != null)
+    if ((reply = this.checkForRepeatedId(perspective.id, this.views.orthos)) != 0)
       return reply;
 
     perspective.near = this.reader.getFloat(child, 'near');
@@ -639,7 +639,7 @@ class MySceneGraph {
       return "Nonexistent default view";
     }
     this.log("Parsed views");
-    return null;
+    return 0;
   }
 
   /**
@@ -708,7 +708,7 @@ class MySceneGraph {
       if (id == arr[key].id)
         return `id "${id}" is repeated`;
     }
-    return null;
+    return 0;
   }
 
   /**
@@ -858,10 +858,10 @@ class MySceneGraph {
 
     // Check for repeated id
     var reply;
-    if ((reply = this.checkForRepeatedId(omni.id, this.light.omnis)) != null)
+    if ((reply = this.checkForRepeatedId(omni.id, this.light.omnis)) != 0)
       return reply;
 
-    if ((reply = this.checkForRepeatedId(omni.id, this.light.spots)) != null)
+    if ((reply = this.checkForRepeatedId(omni.id, this.light.spots)) != 0)
       return reply;
 
     omni.enabled = this.reader.getBoolean(child, 'enabled');
@@ -965,10 +965,10 @@ class MySceneGraph {
 
     // Check for repeated id
     var reply;
-    if ((reply = this.checkForRepeatedId(spot.id, this.light.omnis)) != null)
+    if ((reply = this.checkForRepeatedId(spot.id, this.light.omnis)) != 0)
       return reply;
 
-    if ((reply = this.checkForRepeatedId(spot.id, this.light.spots)) != null)
+    if ((reply = this.checkForRepeatedId(spot.id, this.light.spots)) != 0)
       return reply;
 
     spot.enabled = this.reader.getBoolean(child, 'enabled');
@@ -1039,7 +1039,7 @@ class MySceneGraph {
     }
 
     this.log("Parsed lights");
-    return null;
+    return 0;
   }
 
   /**
@@ -1061,7 +1061,7 @@ class MySceneGraph {
 
     //Check for repeated Id
     var reply;
-    if ((reply = this.checkForRepeatedId(texture.id, this.textures)) != null)
+    if ((reply = this.checkForRepeatedId(texture.id, this.textures)) != 0)
       return reply;
 
     texture.file = this.reader.getString(child, 'file');
@@ -1102,7 +1102,7 @@ class MySceneGraph {
     }
 
     this.log("Parsed textures");
-    return null;
+    return 0;
   }
 
   /**
@@ -1174,7 +1174,7 @@ class MySceneGraph {
 
     // Check for repeated id
     var reply;
-    if ((reply = this.checkForRepeatedId(material.id, this.materials)) != null)
+    if ((reply = this.checkForRepeatedId(material.id, this.materials)) != 0)
       return reply;
 
     material.shininess = this.reader.getFloat(child, 'shininess');
@@ -1237,7 +1237,7 @@ class MySceneGraph {
         return error;
     }
     this.log("Parsed materials");
-    return null;
+    return 0;
 
   }
 
@@ -1320,7 +1320,7 @@ class MySceneGraph {
 
     // Check for repeated id
     var reply;
-    if ((reply = this.checkForRepeatedId(transformation.id, this.transformations)) != null)
+    if ((reply = this.checkForRepeatedId(transformation.id, this.transformations)) != 0)
       return reply;
 
     var grandchildren = child.children;
@@ -1353,7 +1353,7 @@ class MySceneGraph {
         return error;
     }
     this.log("Parsed transformations");
-    return null;
+    return 0;
 
   }
 
@@ -1623,7 +1623,7 @@ class MySceneGraph {
 
     // Check for repeated id
     var reply;
-    if ((reply = this.checkForRepeatedId(primitive.id, this.primitives)) != null)
+    if ((reply = this.checkForRepeatedId(primitive.id, this.primitives)) != 0)
       return reply;
 
     var grandchildren = node.children;
@@ -1659,7 +1659,7 @@ class MySceneGraph {
         return error;
     }
     this.log("Parsed primitives");
-    return null;
+    return 0;
 
   }
 
@@ -1909,7 +1909,7 @@ class MySceneGraph {
 
     // Check for repeated id
     var reply;
-    if ((reply = this.checkForRepeatedId(component.id, this.components)) != null)
+    if ((reply = this.checkForRepeatedId(component.id, this.components)) != 0)
       return reply;
 
     var grandchildren = child.children;
@@ -1961,7 +1961,7 @@ class MySceneGraph {
     }
 
     this.log("Parsed components");
-    return null;
+    return 0;
 
   }
 
@@ -2031,7 +2031,7 @@ class MySceneGraph {
           if (tex)
             tex.bind();
         } else {
-          this.onXMLError("No parent texture passed");
+          return "No parent texture passed";
         }
         break;
 
@@ -2043,6 +2043,7 @@ class MySceneGraph {
         break;
     }
     this.setTexturePosition(component);
+    return 0;
   }
 
   /**
@@ -2060,7 +2061,7 @@ class MySceneGraph {
         if (material != undefined) {
           try {
             this.materials[material].apply();
-            return null;
+            return 0;
           } catch (error) {
             return ` ${component.id} material error. ${material}`;
           }
@@ -2070,7 +2071,7 @@ class MySceneGraph {
         break;
       default:
         this.materials[matID].apply();
-        return null;
+        return 0;
     }
   }
 
@@ -2142,8 +2143,18 @@ class MySceneGraph {
 
     this.scene.pushMatrix();
 
-    this.applyMaterial(component, material);
-    this.applyTexture(component, texture);
+    var err = this.applyMaterial(component, material);
+    if(err != 0) {
+      this.onXMLError(err);
+      return -1;
+    }
+
+    err = this.applyTexture(component, texture);
+    if(err != 0) {
+      this.onXMLError(err);
+      return -1;
+    }
+    
     this.applyTransformation(component);
 
     let primRef = component.children.primitiveref;
