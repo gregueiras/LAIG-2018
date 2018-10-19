@@ -1,10 +1,22 @@
-/**
- * MyObject
- * @param gl {WebGLRenderingContext}
- * @constructor
- */
 
+/**
+ * Creates a cylinder with base on XY centered on Z.
+ *
+ * @class MyCylinder
+ * @extends {CGFobject}
+ */
 class MyCylinder extends CGFobject {
+
+  /**
+   *Creates an instance of MyCylinder.
+   * @param {CGFscene} scene this instance CGFscene
+   * @param {number} slices the number of radial segments
+   * @param {number} stacks the number of segments along the heigth
+   * @param {number} base the base radius
+   * @param {number} top the top radius
+   * @param { number} height the distance from base to top
+   * @memberof MyCylinder
+   */
   constructor(scene, slices, stacks, base, top, height) {
     super(scene);
 
@@ -29,6 +41,12 @@ class MyCylinder extends CGFobject {
     this.initBuffers();
   };
 
+
+  /**
+   * Initializes this instance vertices, indices, normals and texture coordinates.
+   *
+   * @memberof MyCylinder
+   */
   initVIN() {
     var alt = this.height / this.stacks;
     for (var stack = 0; stack <= this.stacks; stack++) {
@@ -62,6 +80,12 @@ class MyCylinder extends CGFobject {
     }
   }
 
+
+  /**
+   * Initializes this instance buffers.
+   *
+   * @memberof MyCylinder
+   */
   initBuffers() {
     this.initVIN();
     this.primitiveType = this.scene.gl.TRIANGLES;

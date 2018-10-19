@@ -1,10 +1,21 @@
-/**
- * MyObject
- * @param gl {WebGLRenderingContext}
- * @constructor
- */
 
+
+/**
+ * Creates a sphere centered on origin.
+ *
+ * @class MySphere
+ * @extends {CGFobject}
+ */
 class MySphere extends CGFobject {
+
+  /**
+   *Creates an instance of MySphere.
+   * @param {CGFscene} scene this instance CGFscene
+   * @param {number} radius the radious
+   * @param {number} slices the number of radial segments
+   * @param {number} stacks the number of segments along the heigth
+   * @memberof MySphere
+   */
   constructor(scene, radius, slices, stacks) {
     super(scene);
 
@@ -20,6 +31,12 @@ class MySphere extends CGFobject {
     this.initBuffers();
   };
 
+
+  /**
+   * Initializes this instance vertices, indices, normals and texture coordinates.
+   *
+   * @memberof MySphere
+   */
   initVIN() {
 
 
@@ -63,12 +80,23 @@ class MySphere extends CGFobject {
   }
 
 
+  /**
+   * Initializes this instance buffers.
+   *
+   * @memberof MySphere
+   */
   initBuffers() {
     this.initVIN();
     this.primitiveType = this.scene.gl.TRIANGLES;
     this.initGLBuffers();
   };
 
+
+  /**
+   * Displays this instance.
+   *
+   * @memberof MySphere
+   */
   display() {
     this.scene.pushMatrix();
 

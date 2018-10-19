@@ -1,10 +1,19 @@
-/**
- * MyObject
- * @param gl {WebGLRenderingContext}
- * @constructor
- */
 
+/**
+ * Creates a circle in XY
+ *
+ * @class MyCircle
+ * @extends {CGFobject}
+ */
 class MyCircle extends CGFobject {
+
+    /**
+     * Creates an instance of MyCircle.
+     * @param {CGFscene} scene this instance CGFscene
+     * @param {number} slices the number of radial segments
+     * @param {number} radius the radius
+     * @memberof MyCircle
+     */
     constructor(scene, slices, radius) {
       super(scene);
   
@@ -23,6 +32,11 @@ class MyCircle extends CGFobject {
       this.initBuffers();
     };
   
+    /**
+     * Initializes this instance vertices, indices, normals and texture coordinates.
+     *
+     * @memberof MyCircle
+     */
     initVIN() {
       for (var slice = 0; slice < this.slices; slice++) {
   
@@ -47,6 +61,12 @@ class MyCircle extends CGFobject {
   
     };
   
+
+    /**
+     * Initializes this instance buffers.
+     *
+     * @memberof MyCircle
+     */
     initBuffers() {
       this.initVIN();
   
