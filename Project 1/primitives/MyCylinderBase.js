@@ -1,8 +1,6 @@
 
 /**
  * Creates a cylinder with base showing on XY centered on Z.
- *
- * @class MyCylinderBase
  * @extends {CGFobject}
  */
 class MyCylinderBase extends CGFobject {

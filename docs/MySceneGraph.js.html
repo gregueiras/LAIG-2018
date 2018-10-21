@@ -233,7 +233,7 @@ class MySceneGraph {
 
       //Parse block
       var error;
-      if ((error = this.parseBlock(node, tagIndex)) != null)
+      if ((error = this.parseBlock(node, tagIndex)) != 0)
         return error;
     }
   }
@@ -355,7 +355,7 @@ class MySceneGraph {
 
     this.log("Parsed scene");
 
-    return null;
+    return 0;
   }
 
   /**
@@ -384,7 +384,7 @@ class MySceneGraph {
         y: null,
         z: null
       }
-    }
+    };
 
     ortho.id = this.reader.getString(child, 'id');
     if (ortho.id == null || !isString(ortho.id)) {
@@ -393,10 +393,10 @@ class MySceneGraph {
 
     // Check for repeated id
     var reply;
-    if ((reply = this.checkForRepeatedId(ortho.id, this.views.perspectives)) != null)
+    if ((reply = this.checkForRepeatedId(ortho.id, this.views.perspectives)) != 0)
       return reply;
 
-    if ((reply = this.checkForRepeatedId(ortho.id, this.views.orthos)) != null)
+    if ((reply = this.checkForRepeatedId(ortho.id, this.views.orthos)) != 0)
       return reply;
 
     ortho.near = this.reader.getFloat(child, 'near');
@@ -404,9 +404,17 @@ class MySceneGraph {
       return "unable to parse near value";
     }
 
+    if(ortho.near &lt; 0) {
+      return "near component is less than 0.";
+    }
+
     ortho.far = this.reader.getFloat(child, 'far');
     if (ortho.far == null || isNaN(ortho.far)) {
       return "unable to parse far value";
+    }
+
+    if(ortho.far &lt; 0) {
+      return "far component is less than 0.";
     }
 
     if (ortho.near >= ortho.far) {
@@ -521,7 +529,7 @@ class MySceneGraph {
         y: null,
         z: null
       },
-    }
+    };
 
     perspective.id = this.reader.getString(child, 'id');
     if (perspective.id == null || !isString(perspective.id)) {
@@ -530,10 +538,10 @@ class MySceneGraph {
 
     // Check for repeated id
     var reply;
-    if ((reply = this.checkForRepeatedId(perspective.id, this.views.perspectives)) != null)
+    if ((reply = this.checkForRepeatedId(perspective.id, this.views.perspectives)) != 0)
       return reply;
 
-    if ((reply = this.checkForRepeatedId(perspective.id, this.views.orthos)) != null)
+    if ((reply = this.checkForRepeatedId(perspective.id, this.views.orthos)) != 0)
       return reply;
 
     perspective.near = this.reader.getFloat(child, 'near');
@@ -555,7 +563,7 @@ class MySceneGraph {
       return "unable to parse angle value";
     }
 
-    if (!isBetween(perspective.angle, 0, 360)) {
+    if (!isBetween(perspective.angle, 0, 90)) {
       return `Camera ${perspective.id}: angle must be between 0 and 360 degrees`;
     }
 
@@ -618,7 +626,7 @@ class MySceneGraph {
       default: null,
       perspectives: [],
       orthos: []
-    }
+    };
 
     // Views default
     let viewsDefault = viewsNames.indexOf("default");
@@ -659,7 +667,7 @@ class MySceneGraph {
       return "Nonexistent default view";
     }
     this.log("Parsed views");
-    return null;
+    return 0;
   }
 
   /**
@@ -728,7 +736,7 @@ class MySceneGraph {
       if (id == arr[key].id)
         return `id "${id}" is repeated`;
     }
-    return null;
+    return 0;
   }
 
   /**
@@ -741,23 +749,31 @@ class MySceneGraph {
    */
   parseChildrenColours(param, child) {
     param.r = this.reader.getFloat(child, 'r');
-    if (param.r == null || isNaN(param.r) || !isBetween(param.r, 0, 1)) {
+    if (param.r == null || isNaN(param.r)) {
       return "unable to parse r value";
+    } else if (!isBetween(param.r, 0, 1)) {
+      return "r value must be between 0 and 1";
     }
 
     param.g = this.reader.getFloat(child, 'g');
-    if (param.g == null || isNaN(param.g) || !isBetween(param.g, 0, 1)) {
+    if (param.g == null || isNaN(param.g)) {
       return "unable to parse g value";
+    } else if (!isBetween(param.g, 0, 1)) {
+      return "g value must be between 0 and 1";
     }
 
     param.b = this.reader.getFloat(child, 'b');
-    if (param.b == null || isNaN(param.b) || !isBetween(param.b, 0, 1)) {
+    if (param.b == null || isNaN(param.b)) {
       return "unable to parse b value";
+    } else if (!isBetween(param.b, 0, 1)) {
+      return "b value must be between 0 and 1";
     }
 
     param.a = this.reader.getFloat(child, 'a');
-    if (param.a == null || isNaN(param.a) || !isBetween(param.a, 0, 1)) {
+    if (param.a == null || isNaN(param.a)) {
       return "unable to parse a value";
+    } else if (!isBetween(param.a, 0, 1)) {
+      return "a value must be between 0 and 1";
     }
 
     return 0;
@@ -861,7 +877,7 @@ class MySceneGraph {
         b: null,
         a: null
       }
-    }
+    };
 
     omni.id = this.reader.getString(child, 'id');
     if (omni.id == null || !isString(omni.id)) {
@@ -870,10 +886,10 @@ class MySceneGraph {
 
     // Check for repeated id
     var reply;
-    if ((reply = this.checkForRepeatedId(omni.id, this.light.omnis)) != null)
+    if ((reply = this.checkForRepeatedId(omni.id, this.light.omnis)) != 0)
       return reply;
 
-    if ((reply = this.checkForRepeatedId(omni.id, this.light.spots)) != null)
+    if ((reply = this.checkForRepeatedId(omni.id, this.light.spots)) != 0)
       return reply;
 
     omni.enabled = this.reader.getBoolean(child, 'enabled');
@@ -977,10 +993,10 @@ class MySceneGraph {
 
     // Check for repeated id
     var reply;
-    if ((reply = this.checkForRepeatedId(spot.id, this.light.omnis)) != null)
+    if ((reply = this.checkForRepeatedId(spot.id, this.light.omnis)) != 0)
       return reply;
 
-    if ((reply = this.checkForRepeatedId(spot.id, this.light.spots)) != null)
+    if ((reply = this.checkForRepeatedId(spot.id, this.light.spots)) != 0)
       return reply;
 
     spot.enabled = this.reader.getBoolean(child, 'enabled');
@@ -1051,7 +1067,7 @@ class MySceneGraph {
     }
 
     this.log("Parsed lights");
-    return null;
+    return 0;
   }
 
   /**
@@ -1073,7 +1089,7 @@ class MySceneGraph {
 
     //Check for repeated Id
     var reply;
-    if ((reply = this.checkForRepeatedId(texture.id, this.textures)) != null)
+    if ((reply = this.checkForRepeatedId(texture.id, this.textures)) != 0)
       return reply;
 
     texture.file = this.reader.getString(child, 'file');
@@ -1114,7 +1130,7 @@ class MySceneGraph {
     }
 
     this.log("Parsed textures");
-    return null;
+    return 0;
   }
 
   /**
@@ -1186,7 +1202,7 @@ class MySceneGraph {
 
     // Check for repeated id
     var reply;
-    if ((reply = this.checkForRepeatedId(material.id, this.materials)) != null)
+    if ((reply = this.checkForRepeatedId(material.id, this.materials)) != 0)
       return reply;
 
     material.shininess = this.reader.getFloat(child, 'shininess');
@@ -1249,7 +1265,7 @@ class MySceneGraph {
         return error;
     }
     this.log("Parsed materials");
-    return null;
+    return 0;
 
   }
 
@@ -1332,7 +1348,7 @@ class MySceneGraph {
 
     // Check for repeated id
     var reply;
-    if ((reply = this.checkForRepeatedId(transformation.id, this.transformations)) != null)
+    if ((reply = this.checkForRepeatedId(transformation.id, this.transformations)) != 0)
       return reply;
 
     var grandchildren = child.children;
@@ -1365,7 +1381,7 @@ class MySceneGraph {
         return error;
     }
     this.log("Parsed transformations");
-    return null;
+    return 0;
 
   }
 
@@ -1590,7 +1606,7 @@ class MySceneGraph {
           radius: null,
           slices: null,
           stacks: null
-        }
+        };
         this.parseChildrenSphere(sphere, child);
         primitive.type = "sphere";
         primitive.specs = sphere;
@@ -1601,7 +1617,7 @@ class MySceneGraph {
           outer: null,
           slices: null,
           loops: null
-        }
+        };
         this.parseChildrenTorus(torus, child);
         primitive.type = "torus";
         primitive.specs = torus;
@@ -1626,7 +1642,7 @@ class MySceneGraph {
       type: null,
       specs: null,
       shape: null
-    }
+    };
 
     primitive.id = this.reader.getString(node, 'id');
     if (primitive.id == null || !isString(primitive.id)) {
@@ -1635,7 +1651,7 @@ class MySceneGraph {
 
     // Check for repeated id
     var reply;
-    if ((reply = this.checkForRepeatedId(primitive.id, this.primitives)) != null)
+    if ((reply = this.checkForRepeatedId(primitive.id, this.primitives)) != 0)
       return reply;
 
     var grandchildren = node.children;
@@ -1664,14 +1680,14 @@ class MySceneGraph {
 
     //Any number of primitives
     if (children.length &lt; 1)
-      return "no primitives available"
+      return "no primitives available";
     for (var i = 0; i &lt; children.length; i++) {
       let error = this.parsePrimitive(children[i]);
       if (error != 0)
         return error;
     }
     this.log("Parsed primitives");
-    return null;
+    return 0;
 
   }
 
@@ -1718,7 +1734,7 @@ class MySceneGraph {
             axis: null,
             angle: null,
             type: children[i].nodeName
-          }
+          };
           this.parseChildrenRotation(tmpRot, children[i]);
           component.transformation.steps.push(tmpRot);
           break;
@@ -1745,7 +1761,7 @@ class MySceneGraph {
         return `Component "${component.id}: unable to parse id value`;
       }
       if (id != "inherit" &amp;&amp; !this.materials.hasOwnProperty(id)) {
-        return `material "${id}" is not defined in &lt;materials> node`
+        return `material "${id}" is not defined in &lt;materials> node`;
       }
       component.materials.push(id);
     }
@@ -1810,11 +1826,10 @@ class MySceneGraph {
    */
   parseChildrenChildren(child, component) {
     let children = child.children;
-
+    var id;
     for (let i = 0; i &lt; children.length; i++) {
       switch (children[i].nodeName) {
         case "componentref":
-          var id;
           id = this.reader.getString(children[i], 'id');
           if (id == null || !isString(id)) {
             return `Component "${component.id}: unable to parse id value`;
@@ -1822,7 +1837,6 @@ class MySceneGraph {
           component.children.componentref.push(id);
           break;
         case "primitiveref":
-          var id;
           id = this.reader.getString(children[i], 'id');
           if (id == null || !isString(id)) {
             return `Component "${component.id}: unable to parse id value`;
@@ -1914,7 +1928,7 @@ class MySceneGraph {
         componentref: [],
         primitiveref: []
       }
-    }
+    };
 
     component.id = this.reader.getString(child, 'id');
     if (component.id == null || !isString(component.id)) {
@@ -1923,7 +1937,7 @@ class MySceneGraph {
 
     // Check for repeated id
     var reply;
-    if ((reply = this.checkForRepeatedId(component.id, this.components)) != null)
+    if ((reply = this.checkForRepeatedId(component.id, this.components)) != 0)
       return reply;
 
     var grandchildren = child.children;
@@ -1934,7 +1948,6 @@ class MySceneGraph {
         return error;
     }
 
-    var reply;
     if ((reply = this.componentErrCheck(component)) != "OK")
       return reply;
 
@@ -1956,7 +1969,7 @@ class MySceneGraph {
 
     //Any number of components
     if (children.length &lt; 1)
-      return "no components available"
+      return "no components available";
     for (var i = 0; i &lt; children.length; i++) {
       let error = this.parseComponent(children[i]);
       if (error != 0) {
@@ -1976,7 +1989,7 @@ class MySceneGraph {
     }
 
     this.log("Parsed components");
-    return null;
+    return 0;
 
   }
 
@@ -2008,7 +2021,7 @@ class MySceneGraph {
 
 
   /**
-   * Applies component material  
+   * Applies component texture  
    * @param {Object} component - component object
    * @memberof MySceneGraph
    */
@@ -2046,7 +2059,7 @@ class MySceneGraph {
           if (tex)
             tex.bind();
         } else {
-          this.onXMLError("No parent texture passed")
+          return "No parent texture passed";
         }
         break;
 
@@ -2058,6 +2071,7 @@ class MySceneGraph {
         break;
     }
     this.setTexturePosition(component);
+    return 0;
   }
 
   /**
@@ -2075,17 +2089,17 @@ class MySceneGraph {
         if (material != undefined) {
           try {
             this.materials[material].apply();
-            return null;
+            return 0;
           } catch (error) {
             return ` ${component.id} material error. ${material}`;
           }
         } else {
           return "No parent material passed";
         }
-
+        break;
       default:
         this.materials[matID].apply();
-        return null;
+        return 0;
     }
   }
 
@@ -2157,8 +2171,18 @@ class MySceneGraph {
 
     this.scene.pushMatrix();
 
-    this.applyMaterial(component, material);
-    this.applyTexture(component, texture);
+    var err = this.applyMaterial(component, material);
+    if(err != 0) {
+      this.onXMLError(err);
+      return -1;
+    }
+
+    err = this.applyTexture(component, texture);
+    if(err != 0) {
+      this.onXMLError(err);
+      return -1;
+    }
+    
     this.applyTransformation(component);
 
     let primRef = component.children.primitiveref;
@@ -2248,10 +2272,8 @@ function isAxis(axis) {
     case "z":
     case "Z":
       return true;
-      break;
     default:
       return false;
-      break;
   }
 }
 
@@ -2290,13 +2312,13 @@ function isBetween(a, min, max) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MyInterface.html">MyInterface</a></li><li><a href="MySceneGraph.html">MySceneGraph</a></li><li><a href="XMLscene.html">XMLscene</a></li></ul><h3>Global</h3><ul><li><a href="global.html#isAxis">isAxis</a></li><li><a href="global.html#isBetween">isBetween</a></li><li><a href="global.html#isBoolean">isBoolean</a></li><li><a href="global.html#isInteger">isInteger</a></li><li><a href="global.html#isString">isString</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MyCircle.html">MyCircle</a></li><li><a href="MyCylinder.html">MyCylinder</a></li><li><a href="MyCylinderBase.html">MyCylinderBase</a></li><li><a href="MyInterface.html">MyInterface</a></li><li><a href="MyQuad.html">MyQuad</a></li><li><a href="MySceneGraph.html">MySceneGraph</a></li><li><a href="MySphere.html">MySphere</a></li><li><a href="MyTorus.html">MyTorus</a></li><li><a href="MyTriangle.html">MyTriangle</a></li><li><a href="XMLscene.html">XMLscene</a></li></ul><h3>Global</h3><ul><li><a href="global.html#isAxis">isAxis</a></li><li><a href="global.html#isBetween">isBetween</a></li><li><a href="global.html#isBoolean">isBoolean</a></li><li><a href="global.html#isInteger">isInteger</a></li><li><a href="global.html#isString">isString</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Oct 18 2018 20:19:13 GMT+0100 (GMT Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Oct 21 2018 17:24:36 GMT+0100 (GMT Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

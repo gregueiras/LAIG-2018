@@ -2,7 +2,6 @@
  * Creates a square on specified coordinates. if not specified
  * will create square with side 1, centered on XY
  *
- * @class MyQuad
  * @extends {CGFobject}
  */
 class MyQuad extends CGFobject {

@@ -1,8 +1,6 @@
 
 /**
  * Creates a circle in XY
- *
- * @class MyCircle
  * @extends {CGFobject}
  */
 class MyCircle extends CGFobject {

@@ -2,8 +2,7 @@
 
 /**
  * Creates a sphere centered on origin.
- *
- * @class MySphere
+ * 
  * @extends {CGFobject}
  */
 class MySphere extends CGFobject {
