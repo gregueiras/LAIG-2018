@@ -1993,7 +1993,7 @@ class MySceneGraph {
 
 
   /**
-   * Applies component material  
+   * Applies component texture  
    * @param {Object} component - component object
    * @memberof MySceneGraph
    */
