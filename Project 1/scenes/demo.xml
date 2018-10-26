@@ -357,6 +357,8 @@
             </transformation>
             <materials>
                 <material id="mat_lighter_wood" />
+                <material id="mat_grey" />
+                <material id="mat_red" />
             </materials>
             <texture id="tex_wood" length_s="1" length_t="1" />
             <children>
@@ -509,6 +511,7 @@
             </transformation>
             <materials>
                 <material id="inherit" />
+                <material id="mat_turquoise" />
             </materials>
             <texture id="inherit" />
             <children>

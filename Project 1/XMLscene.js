@@ -267,6 +267,7 @@ class XMLscene extends CGFscene {
           component.materialID = 0;
         }
       };
+      this.graph.setAllMaterials(this.graph.components[this.graph.idRoot]);
       this.interface.releaseKey(CHANGE_MATERIAL);
     }
 

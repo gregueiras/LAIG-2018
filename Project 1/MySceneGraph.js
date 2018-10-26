@@ -134,6 +134,8 @@ class MySceneGraph {
       this.onXMLError(error);
       return;
     }
+    this.setAllTextures(this.components[this.idRoot]);
+    this.setAllMaterials(this.components[this.idRoot]);
 
     this.loadedOk = true;
 
@@ -1891,6 +1893,7 @@ class MySceneGraph {
       },
       materials: [],
       materialID: 0,
+      materialInherited: null,
       texture: {
         id: null,
         length_s: null,
@@ -2053,22 +2056,17 @@ class MySceneGraph {
    * @returns null if run with sucess, an error message if there was an error
    * @memberof MySceneGraph
    */
-  applyMaterial(component, material) {
+  applyMaterial(component) {
 
     let matID = component.materials[component.materialID];
     switch (matID) {
       case INHERIT:
-        if (material != undefined) {
-          try {
-            this.materials[material].apply();
-            return 0;
-          } catch (error) {
-            return ` ${component.id} material error. ${material}`;
-          }
-        } else {
-          return "No parent material passed";
+        try {
+          this.materials[component.materialInherited].apply();
+          return 0;
+        } catch (error) {
+          return ` ${component.id} material error. ${material}`;
         }
-        break;
       default:
         this.materials[matID].apply();
         return 0;
@@ -2139,17 +2137,17 @@ class MySceneGraph {
    * @param {number} length_t - vertical texture factor of scale
    * @memberof MySceneGraph
    */
-  displayComponent(component, material, texture, length_s, length_t) {
+  displayComponent(component) {
 
     this.scene.pushMatrix();
 
-    var err = this.applyMaterial(component, material);
+    var err = this.applyMaterial(component);
     if (err != 0) {
       this.onXMLError(err);
       return -1;
     }
 
-    err = this.applyTexture(component, texture);
+    err = this.applyTexture(component);
     if (err != 0) {
       this.onXMLError(err);
       return -1;
@@ -2168,35 +2166,50 @@ class MySceneGraph {
     let compRef = component.children.componentref;
     compRef.forEach(reference => {
       let child = this.components[reference];
-      let texID;
-      let ls, lt;
-      if (component.texture.id == "inherit") {
-        texID = texture;
-        if (child.texture.length_s == undefined)
-          child.texture.length_s = length_s;
-        if (child.texture.length_t == undefined)
-          child.texture.length_t = length_t;
-
-      } else {
-        texID = component.texture.id;
-        ls = component.texture.length_s;
-        lt = component.texture.length_t;
-        if (child.texture.length_s == undefined)
-          child.texture.length_s = ls;
-        if (child.texture.length_t == undefined)
-          child.texture.length_t = lt;
-      }
-
-      let matID;
-      if (component.materials[0] == "inherit")
-        matID = material;
-      else
-        matID = component.materials[component.materialID];
-
-      this.displayComponent(child, matID, texID, ls, lt);
+      this.displayComponent(child);
 
     });
     this.scene.popMatrix();
+  }
+
+  setAllTextures(component, texture, length_s, length_t) {
+
+    if (component.texture.length_s == undefined || component.texture.length_t == undefined) {
+      component.texture.length_s = length_s;
+      component.texture.length_t = length_t;
+    }
+    if (component.texture.id == "inherit") {
+      component.texture.id = texture;
+    }
+    let texID = component.texture.id;
+    let ls = component.texture.length_s;
+    let lt = component.texture.length_t;
+
+    let compRef = component.children.componentref;
+    compRef.forEach(reference => {
+      let child = this.components[reference];
+      this.setAllTextures(child, texID, ls, lt);
+
+    });
+  }
+
+  setAllMaterials(component, material) {
+    let id = component.materialID;
+    let matID = component.materials[id];
+
+    if (component.materials[component.materialID] == "inherit") {
+      component.materialInherited = material;
+      matID = material;
+    }
+
+    let compRef = component.children.componentref;
+    compRef.forEach(reference => {
+
+      let child = this.components[reference];
+      this.setAllMaterials(child, matID);
+
+    });
+
   }
 
   /**
@@ -2214,7 +2227,6 @@ class MySceneGraph {
       }
       return;
     }
-
     this.displayComponent(rootNode);
 
   }
