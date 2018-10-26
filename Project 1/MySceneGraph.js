@@ -376,7 +376,7 @@ class MySceneGraph {
       return "unable to parse near value";
     }
 
-    if(ortho.near < 0) {
+    if (ortho.near < 0) {
       return "near component is less than 0.";
     }
 
@@ -385,7 +385,7 @@ class MySceneGraph {
       return "unable to parse far value";
     }
 
-    if(ortho.far < 0) {
+    if (ortho.far < 0) {
       return "far component is less than 0.";
     }
 
@@ -672,7 +672,7 @@ class MySceneGraph {
       this.onXMLMinorError(`ambient light values missing; assuming RGBA(${this.ambient.r}, ${this.ambient.g}, ${this.ambient.b}, ${this.ambient.a})`);
     } else {
       var rep = this.parseChildrenColours(this.ambient, children[indexAmbient]);
-      if(rep != 0)
+      if (rep != 0)
         return rep;
     }
     // Background color values
@@ -689,7 +689,7 @@ class MySceneGraph {
       this.onXMLMinorError(`background light values missing; assuming RGBA(${this.background.r}, ${this.background.g}, ${this.background.b}, ${this.background.a})`);
     } else {
       var rep = this.parseChildrenColours(this.background, children[indexBackground]);
-      if(rep != 0)
+      if (rep != 0)
         return rep;
     }
   }
@@ -2144,17 +2144,17 @@ class MySceneGraph {
     this.scene.pushMatrix();
 
     var err = this.applyMaterial(component, material);
-    if(err != 0) {
+    if (err != 0) {
       this.onXMLError(err);
       return -1;
     }
 
     err = this.applyTexture(component, texture);
-    if(err != 0) {
+    if (err != 0) {
       this.onXMLError(err);
       return -1;
     }
-    
+
     this.applyTransformation(component);
 
     let primRef = component.children.primitiveref;
@@ -2172,14 +2172,19 @@ class MySceneGraph {
       let ls, lt;
       if (component.texture.id == "inherit") {
         texID = texture;
-        if (component.texture.length_s == undefined)
-          component.texture.length_s = length_s;
-        if (component.texture.length_t == undefined)
-          component.texture.length_t = length_t;
+        if (child.texture.length_s == undefined)
+          child.texture.length_s = length_s;
+        if (child.texture.length_t == undefined)
+          child.texture.length_t = length_t;
+
       } else {
         texID = component.texture.id;
         ls = component.texture.length_s;
         lt = component.texture.length_t;
+        if (child.texture.length_s == undefined)
+          child.texture.length_s = ls;
+        if (child.texture.length_t == undefined)
+          child.texture.length_t = lt;
       }
 
       let matID;

@@ -52,11 +52,11 @@
 
     </lights>
     <textures>
-        <texture id="tex_rough" file="images/rough.jpg" />
-        <texture id="tex_world" file="images/world.jpg" />
-        <texture id="tex_window" file="images/window.jpg" />
-        <texture id="tex_wood" file="images/wood.png" />
-        <texture id="tex_donut" file="images/donut.png" />
+        <texture id="tex_rough" file="scenes/images/rough.jpg" />
+        <texture id="tex_world" file="scenes/images/world.jpg" />
+        <texture id="tex_window" file="scenes/images/window.jpg" />
+        <texture id="tex_wood" file="scenes/images/wood.png" />
+        <texture id="tex_donut" file="scenes/images/donut.png" />
     </textures>
     <materials>
         <material id="mat_metal" shininess="80" >
@@ -195,17 +195,17 @@
             <materials>
                 <material id="mat_regular" />
             </materials>
-            <texture id="tex_window" length_s ="1" length_t="1"/>
+            <texture id="none" />
             <children>
-                <componentref id="table" />
+                <componentref id="desk_globe" />
                 <componentref id="right_wall" />
                 <componentref id="left_wall" />
-                <componentref id="desk_globe" />
                 <!-- componentref id="frame_comp" />
                 <componentref id="floor" />
                 <componentref id="window" />
                 <componentref id="frame_comp2" / -->
                 <componentref id="ceiling" />
+                <componentref id="table" />
                 <componentref id="plate_with_donut" />
             </children>
         </component>
@@ -219,7 +219,7 @@
                 <material id="mat_orange" />
                 <material id="mat_turquoise" />
             </materials>
-            <texture id="inherit" />
+            <texture id="none" />
             <children>
                 <primitiveref id="wall" />
             </children>
@@ -236,7 +236,7 @@
                 <material id="mat_orange" />
                 <material id="mat_turquoise" />
             </materials>
-            <texture id="inherit" />
+            <texture id="none" />
             <children>
                 <primitiveref id="wall" />
             </children>
@@ -360,11 +360,11 @@
             </materials>
             <texture id="tex_wood" length_s="1" length_t="1" />
             <children>
-                <componentref id="table_top" />
                 <componentref id="table_leg1" />
                 <componentref id="table_leg2" />
                 <componentref id="table_leg3" />
                 <componentref id="table_leg4" />
+                <componentref id="table_top" />
             </children>
         </component>
 
