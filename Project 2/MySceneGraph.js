@@ -376,7 +376,7 @@ class MySceneGraph {
       return "unable to parse near value";
     }
 
-    if(ortho.near < 0) {
+    if (ortho.near < 0) {
       return "near component is less than 0.";
     }
 
@@ -385,7 +385,7 @@ class MySceneGraph {
       return "unable to parse far value";
     }
 
-    if(ortho.far < 0) {
+    if (ortho.far < 0) {
       return "far component is less than 0.";
     }
 
@@ -672,7 +672,7 @@ class MySceneGraph {
       this.onXMLMinorError(`ambient light values missing; assuming RGBA(${this.ambient.r}, ${this.ambient.g}, ${this.ambient.b}, ${this.ambient.a})`);
     } else {
       var rep = this.parseChildrenColours(this.ambient, children[indexAmbient]);
-      if(rep != 0)
+      if (rep != 0)
         return rep;
     }
     // Background color values
@@ -689,7 +689,7 @@ class MySceneGraph {
       this.onXMLMinorError(`background light values missing; assuming RGBA(${this.background.r}, ${this.background.g}, ${this.background.b}, ${this.background.a})`);
     } else {
       var rep = this.parseChildrenColours(this.background, children[indexBackground]);
-      if(rep != 0)
+      if (rep != 0)
         return rep;
     }
   }
@@ -994,7 +994,8 @@ class MySceneGraph {
         return reply;
     }
 
-    let l = spot.location, t = spot.target;
+    let l = spot.location,
+      t = spot.target;
     if (l.x == t.x && l.y == t.y && l.z == t.z) {
       return `Spot ${spot.id}: Location can't be the same as target`;
     }
@@ -2099,7 +2100,11 @@ class MySceneGraph {
             z: 0
           };
 
-          axis[step.axis] = 1;
+          if (step.customAxis) {
+            axis = step.axis;
+          } else {
+            axis[step.axis] = 1;
+          }
           this.scene.rotate(DEGREE_TO_RAD * step.angle, axis.x, axis.y, axis.z);
           break;
         case "scale":
@@ -2144,17 +2149,17 @@ class MySceneGraph {
     this.scene.pushMatrix();
 
     var err = this.applyMaterial(component, material);
-    if(err != 0) {
+    if (err != 0) {
       this.onXMLError(err);
       return -1;
     }
 
     err = this.applyTexture(component, texture);
-    if(err != 0) {
+    if (err != 0) {
       this.onXMLError(err);
       return -1;
     }
-    
+
     this.applyTransformation(component);
 
     let primRef = component.children.primitiveref;
