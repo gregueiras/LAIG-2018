@@ -321,6 +321,22 @@
         <transformation id="tf46">
         </transformation>
     </transformations>
+
+    <animations>
+
+        <linear id="la1" span="20">
+            <controlpoint xx="0" yy="0" zz="0"/>
+            <controlpoint xx="5" yy="0" zz="0"/>
+            <controlpoint xx="5" yy="0" zz="5"/>
+        </linear>
+        <linear id="la2" span="20">
+            <controlpoint xx="0" yy="0" zz="0"/>
+            <controlpoint xx="-5" yy="0" zz="0"/>
+            <controlpoint xx="-5" yy="0" zz="5"/>
+        </linear>
+
+    </animations>
+
     <primitives>
         <primitive id="rect1">
             <rectangle x1="0" y1="0" x2="6" y2="3"/>
@@ -699,8 +715,11 @@
         </component>
         <component id="pilar1">
             <transformation>
-                <transformationref id="tf4" />
+                <transformationref id="tf1" />
             </transformation>
+            <animations>
+                <animationref id="la1"/>
+            </animations>
             <materials>
                 <material id="inherit" />
             </materials>
@@ -713,6 +732,9 @@
             <transformation>
                 <transformationref id="tf5" />
             </transformation>
+            <animations>
+                <animationref id="la2"/>
+            </animations>
             <materials>
                 <material id="inherit" />
             </materials>

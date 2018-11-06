@@ -19,6 +19,9 @@ class XMLscene extends CGFscene {
 
     this.interface = myInterface;
     this.lightValues = {};
+    this.oldtime = 0;
+    
+
   }
 
   /**
@@ -128,6 +131,10 @@ class XMLscene extends CGFscene {
 
     this.loadCamera();
     this.sceneInited = true;
+    
+    this.oldtime = 0;
+    this.setUpdatePeriod(10);
+
   }
 
   /**
@@ -270,5 +277,20 @@ class XMLscene extends CGFscene {
       this.interface.releaseKey(CHANGE_MATERIAL);
     }
 
+  }
+
+  update(currentTime) {
+    if (this.oldtime == 0) {
+      this.oldtime = currentTime;
+      return;
+    }
+    var elapsedTime = (currentTime - this.oldtime) / 1000;
+
+    let keys = Object.keys(this.graph.animations);
+    for (let key of keys) {
+      this.graph.animations[key].update(elapsedTime);
+    }
+    
+    this.oldtime = currentTime;
   }
 }

@@ -9,10 +9,15 @@ const LIGHTS_INDEX = 3;
 const TEXTURES_INDEX = 4;
 const MATERIALS_INDEX = 5;
 const TRANSFORMATIONS_INDEX = 6;
-const PRIMITIVES_INDEX = 7;
-const COMPONENTS_INDEX = 8;
+const ANIMATIONS_INDEX = 7;
+const PRIMITIVES_INDEX = 8;
+const COMPONENTS_INDEX = 9;
+
 const INHERIT = "inherit";
 const NONE = "none";
+const LINEAR = "linear";
+const CIRCULAR = "circular";
+const CONTROL_POINT = "controlpoint";
 
 const ERROR = "ERROR";
 
@@ -174,6 +179,9 @@ class MySceneGraph {
       case TRANSFORMATIONS_INDEX:
         error = this.parseTransformations(node);
         break;
+      case ANIMATIONS_INDEX:
+        error = this.parseAnimations(node);
+        break;
       case PRIMITIVES_INDEX:
         error = this.parsePrimitives(node);
         this.buildComponents();
@@ -265,6 +273,11 @@ class MySceneGraph {
 
     // <ambient>
     error = this.processTag(nodes[AMBIENT_INDEX], nodeNames, "ambient", AMBIENT_INDEX);
+    if (error != null)
+      return error;
+
+    // <animations>
+    error = this.processTag(nodes[ANIMATIONS_INDEX], nodeNames, "animations", ANIMATIONS_INDEX);
     if (error != null)
       return error;
 
@@ -1605,6 +1618,119 @@ class MySceneGraph {
   }
 
   /**
+   * Parse <linear> block
+   * @param {Object} node - node to be parsed
+   * @returns 0 if run with sucess, an error message if there was an error
+   */
+  parseLinearAnimation(node) {
+    let pointList = [];
+    let time = 0;
+    let id = 0;
+
+    id = this.reader.getString(node, 'id');
+    if (id == null || !isString(id)) {
+      return "Linear Animation: unable to parse id value";
+    }
+
+    // Check for repeated id
+    var reply;
+    if ((reply = this.checkForRepeatedId(id, this.animations)) != 0)
+      return reply;
+
+    time = this.reader.getFloat(node, 'span');
+    if (time == null || isNaN(time)) {
+      return "Linear Animation: unable to parse span value";
+    }
+
+    var grandchildren = node.children;
+    for (let index = 0; index < grandchildren.length; index++) {
+      const control_point = grandchildren[index];
+
+      if (control_point.nodeName != CONTROL_POINT)
+        return `${control_point.nodeName} is not a valid sub-block to a <linear> block`;
+
+      let point = {
+        x: 0,
+        y: 0,
+        z: 0
+      };
+
+      point.x = this.reader.getFloat(control_point, 'xx');
+      if (point.x == null || isNaN(point.x)) {
+        return "Linear Animation: unable to parse xx value";
+      }
+
+      point.y = this.reader.getFloat(control_point, 'yy');
+      if (point.y == null || isNaN(point.y)) {
+        return "Linear Animation: unable to parse yy value";
+      }
+
+      point.z = this.reader.getFloat(control_point, 'zz');
+      if (point.z == null || isNaN(point.z)) {
+        return "Linear Animation: unable to parse zz value";
+      }
+
+      pointList.push(point);
+
+    }
+
+    if (pointList.length < 2) {
+      return `Linear Animation ${id}: There must be at least 2 control points`;
+    }
+
+    let lA = new LinearAnimation(this, time, pointList, id);
+    this.animations[lA.id] = lA;
+    return 0;
+  }
+
+  /**
+   * Parses the <animations> block.
+   * @param {Object} animationsNode
+   * @returns null if run with sucess, an error message ig there was an error
+   * @memberof MySceneGraph
+   */
+  parseAnimations(animationsNode) {
+    if (animationsNode.nodeName != "animations") {
+      return `<${animationsNode.nodeName}> is in <animations> location`;
+    }
+
+    var children = animationsNode.children;
+
+    this.animations = {};
+
+    //Any number of primitives
+    if (children.length == 0) {
+      this.log("There were no animations to parse");
+      return 0;
+    }
+
+    for (var i = 0; i < children.length; i++) {
+      let error;
+      let node = children[i];
+
+      switch (node.nodeName) {
+        case LINEAR:
+          error = this.parseLinearAnimation(node);
+          if (error != 0)
+            return error;
+          break;
+
+        case CIRCULAR:
+          error = this.parseCircularAnimation(node);
+          if (error != 0)
+            return error;
+          break;
+
+        default:
+          return `${node.nodeName} is not a valid animation type`;
+      }
+    }
+    this.log("Parsed animations");
+    return 0;
+
+  }
+
+  /**
    * Parse <primitive> block
    * @param {Object} node - node to be parsed
    * @returns 0 if run with sucess, an error message if there was an error
@@ -1826,6 +1952,38 @@ class MySceneGraph {
   }
 
   /**
+   * Parses the sub-blocks of a <animations> block inside a <component>
+   * @param {Object} child - child node to be parsed
+   * @param {Object} component - component object to be populated
+   * @returns 0 if run with sucess, an error message if there was an error
+   * @memberof MySceneGraph
+   */
+  parseChildrenAnimations(child, component) {
+    let children = child.children;
+    var id;
+
+    for (let i = 0; i < children.length; i++) {
+      const aRef = children[i];
+
+      if (aRef.nodeName != "animationref") {
+        return `${aRef.nodeName} should be animationref`;
+      }
+
+      id = this.reader.getString(aRef, 'id');
+      if (id == null || !isString(id)) {
+        return `Component "${component.id}: unable to parse animationref id value`;
+      }
+
+      if (Object.keys(this.animations).indexOf(id) == -1) {
+        return `Component "${component.id}": animation ${id} doesn't exist`;
+      }
+      component.animations.push(id);
+      break;
+    }
+    return 0;
+  }
+
+  /**
    * Parse any child node of a component
    *
    * @param {Object} child - child node to be parsed
@@ -1837,6 +1995,9 @@ class MySceneGraph {
     switch (child.nodeName) {
       case "transformation":
         return this.parseChildrenTransformation(child, component);
+
+      case "animations":
+        return this.parseChildrenAnimations(child, component);
 
       case "materials":
         return this.parseChildrenMaterials(child, component);
@@ -1900,7 +2061,8 @@ class MySceneGraph {
       children: {
         componentref: [],
         primitiveref: []
-      }
+      },
+      animations: []
     };
 
     component.id = this.reader.getString(child, 'id');
@@ -1916,6 +2078,9 @@ class MySceneGraph {
     var grandchildren = child.children;
 
     for (var j = 0; j < grandchildren.length; j++) {
+      if (grandchildren[j].nodeName == "animations" && grandchildren[j - 1].nodeName != "transformation")
+        return "<animations> block must be directly after the <transformations> block";
+
       let error = this.parseComponentsComponentChildren(grandchildren[j], component);
       if (error != 0)
         return error;
@@ -2160,8 +2325,11 @@ class MySceneGraph {
       return -1;
     }
 
+    component.animations.forEach(id => {
+      this.animations[id].apply();
+    });
     this.applyTransformation(component);
-
+    
     let primRef = component.children.primitiveref;
     if (Object.keys(primRef).length != 0) {
       primRef.forEach(primID => {

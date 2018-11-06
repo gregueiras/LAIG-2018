@@ -12,21 +12,24 @@ class Animation {
      * @type {Transformation[]}
      */
     this.transformations = [];
+    console.dir(this);
   }
 
   update(elapsedTime) {
+    this.currTime += elapsedTime;
+
     this.transformations.forEach(transformation => {
       let completion = 0;
 
 
-      if (elapsedTime >= transformation.endTime) {
+      if (this.currTime >= transformation.endTime) {
         completion = 1;
-      } else if (elapsedTime <= transformation.startTime || transformation.instant) {
+      } else if (this.currTime <= transformation.startTime || transformation.instant) {
         completion = 0;
       } else {
-        completion = (transformation.endTime - transformation.startTime) / (elapsedTime - transformation.startTime);
+        completion = (this.currTime - transformation.startTime) / (transformation.endTime - transformation.startTime);
+        
       }
-
 
       switch (transformation.type) {
         case "translate":
@@ -35,7 +38,7 @@ class Animation {
           transformation.y = transformation.origY * completion;
           transformation.z = transformation.origZ * completion;
           break;
-          
+
         case "rotate":
           transformation.angle = transformation.origAngle * completion;
 
@@ -48,6 +51,6 @@ class Animation {
   }
 
   apply() {
-    this.graph.transform(this.tranformations);
+    this.graph.transform(this.transformations);
   }
 }

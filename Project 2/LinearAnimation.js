@@ -2,16 +2,27 @@ class LinearAnimation extends Animation {
 
   /**
    *Creates an instance of LinearAnimation.
+   * @param {MySceneGraph} graph
    * @param {number} time
    * @param {Point[]} pointList
+   * @param {string} id
    * @memberof LinearAnimation
    */
-  constructor(graph, time, pointList) {
+  constructor(graph, time, pointList, id) {
     super(graph);
     this.time = time;
-  
+    this.id = id;
+    
     this.interpolateTransformations(pointList);
 
+    this.transformations.sort((a, b) => {
+      let x = a.type.toLowerCase();
+      var y = b.type.toLowerCase();
+      if (x > y) {return -1;}
+      if (x < y) {return 1;}
+      return 0;
+      
+    }); 
   }
 
   interpolateTransformations(pointList) {
@@ -53,8 +64,8 @@ class LinearAnimation extends Animation {
         customAxis: true
       };
       
-      this.transformations.push(rotation);
       this.transformations.push(translation);
+      this.transformations.push(rotation);
 
       oldDir = dir;
     }
