@@ -4,9 +4,11 @@
  */
 class Animation {
 
-  constructor(graph) {
+  constructor(graph, id, span) {
     this.graph = graph;
     this.currTime = 0;
+    this.id = id;
+    this.span = span;
 
     /** 
      * @type {Transformation[]}
@@ -15,9 +17,10 @@ class Animation {
     console.dir(this);
   }
 
-  update(elapsedTime) {
-    this.currTime += elapsedTime;
+  update(currTime) {
+    this.currTime = currTime;
 
+    console.log(this.id, this.currTime);
     this.transformations.forEach(transformation => {
       let completion = 0;
 

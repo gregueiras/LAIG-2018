@@ -18,13 +18,13 @@
       <diffuse r="0.7" g="0.7" b="0.7" a="1" />
       <specular r="0.3" g="0.3" b="0.3" a="1" />
     </omni>
-        <omni id="Point1" enabled="1">
+    <omni id="Point1" enabled="1">
       <location x="-5" y="0" z="0" w="0" />
       <ambient r="0" g="0" b="0" a="1" />
       <diffuse r="0.7" g="0.7" b="0.7" a="1" />
       <specular r="0.3" g="0.3" b="0.3" a="1" />
     </omni>
-        <omni id="Point2" enabled="1">
+    <omni id="Point2" enabled="1">
       <location x="-5" y="3" z="-5" w="0" />
       <ambient r="0" g="0" b="0" a="1" />
       <diffuse r="0.7" g="0.7" b="0.7" a="1" />
@@ -33,7 +33,7 @@
 
   </lights>
   <textures>
-          <texture id="text_wood" file="./scenes/images/table.png" />
+    <texture id="text_wood" file="./scenes/images/table.png" />
   </textures>
   <materials>
     <material id="default" shininess = "0.1">
@@ -50,7 +50,7 @@
       <scale x="1" y="1" z="1" />
     </transformation>
   </transformations>
-  
+
   <animations>
 
     <linear id="la1" span="5">
@@ -71,13 +71,14 @@
       <cylinder base="0.3" top="0.1" height="3" slices="30" stacks="30" />
     </primitive >
   </primitives>
-  
+
   <components>
     <component id="house">
       <transformation>
       </transformation>
       <animations>
-       <animationref id="la2"/>
+        <animationref id="la2"/>
+        <animationref id="la1"/>
       </animations>
       <materials>
         <material id="default" />

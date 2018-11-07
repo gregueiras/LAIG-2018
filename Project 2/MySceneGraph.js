@@ -1725,6 +1725,7 @@ class MySceneGraph {
           return `${node.nodeName} is not a valid animation type`;
       }
     }
+
     this.log("Parsed animations");
     return 0;
 
@@ -1961,7 +1962,9 @@ class MySceneGraph {
   parseChildrenAnimations(child, component) {
     let children = child.children;
     var id;
+    let timer = 0;
 
+    component.currTime = 0;
     for (let i = 0; i < children.length; i++) {
       const aRef = children[i];
 
@@ -1977,8 +1980,19 @@ class MySceneGraph {
       if (Object.keys(this.animations).indexOf(id) == -1) {
         return `Component "${component.id}": animation ${id} doesn't exist`;
       }
-      component.animations.push(id);
-      break;
+      let anim = {
+        id: id,
+        start: null,
+        end: null
+      };
+
+
+      anim.start = timer;
+
+      timer += this.animations[id].span;
+
+      anim.end = timer;
+      component.animations.push(anim);
     }
     return 0;
   }
@@ -2325,11 +2339,10 @@ class MySceneGraph {
       return -1;
     }
 
-    component.animations.forEach(id => {
-      this.animations[id].apply();
-    });
+    this.applyAnimations(component);
+
     this.applyTransformation(component);
-    
+
     let primRef = component.children.primitiveref;
     if (Object.keys(primRef).length != 0) {
       primRef.forEach(primID => {
@@ -2365,6 +2378,24 @@ class MySceneGraph {
 
     });
     this.scene.popMatrix();
+  }
+
+  applyAnimations(component) {
+    if (this.scene.elapsedTime)
+      component.currTime += this.scene.elapsedTime;
+    for (let index = 0; index < component.animations.length; index++) {
+      const compAnim = component.animations[index];
+      const animation = this.animations[compAnim.id];
+      let time;
+      if (isBetween(component.currTime, compAnim.start, compAnim.end)) {
+        time = component.currTime - compAnim.start;
+        animation.update(time);
+        animation.apply();
+      }
+      /* else if (component.currTime > compAnim.end) {
+             time = component.currTime;
+           } */
+    }
   }
 
   /**

@@ -3,15 +3,13 @@ class LinearAnimation extends Animation {
   /**
    *Creates an instance of LinearAnimation.
    * @param {MySceneGraph} graph
-   * @param {number} time
+   * @param {number} span
    * @param {Point[]} pointList
    * @param {string} id
    * @memberof LinearAnimation
    */
-  constructor(graph, time, pointList, id) {
-    super(graph);
-    this.time = time;
-    this.id = id;
+  constructor(graph, span, pointList, id) {
+    super(graph, id, span);
     
     this.interpolateTransformations(pointList);
 
@@ -27,7 +25,7 @@ class LinearAnimation extends Animation {
 
   interpolateTransformations(pointList) {
     let totD = totalDistance(pointList);
-    let speed = this.time/totD;
+    let speed = this.span/totD;
 
     let distSoFar = 0;
     let oldDir = {x: 0, y: 0, z: 1};

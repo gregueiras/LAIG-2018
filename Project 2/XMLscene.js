@@ -284,13 +284,8 @@ class XMLscene extends CGFscene {
       this.oldtime = currentTime;
       return;
     }
-    var elapsedTime = (currentTime - this.oldtime) / 1000;
+    this.elapsedTime = (currentTime - this.oldtime) / 1000;
 
-    let keys = Object.keys(this.graph.animations);
-    for (let key of keys) {
-      this.graph.animations[key].update(elapsedTime);
-    }
-    
     this.oldtime = currentTime;
   }
 }
