@@ -17,18 +17,18 @@ class CircularAnimation extends Animation {
 
     this.interpolateTransformations(center, radius, startAngle, rotationAngle);
 
-    this.transformations.sort((a, b) => {
-      let x = a.type.toLowerCase();
-      var y = b.type.toLowerCase();
-      if (x > y) {
-        return -1;
-      }
-      if (x < y) {
-        return 1;
-      }
-      return 0;
+    /*  this.transformations.sort((a, b) => {
+        let x = a.type.toLowerCase();
+        var y = b.type.toLowerCase();
+        if (x > y) {
+          return -1;
+        }
+        if (x < y) {
+          return 1;
+        }
+        return 0;
 
-    });
+      }); */
   }
 
   interpolateTransformations(center, radius, startAngle, rotationAngle) {
@@ -43,33 +43,36 @@ class CircularAnimation extends Animation {
 
     let radiusTrans = {
       type: "translate",
-      origX: Math.cos(startAngle) * radius,
-      origY: Math.sin(startAngle) * radius,
-      origZ: center.z,
+      origX: Math.sin(startAngle * DEGREE_TO_RAD) * radius,
+      origY: 0,
+      origZ: Math.cos(startAngle * DEGREE_TO_RAD) * radius,
       endTime: 0
     };
 
-    let placeRot = {//rotation to startAngle
+    console.dir(radiusTrans);
+
+    let placeRot = { //rotation to startAngle
       type: "rotate",
-      origAngle: startAngle,
+      origAngle: 90 + startAngle,
       axis: "y",
       endTime: 0,
       instant: true,
     };
-
+    console.log(startAngle);
+    
     let mainRot = {
       type: "rotate",
-      startAngle: 0,
+      startAngle: 90, //TODO: Remover start angle
       origAngle: rotationAngle,
       axis: "y",
       startTime: 0,
       endTime: this.span,
     };
 
-    //this.transformations.push(centerTrans);
-    //this.transformations.push(mainRot);
+    this.transformations.push(centerTrans);
+    this.transformations.push(mainRot);
     this.transformations.push(radiusTrans);
     this.transformations.push(placeRot);
   }
-
+  
 }
