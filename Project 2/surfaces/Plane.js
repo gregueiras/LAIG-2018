@@ -26,13 +26,19 @@ class Plane extends CGFobject {
             ]
         ];
 
-        initGeometry();
+        this.initGeometry();
+
+        this.initBuffers();
 
     }
 
     initGeometry() {
         var nurbsSurface = new CGFnurbsSurface(this.ctrlDegreesU, this.ctrlDegreesV, this.controlVertex);
 
-        this.obj = new CGFnurbsObject(this, this.divU, this.divV, nurbsSurface);
-    };
+        this.obj = new CGFnurbsObject(this.scene, this.divU, this.divV, nurbsSurface);
+    }
+
+    display() {
+        this.obj.display();
+    }
 }

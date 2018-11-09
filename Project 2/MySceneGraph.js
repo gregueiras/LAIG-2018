@@ -123,6 +123,15 @@ class MySceneGraph {
             this.primitives[key].specs.npartsU,
             this.primitives[key].specs.npartsV);
           break;
+          case "patch":
+          this.primitives[key].shape = new Patch(
+            this.scene,
+            this.primitives[key].specs.npartsU,
+            this.primitives[key].specs.npartsV,
+            this.primitives[key].specs.npointsU,
+            this.primitives[key].specs.npointsV,
+            this.primitives[key].specs.ctrlPoints);
+          break;
         default:
           break;
       }
@@ -1560,6 +1569,78 @@ class MySceneGraph {
     }
   }
 
+
+
+  //ctrlPoints: []
+  /**
+   * Parse a <patch> block
+   * @param {Object} patch - primitive object to be populated
+   * @param {Object} child - child node to be parsed
+   * @returns {number} an error message if there was an error
+   */
+  parseChildrenPatch(patch, child) { //TODO
+    patch.npointsU = this.reader.getFloat(child, 'npointsU');
+    if (patch.npointsU == null || !isInteger(patch.npointsU)) {
+      return "unable to parse npointsU value";
+    }
+
+    patch.npointsV = this.reader.getFloat(child, 'npointsV');
+    if (patch.npointsV == null || !isInteger(patch.npointsV)) {
+      return "unable to parse npointsV value";
+    }
+
+    patch.npartsU = this.reader.getFloat(child, 'npartsU');
+    if (patch.npartsU == null || !isInteger(patch.npartsU)) {
+      return "unable to parse npartsU value";
+    }
+
+    patch.npartsV = this.reader.getFloat(child, 'npartsV');
+    if (patch.npartsV == null || !isInteger(patch.npartsV)) {
+      return "unable to parse npartsV value";
+    }
+
+    var children = child.children;
+
+    for (var j = 0; j < children.length; j++) {
+      let error = this.parseChildrenPatchChildren(patch, children[j]);
+      if (error != 0) {
+        return error;
+      }
+    }
+
+    if(patch.ctrlPoints.length != patch.npointsU * patch.npointsV)
+      return "Wrong number of ctrl points";
+
+    return 0;
+
+  }
+
+  parseChildrenPatchChildren(patch, child) {
+
+    if (child.nodeName != 'controlpoint')
+      return "child name is wrong";
+
+    var xx = this.reader.getFloat(child, 'xx');
+    if (xx == null || isNaN(xx)) {
+      return "unable to parse xx value";
+    }
+
+    var yy = this.reader.getFloat(child, 'yy');
+    if (yy == null || isNaN(yy)) {
+      return "unable to parse yy value";
+    }
+
+    var zz = this.reader.getFloat(child, 'zz');
+    if (zz == null || isNaN(zz)) {
+      return "unable to parse zz value";
+    }
+
+    patch.ctrlPoints.push([xx, yy, zz, 1]);
+
+    return 0;
+
+  }
+
   /**
    * Parse a sub-block of a <primitive> block
    * @param {Object} child - child node to be parsed
@@ -1634,13 +1715,24 @@ class MySceneGraph {
         break;
       case "plane":
         var plane = {
-          id: null,
           npartsU: null,
           npartsV: null
         };
         this.parseChildrenPlane(plane, child);
         primitive.type = "plane";
         primitive.specs = plane;
+        break;
+      case "patch":
+        var patch = {
+          npointsU: null,
+          npointsV: null,
+          npartsU: null,
+          npartsV: null,
+          ctrlPoints: []
+        };
+        this.parseChildrenPatch(patch, child);
+        primitive.type = "patch";
+        primitive.specs = patch;
         break;
       default:
         this.onXMLMinorError("unknown tag <" + child.nodeName + ">");

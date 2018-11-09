@@ -42,21 +42,23 @@ function getUrlVars() {
     return vars;
 }
 //Include additional files here
-serialInclude(['../lib/CGF.js',
+serialInclude(['./lib/CGF.js',
     'XMLscene.js',
     'MySceneGraph.js',
     'MyInterface.js',
-    '/primitives/MyCircle.js',
-    '/primitives/MyCylinder.js',
-    '/primitives/MyCylinderBase.js',
-    '/primitives/MyQuad.js',
-    '/primitives/MySphere.js',
-    '/primitives/MyTorus.js',
-    '/primitives/MyTriangle.js',
-    'Animation.js',
-    'LinearAnimation.js',
-    'CircularAnimation.js',
-    
+    'primitives/MyCircle.js',
+    'primitives/MyCylinder.js',
+    'primitives/MyCylinderBase.js',
+    'primitives/MyQuad.js',
+    'primitives/MySphere.js',
+    'primitives/MyTorus.js',
+    'primitives/MyTriangle.js',
+    'animation/Animation.js',
+    'animation/LinearAnimation.js',
+    'animation/CircularAnimation.js',
+    'surfaces/Patch.js',
+    'surfaces/Plane.js',
+
     main = function () {
         // Standard application, scene and interface setup
         var app = new CGFapplication(document.body);
@@ -73,7 +75,7 @@ serialInclude(['../lib/CGF.js',
         // get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
         // or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
 
-        var filename = getUrlVars()['file'] || "anim.xml";
+        var filename = getUrlVars()['file'] || "patch.xml";
 
         // create and load graph, and associate it to scene. 
         // Check console for loading errors
