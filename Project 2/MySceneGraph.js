@@ -117,6 +117,12 @@ class MySceneGraph {
             this.primitives[key].specs.slices,
             this.primitives[key].specs.stacks);
           break;
+        case "plane":
+          this.primitives[key].shape = new Plane(
+            this.scene,
+            this.primitives[key].specs.npartsU,
+            this.primitives[key].specs.npartsV);
+          break;
         default:
           break;
       }
@@ -1537,6 +1543,24 @@ class MySceneGraph {
   }
 
   /**
+   * Parse a <plane> block
+   * @param {Object} plane - primitive object to be populated
+   * @param {Object} child - child node to be parsed
+   * @returns {number} an error message if there was an error
+   */
+  parseChildrenPlane(plane, child) {
+    plane.npartsU = this.reader.getFloat(child, 'npartsU');
+    if (plane.npartsU == null || !isInteger(plane.npartsU)) {
+      return "unable to parse npartsU value";
+    }
+
+    plane.npartsV = this.reader.getFloat(child, 'npartsV');
+    if (plane.npartsV == null || !isInteger(plane.npartsV)) {
+      return "unable to parse npartsV value";
+    }
+  }
+
+  /**
    * Parse a sub-block of a <primitive> block
    * @param {Object} child - child node to be parsed
    * @param {Object} primitive - primitive object to be populated
@@ -1607,6 +1631,16 @@ class MySceneGraph {
         this.parseChildrenTorus(torus, child);
         primitive.type = "torus";
         primitive.specs = torus;
+        break;
+      case "plane":
+        var plane = {
+          id: null,
+          npartsU: null,
+          npartsV: null
+        };
+        this.parseChildrenPlane(plane, child);
+        primitive.type = "plane";
+        primitive.specs = plane;
         break;
       default:
         this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
