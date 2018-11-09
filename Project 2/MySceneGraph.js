@@ -1881,6 +1881,7 @@ class MySceneGraph {
       return "Circular Animation: unable to parse startang value";
     }
 
+    
     let cA = new CircularAnimation(this, span, id, center, radius, startAng, rotAng);
     console.dir(center);
     this.animations[id] = cA;

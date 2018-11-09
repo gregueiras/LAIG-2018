@@ -46,6 +46,7 @@ class Animation {
           if (transformation.startAngle)
             transformation.angle += transformation.startAngle;
           
+          console.log(transformation.angle);
             break;
         default:
           console.error(`Invalid value for transformation type`);
