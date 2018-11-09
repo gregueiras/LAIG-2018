@@ -1718,6 +1718,84 @@ class MySceneGraph {
   }
 
   /**
+   * Parse <circular> block
+   * @param {Object} node - node to be parsed
+   * @returns 0 if run with sucess, an error message if there was an error
+   */
+  parseCircularAnimation(node) {
+
+    let
+      id,
+      span,
+      center = {
+        x: undefined,
+        y: undefined,
+        z: undefined
+      },
+      radius,
+      startAng,
+      rotAng;
+
+
+    id = this.reader.getString(node, 'id');
+    if (id == null || !isString(id)) {
+      return "Circular Animation: unable to parse id value";
+    }
+
+    // Check for repeated id
+    var reply;
+    if ((reply = this.checkForRepeatedId(id, this.animations)) != 0)
+      return reply;
+
+    span = this.reader.getFloat(node, 'span');
+    if (span == null || isNaN(span) || span < 0) {
+      return "Circular Animation: unable to parse span value";
+    }
+
+    let tempCenter = this.reader.getString(node, 'center');
+    let coords = tempCenter.split(' ');
+    if (coords.length != 3) {
+      return `Circular Animation "${id}": unable to parse center value`;
+    } else {
+      center.x = parseFloat(coords[0]);
+      if (isNaN(center.x) || !isFinite(center.x)) {
+        return `Circular Animation "${id}": invalid center "x" value`;
+      }
+
+      center.y = parseFloat(coords[1]);
+      if (isNaN(center.y) || !isFinite(center.y)) {
+        return `Circular Animation "${id}": invalid center "y" value`;
+      }
+
+      center.z = parseFloat(coords[2]);
+      if (isNaN(center.z) || !isFinite(center.z)) {
+        return `Circular Animation "${id}": invalid center "z" value`;
+      }
+
+    }
+
+    radius = this.reader.getFloat(node, 'radius');
+    if (radius == null || isNaN(radius)) {
+      return "Circular Animation: unable to parse radius value";
+    }
+
+    startAng = this.reader.getFloat(node, 'startang');
+    if (startAng == null || isNaN(startAng)) {
+      return "Circular Animation: unable to parse startang value";
+    }
+
+    rotAng = this.reader.getFloat(node, 'rotang');
+    if (rotAng == null || isNaN(rotAng)) {
+      return "Circular Animation: unable to parse startang value";
+    }
+
+    let cA = new CircularAnimation(this, span, id, center, radius, startAng, rotAng);
+    console.dir(center);
+    this.animations[id] = cA;
+    return 0;
+  }
+
+  /**
    * Parses the <animations> block.
    * @param {Object} animationsNode
    * @returns null if run with sucess, an error message ig there was an error
@@ -2423,12 +2501,11 @@ class MySceneGraph {
       let time;
       if (isBetween(component.currTime, compAnim.start, compAnim.end)) {
         time = component.currTime - compAnim.start;
-        animation.update(time);
-        animation.apply();
+      } else if (component.currTime > compAnim.end) {
+        time = component.currTime;
       }
-      /* else if (component.currTime > compAnim.end) {
-             time = component.currTime;
-           } */
+      animation.update(time);
+      animation.apply();
     }
   }
 

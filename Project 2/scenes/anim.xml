@@ -64,6 +64,9 @@
       <controlpoint xx="-5" yy="3" zz="-5"/>
     </linear>
 
+    <circular id="ca1" span="10" center="0 0 0" radius="5" startang="40" rotang="180" />
+    
+
   </animations>
 
   <primitives>
@@ -75,10 +78,10 @@
   <components>
     <component id="house">
       <transformation>
+        <transformationref id="tf1"/>
       </transformation>
       <animations>
-        <animationref id="la2"/>
-        <animationref id="la1"/>
+        <animationref id="ca1"/>
       </animations>
       <materials>
         <material id="default" />

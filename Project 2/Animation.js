@@ -14,13 +14,11 @@ class Animation {
      * @type {Transformation[]}
      */
     this.transformations = [];
-    console.dir(this);
   }
 
   update(currTime) {
     this.currTime = currTime;
 
-    console.log(this.id, this.currTime);
     this.transformations.forEach(transformation => {
       let completion = 0;
 
@@ -31,7 +29,6 @@ class Animation {
         completion = 0;
       } else {
         completion = (this.currTime - transformation.startTime) / (transformation.endTime - transformation.startTime);
-        
       }
 
       switch (transformation.type) {
@@ -43,9 +40,13 @@ class Animation {
           break;
 
         case "rotate":
+
           transformation.angle = transformation.origAngle * completion;
 
-          break;
+          if (transformation.startAngle)
+            transformation.angle += transformation.startAngle;
+          
+            break;
         default:
           console.error(`Invalid value for transformation type`);
           break;
