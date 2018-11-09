@@ -55,7 +55,7 @@ serialInclude(['../lib/CGF.js',
     '/primitives/MyTriangle.js',
     'Animation.js',
     'LinearAnimation.js',
-    'types.js',
+    'CircularAnimation.js',
     
     main = function () {
         // Standard application, scene and interface setup
