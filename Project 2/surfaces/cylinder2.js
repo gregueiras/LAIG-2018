@@ -17,8 +17,8 @@ class cylinder2 extends CGFobject {
   constructor(scene, slices, stacks, base, top, height) {
     super(scene);
 
-    this.npartsU = stacks;
-    this.npartsV = slices;
+    this.npartsU = slices;
+    this.npartsV = stacks;
 
     base = typeof base !== 'undefined' ? base : 1;
     top = typeof top !== 'undefined' ? top : 1;
@@ -40,36 +40,49 @@ class cylinder2 extends CGFobject {
    * @memberof MyCylinder
    */
   initObj() {
-    var baseZ = this.height / 2;
-    var topZ = -this.height / 2;
+    var baseZ = 0;
+    var topZ = this.height;
 
-    var baseCtrlPoints = [
-      [this.base / 2, 0, baseZ, 1],
-      [this.base / 2, this.base / 2, baseZ, 1],
-      [0, this.base / 2, baseZ, 1],
-      [-this.base / 2, this.base / 2, baseZ, 1],
-      [-this.base / 2, 0, baseZ, 1],
-      [-this.base / 2, -this.base / 2, baseZ, 1],
-      [0, -this.base / 2, baseZ, 1],
-      [this.base / 2, -this.base / 2, baseZ, 1],
-      [this.base / 2, 0, baseZ, 1]
+    this.controlVertex = [
+      [
+        [this.top, 0, topZ, 1],
+        [this.base, 0, baseZ, 1],
+      ],
+      [
+        [this.top, -this.top, topZ, 1.00],
+        [this.base, -this.base, baseZ, 1.00],
+      ],
+      [
+        [0, -this.top, topZ, 1],
+        [0, -this.base, baseZ, 1],
+      ],
+      [
+        [-this.top, -this.top, topZ, 1.00],
+        [-this.base, -this.base, baseZ, 1.00],
+      ],
+      [
+        [-this.top, 0, topZ, 10],
+        [-this.base, 0, baseZ, 10],
+      ],
+      [
+        [-this.top, this.top, topZ, 1.00],
+        [-this.base, this.base, baseZ, 1.00],
+      ],
+      [
+        [0, this.top, topZ, 1],
+        [0, this.base, baseZ, 1],
+      ],
+      [
+        [this.top, this.top, topZ, 1.00],
+        [this.base, this.base, baseZ, 1.00],
+      ],
+      [
+        [this.top, 0, topZ, 1],
+        [this.base, 0, baseZ, 1],
+      ],
     ];
-
-    var topCtrlPoints = [
-      [this.top / 2, 0, topZ, 1],
-      [this.top / 2, this.top / 2, topZ, 1],
-      [0, this.top / 2, topZ, 1],
-      [-this.top / 2, this.top / 2, topZ, 1],
-      [-this.top / 2, 0, topZ, 1],
-      [-this.top / 2, -this.top / 2, topZ, 1],
-      [0, -this.top / 2, topZ, 1],
-      [this.top / 2, -this.top / 2, topZ, 1],
-      [this.top / 2, 0, topZ, 1]
-    ];
-
-    this.controlVertex = [baseCtrlPoints, topCtrlPoints];
     this.degreesU = this.controlVertex.length - 1;
-    this.degreesV = baseCtrlPoints.length - 1;
+    this.degreesV = this.controlVertex[0].length - 1;
 
     this.initGeometry();
   }
