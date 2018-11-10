@@ -101,7 +101,6 @@ class MySceneGraph {
             this.primitives[key].specs.top,
             this.primitives[key].specs.height);
           break;
-
         case "torus":
           this.primitives[key].shape = new MyTorus(
             this.scene,
@@ -131,6 +130,15 @@ class MySceneGraph {
             this.primitives[key].specs.npointsU,
             this.primitives[key].specs.npointsV,
             this.primitives[key].specs.ctrlPoints);
+          break;
+          case "cylinder2":
+          this.primitives[key].shape = new cylinder2(
+            this.scene,
+            this.primitives[key].specs.slices,
+            this.primitives[key].specs.stacks,
+            this.primitives[key].specs.base,
+            this.primitives[key].specs.top,
+            this.primitives[key].specs.height);
           break;
         default:
           break;
@@ -1681,6 +1689,7 @@ class MySceneGraph {
         primitive.specs = triangle;
         break;
       case "cylinder":
+      case "cylinder2":
         var cylinder = {
           base: null,
           top: null,
@@ -1689,7 +1698,11 @@ class MySceneGraph {
           stacks: null
         }
         this.parseChildrenCylinder(cylinder, child);
-        primitive.type = "cylinder";
+        if(child.nodeName == "cylinder") {
+          primitive.type = "cylinder";
+        } else {
+          primitive.type = "cylinder2";
+        }
         primitive.specs = cylinder;
         break;
       case "sphere":

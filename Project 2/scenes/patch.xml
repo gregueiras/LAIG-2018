@@ -128,6 +128,9 @@
         <controlpoint xx="2.0" yy="2.0" zz="1.0" />
       </patch>
     </primitive>
+    <primitive id="cil2_1">
+      <cylinder2 base="2" top="1" height="5" slices="20" stacks="20" />
+    </primitive>
 
 </primitives>
 
@@ -144,7 +147,7 @@
         <texture id="text_text" length_s="1" length_t="1" />
         <children>
           <!--<primitiveref id="plane1" />-->
-          <primitiveref id="patch3" />
+          <primitiveref id="cil2_1" />
         </children>
       </component>
     </components>
