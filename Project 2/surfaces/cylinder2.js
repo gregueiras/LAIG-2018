@@ -88,17 +88,10 @@ class cylinder2 extends CGFobject {
   }
 
   initGeometry() {
-    console.log(this.controlVertex);
-    console.log(this.degreesU);
-    console.log(this.degreesV);
-    console.log(this.npartsU);
-    console.log(this.npartsV);
     var nurbsSurface = new CGFnurbsSurface(this.degreesU, this.degreesV, this.controlVertex);
 
     this.obj = new CGFnurbsObject(this.scene, this.npartsU, this.npartsV, nurbsSurface);
 
-    console.log(nurbsSurface);
-    console.log(this.obj);
   }
 
   display() {

@@ -49,8 +49,6 @@ class CircularAnimation extends Animation {
       endTime: 0
     };
 
-    console.dir(radiusTrans);
-
     let placeRot = { //rotation to startAngle
       type: "rotate",
       origAngle: 90 + startAngle,
@@ -58,7 +56,6 @@ class CircularAnimation extends Animation {
       endTime: 0,
       instant: true,
     };
-    console.log(startAngle);
     
     let mainRot = {
       type: "rotate",

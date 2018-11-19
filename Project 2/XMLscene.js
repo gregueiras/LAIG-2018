@@ -21,7 +21,6 @@ class XMLscene extends CGFscene {
     this.lightValues = {};
     this.oldtime = 0;
     
-
   }
 
   /**
@@ -43,7 +42,17 @@ class XMLscene extends CGFscene {
     this.gl.depthFunc(this.gl.LEQUAL);
 
     this.axis = new CGFaxis(this);
+    this.myShader = new CGFshader(this.gl, './shaders/map.vertex', './shaders/texture2.frag');
+    this.heightMap = new CGFtexture(this, './scenes/images/heightmap.png');
+    this.texture = new CGFtexture(this, './scenes/images/texture.jpg');
 
+    const options = {
+      timeFactor: 1,
+      normScale: 1,
+      myHeightmap: 0,
+      myTexture: 1
+    }
+    this.myShader.setUniformsValues(options);
   }
 
   /**
@@ -211,6 +220,7 @@ class XMLscene extends CGFscene {
   /**
    * Displays the scene.
    */
+  // Quando trocar de shader, usar this.setActiveShader(this.defaultShader);
   display() {
     // ---- BEGIN Background, camera and axis setup
 
@@ -247,6 +257,10 @@ class XMLscene extends CGFscene {
         }
       }
 
+      this.setActiveShader(this.myShader);
+      this.heightMap.bind(0);
+      this.texture.bind(1);
+
       // Displays the scene (MySceneGraph function).
       this.graph.displayScene();
     } else {
@@ -256,6 +270,7 @@ class XMLscene extends CGFscene {
 
     this.popMatrix();
     // ---- END Background, camera and axis setup
+    this.setActiveShader(this.defaultShader);
 
     this.checkKeys();
   }

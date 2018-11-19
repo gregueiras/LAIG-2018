@@ -122,7 +122,7 @@ class MySceneGraph {
             this.primitives[key].specs.npartsU,
             this.primitives[key].specs.npartsV);
           break;
-          case "patch":
+        case "patch":
           this.primitives[key].shape = new Patch(
             this.scene,
             this.primitives[key].specs.npartsU,
@@ -131,7 +131,7 @@ class MySceneGraph {
             this.primitives[key].specs.npointsV,
             this.primitives[key].specs.ctrlPoints);
           break;
-          case "cylinder2":
+        case "cylinder2":
           this.primitives[key].shape = new cylinder2(
             this.scene,
             this.primitives[key].specs.slices,
@@ -1616,7 +1616,7 @@ class MySceneGraph {
       }
     }
 
-    if(patch.ctrlPoints.length != patch.npointsU * patch.npointsV)
+    if (patch.ctrlPoints.length != patch.npointsU * patch.npointsV)
       return "Wrong number of ctrl points";
 
     return 0;
@@ -1698,7 +1698,7 @@ class MySceneGraph {
           stacks: null
         }
         this.parseChildrenCylinder(cylinder, child);
-        if(child.nodeName == "cylinder") {
+        if (child.nodeName == "cylinder") {
           primitive.type = "cylinder";
         } else {
           primitive.type = "cylinder2";
@@ -1894,9 +1894,8 @@ class MySceneGraph {
       return "Circular Animation: unable to parse startang value";
     }
 
-    
+
     let cA = new CircularAnimation(this, span, id, center, radius, startAng, rotAng);
-    console.dir(center);
     this.animations[id] = cA;
     return 0;
   }
@@ -2604,11 +2603,14 @@ class MySceneGraph {
     for (let index = 0; index < component.animations.length; index++) {
       const compAnim = component.animations[index];
       const animation = this.animations[compAnim.id];
+
       let time;
       if (isBetween(component.currTime, compAnim.start, compAnim.end)) {
         time = component.currTime - compAnim.start;
       } else if (component.currTime > compAnim.end) {
         time = component.currTime;
+      } else {
+        time = null;
       }
       animation.update(time);
       animation.apply();

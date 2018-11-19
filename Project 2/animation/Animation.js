@@ -18,6 +18,8 @@ class Animation {
 
   update(currTime) {
     this.currTime = currTime;
+    if (this.currTime === null)
+      return;
 
     this.transformations.forEach(transformation => {
       let completion = 0;
@@ -45,9 +47,8 @@ class Animation {
 
           if (transformation.startAngle)
             transformation.angle += transformation.startAngle;
-          
-          console.log(transformation.angle);
-            break;
+
+          break;
         default:
           console.error(`Invalid value for transformation type`);
           break;
@@ -56,6 +57,8 @@ class Animation {
   }
 
   apply() {
+    if (this.currTime === null)
+      return;
     this.graph.transform(this.transformations);
   }
 }

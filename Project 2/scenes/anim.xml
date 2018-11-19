@@ -117,6 +117,9 @@
       </transformation>
       <animations>
         <animationref id="ca1"/>
+        <animationref id="la1"/>
+        <animationref id="ca1"/>
+        <animationref id="la1"/>
       </animations>
       <materials>
         <material id="default" />

@@ -5,7 +5,7 @@ class Plane extends CGFobject {
         super(scene);
 
         divU = typeof divU !== 'undefined' ? divU : 1;
-        divV = typeof divV !== 'Vndefined' ? divV : 1;
+        divV = typeof divV !== 'undefined' ? divV : 1;
 
         this.divU = divU;
         this.divV = divV;
