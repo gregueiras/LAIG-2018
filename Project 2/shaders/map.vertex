@@ -26,18 +26,19 @@ float map(float OrigValue, float OrigLowerBound, float OrigUpperBound, float New
 void main() {
   // vertex pushed outwards according to the normal and scale
   
-  vTextureCoord = aTextureCoord;
-
-  vec4 heightColor = texture2D(myHeightmap, vTextureCoord);
-  float heightIntensity = heightColor.r + heightColor.g + heightColor.b;
+  vec4 heightColor = texture2D(myHeightmap, aTextureCoord);
+  float heightIntensity = heightColor.x + heightColor.y + heightColor.z;
   float min = 0.0, max = 3.0;
   float height = map(heightIntensity, min, max, min, MAX_HEIGHT);
 
-  vec4 vertex= vec4(aVertexPosition, 1.0);
-  vertex.z += height*0.1;
+  vec3 temp = aVertexNormal;
+  temp.z += height * normScale;
+  vec4 vertex= vec4(temp, 1.0);
+  //vertex.z += height*0.1;
 
   // projected vertex
   gl_Position = uPMatrix * uMVMatrix * vertex;
     
+  vTextureCoord = aTextureCoord;
   
 }

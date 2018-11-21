@@ -44,13 +44,13 @@ class XMLscene extends CGFscene {
     this.axis = new CGFaxis(this);
     this.myShader = new CGFshader(this.gl, './shaders/map.vertex', './shaders/texture2.frag');
     this.heightMap = new CGFtexture(this, './scenes/images/heightmap.png');
-    this.texture = new CGFtexture(this, './scenes/images/texture.jpg');
+    //this.texture = new CGFtexture(this, './scenes/images/texture.jpg');
 
     const options = {
       timeFactor: 1,
-      normScale: 1,
-      myHeightmap: 0,
-      myTexture: 1
+      normScale: 0.05,
+      myHeightmap: 1,
+      myTexture: 0
     }
     this.myShader.setUniformsValues(options);
   }
@@ -258,11 +258,12 @@ class XMLscene extends CGFscene {
       }
 
       this.setActiveShader(this.myShader);
-      this.heightMap.bind(0);
-      this.texture.bind(1);
-
+      this.pushMatrix();
+      this.heightMap.bind(1);
+      //this.texture.bind(1);
       // Displays the scene (MySceneGraph function).
       this.graph.displayScene();
+      this.popMatrix();
     } else {
       // Draw axis
       this.axis.display();

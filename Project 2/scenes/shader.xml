@@ -34,6 +34,7 @@
   </lights>
   <textures>
     <texture id="text_text" file="./scenes/images/texture.jpg" />
+    <texture id="map" file="./scenes/images/heightmap.png" />
   </textures>
   <materials>
     <material id="default" shininess = "0.1">
