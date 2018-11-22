@@ -148,6 +148,15 @@ class MySceneGraph {
             this.primitives[key].specs.idTexture,
             this.primitives[key].specs.heightScale);
           break;
+        case "water":
+          this.primitives[key].shape = new MyWater(
+            this.scene,
+            this.primitives[key].specs.parts,
+            this.primitives[key].specs.idWaveMap,
+            this.primitives[key].specs.idTexture,
+            this.primitives[key].specs.heightScale,
+            this.primitives[key].specs.texScale);
+          break;
         default:
           break;
       }
@@ -1585,7 +1594,7 @@ class MySceneGraph {
     }
   }
 
-    /**
+  /**
    * Parse a <terrain> block
    * @param {Object} terrain - primitive object to be populated
    * @param {Object} child - child node to be parsed
@@ -1613,7 +1622,39 @@ class MySceneGraph {
       return "unable to parse heightscale value";
     }
   }
+ /**
+   * Parse a <water> block
+   * @param {Object} water - primitive object to be populated
+   * @param {Object} child - child node to be parsed
+   * @returns {number} an error message if there was an error
+   */
+  parseChildrenWater(water, child) {
+    water.idTexture = this.reader.getString(child, 'idtexture');
+    if (water.idTexture == null || !isString(water.idTexture)) {
+      return "unable to parse idtexture value";
+    }
 
+    water.idWaveMap = this.reader.getString(child, 'idwavemap');
+    if (water.idWaveMap == null || !isString(water.idWaveMap)) {
+      return "unable to parse idwavemap value";
+    }
+
+    water.parts = this.reader.getFloat(child, 'parts');
+    water.parts = Math.round(water.parts);
+    if (water.parts == null || !isInteger(water.parts)) {
+      return "unable to parse parts value";
+    }
+
+    water.heightScale = this.reader.getFloat(child, 'heightscale');
+    if (water.heightScale == null || isNaN(water.heightScale)) {
+      return "unable to parse heightscale value";
+    }
+
+    water.texScale = this.reader.getFloat(child, 'texscale');
+    if (water.texScale == null || isNaN(water.texScale)) {
+      return "unable to parse texscale value";
+    }
+  }
 
   //ctrlPoints: []
   /**
@@ -1793,6 +1834,18 @@ class MySceneGraph {
         this.parseChildrenTerrain(terrain, child);
         primitive.type = "terrain";
         primitive.specs = terrain;
+        break;
+      case "water":
+        var water = {
+          idTexture: null,
+          idWaveMap: null,
+          parts: null,
+          heightScale: null,
+          texScale: null
+        };
+        this.parseChildrenWater(water, child);
+        primitive.type = "water";
+        primitive.specs = water;
         break;
       default:
         this.onXMLMinorError("unknown tag <" + child.nodeName + ">");

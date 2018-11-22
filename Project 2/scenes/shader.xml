@@ -35,7 +35,9 @@
   <textures>
     <texture id="text_text" file="./scenes/images/texture.jpg" />
     <texture id="map" file="./scenes/images/heightmap.png" />
+    <texture id="wave_map" file="./scenes/images/wave.jpg" />
     <texture id="text_rocks" file="./scenes/images/rocks.jpg" />
+    <texture id="text_water" file="./scenes/images/water.jpg" />
   </textures>
   <materials>
     <material id="default" shininess = "0.1">
@@ -93,8 +95,11 @@
 
   <primitives>
 
-    <primitive id="plane1">
+    <primitive id="terr">
       <terrain idtexture="text_text" idheightmap="map" parts="10" heightscale="0.2" />
+    </primitive>
+    <primitive id="wat">
+      <water idtexture="text_water" idwavemap="wave_map" parts="10" heightscale="0.15" texscale="1" />
     </primitive>
 
     <primitive id="patch0">
@@ -178,7 +183,8 @@
       </materials>
       <texture id="text_rocks" length_s="1" length_t="1" />
       <children>
-        <primitiveref id="plane1"/>
+        <primitiveref id="terr"/>
+        <primitiveref id="wat"/>
       </children>
     </component>
   </components>
