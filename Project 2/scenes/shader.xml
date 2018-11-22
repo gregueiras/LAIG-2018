@@ -35,6 +35,7 @@
   <textures>
     <texture id="text_text" file="./scenes/images/texture.jpg" />
     <texture id="map" file="./scenes/images/heightmap.png" />
+    <texture id="text_rocks" file="./scenes/images/rocks.jpg" />
   </textures>
   <materials>
     <material id="default" shininess = "0.1">
@@ -93,7 +94,7 @@
   <primitives>
 
     <primitive id="plane1">
-      <plane npartsU="10" npartsV="10" />
+      <terrain idtexture="text_text" idheightmap="map" parts="10" heightscale="0.5" />
     </primitive>
 
     <primitive id="patch0">
@@ -175,7 +176,7 @@
       <materials>
         <material id="default" />
       </materials>
-      <texture id="text_text" length_s="1" length_t="1" />
+      <texture id="text_rocks" length_s="1" length_t="1" />
       <children>
         <primitiveref id="plane1"/>
       </children>

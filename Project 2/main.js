@@ -59,6 +59,7 @@ serialInclude(['./lib/CGF.js',
     'surfaces/Patch.js',
     'surfaces/Plane.js',
     'surfaces/cylinder2.js',
+    'surfaces/MyTerrain.js',
 
     main = function () {
         // Standard application, scene and interface setup

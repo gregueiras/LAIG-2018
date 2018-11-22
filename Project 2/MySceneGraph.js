@@ -140,6 +140,14 @@ class MySceneGraph {
             this.primitives[key].specs.top,
             this.primitives[key].specs.height);
           break;
+        case "terrain":
+          this.primitives[key].shape = new MyTerrain(
+            this.scene,
+            this.primitives[key].specs.parts,
+            this.primitives[key].specs.idHeightMap,
+            this.primitives[key].specs.idTexture,
+            this.primitives[key].specs.heightScale);
+          break;
         default:
           break;
       }
@@ -1577,6 +1585,34 @@ class MySceneGraph {
     }
   }
 
+    /**
+   * Parse a <terrain> block
+   * @param {Object} terrain - primitive object to be populated
+   * @param {Object} child - child node to be parsed
+   * @returns {number} an error message if there was an error
+   */
+  parseChildrenTerrain(terrain, child) {
+    terrain.idTexture = this.reader.getString(child, 'idtexture');
+    if (terrain.idTexture == null || !isString(terrain.idTexture)) {
+      return "unable to parse idtexture value";
+    }
+
+    terrain.idHeightMap = this.reader.getString(child, 'idheightmap');
+    if (terrain.idHeightMap == null || !isString(terrain.idHeightMap)) {
+      return "unable to parse idheightmap value";
+    }
+
+    terrain.parts = this.reader.getFloat(child, 'parts');
+    terrain.parts = Math.round(terrain.parts);
+    if (terrain.parts == null || isInteger(terrain.parts)) {
+      return "unable to parse parts value";
+    }
+
+    terrain.heightScale = this.reader.getFloat(child, 'heightscale');
+    if (terrain.heightScale == null || !isInteger(terrain.heightScale)) {
+      return "unable to parse heightscale value";
+    }
+  }
 
 
   //ctrlPoints: []
@@ -1746,6 +1782,17 @@ class MySceneGraph {
         this.parseChildrenPatch(patch, child);
         primitive.type = "patch";
         primitive.specs = patch;
+        break;
+      case "terrain":
+        var terrain = {
+          idTexture: null,
+          idHeightMap: null,
+          parts: null,
+          heightScale: null
+        };
+        this.parseChildrenTerrain(terrain, child);
+        primitive.type = "terrain";
+        primitive.specs = terrain;
         break;
       default:
         this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
