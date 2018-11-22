@@ -9,7 +9,7 @@ class MyTerrain extends Plane {
 
     const options = {
       timeFactor: 1,
-      normScale: 0.2,
+      normScale: heightScale,
       myHeightmap: 1,
       myTexture: 0
     }

@@ -1604,12 +1604,12 @@ class MySceneGraph {
 
     terrain.parts = this.reader.getFloat(child, 'parts');
     terrain.parts = Math.round(terrain.parts);
-    if (terrain.parts == null || isInteger(terrain.parts)) {
+    if (terrain.parts == null || !isInteger(terrain.parts)) {
       return "unable to parse parts value";
     }
 
     terrain.heightScale = this.reader.getFloat(child, 'heightscale');
-    if (terrain.heightScale == null || !isInteger(terrain.heightScale)) {
+    if (terrain.heightScale == null || isNaN(terrain.heightScale)) {
       return "unable to parse heightscale value";
     }
   }

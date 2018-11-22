@@ -94,7 +94,7 @@
   <primitives>
 
     <primitive id="plane1">
-      <terrain idtexture="text_text" idheightmap="map" parts="10" heightscale="0.5" />
+      <terrain idtexture="text_text" idheightmap="map" parts="10" heightscale="0.2" />
     </primitive>
 
     <primitive id="patch0">
