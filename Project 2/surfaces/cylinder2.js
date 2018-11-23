@@ -17,7 +17,7 @@ class cylinder2 extends CGFobject {
   constructor(scene, slices, stacks, base, top, height) {
     super(scene);
 
-    this.npartsU = slices;
+    this.npartsU = slices/2;
     this.npartsV = stacks;
 
     base = typeof base !== 'undefined' ? base : 1;
@@ -43,44 +43,42 @@ class cylinder2 extends CGFobject {
     var baseZ = 0;
     var topZ = this.height;
 
+    var alphaX = Math.cos(Math.PI / 4);
+    var alphaY = Math.sin(Math.PI / 4);
+
+    var m = Math.tan(Math.PI / 3);
+    var b = alphaY + m * alphaX;
+    var maxY = b;
+    var maxX = -1*((-1 - b) / m);
+
     this.controlVertex = [
+      //6
       [
         [this.top, 0, topZ, 1],
         [this.base, 0, baseZ, 1],
       ],
+      //7
       [
-        [this.top, -this.top, topZ, 1.00],
-        [this.base, -this.base, baseZ, 1.00],
+        [this.top, -this.top, topZ, 4],
+        [this.base, -this.base, baseZ, 4],
       ],
+      //0
       [
-        [0, -this.top, topZ, 1],
-        [0, -this.base, baseZ, 1],
+        [0, -this.top, topZ, 15],
+        [0, -this.base, baseZ, 15],
       ],
+      //1
       [
-        [-this.top, -this.top, topZ, 1.00],
-        [-this.base, -this.base, baseZ, 1.00],
+        [-this.top, -this.top, topZ, 4],
+        [-this.base, -this.base, baseZ, 4],
       ],
+      //2
       [
-        [-this.top, 0, topZ, 10],
-        [-this.base, 0, baseZ, 10],
-      ],
-      [
-        [-this.top, this.top, topZ, 1.00],
-        [-this.base, this.base, baseZ, 1.00],
-      ],
-      [
-        [0, this.top, topZ, 1],
-        [0, this.base, baseZ, 1],
-      ],
-      [
-        [this.top, this.top, topZ, 1.00],
-        [this.base, this.base, baseZ, 1.00],
-      ],
-      [
-        [this.top, 0, topZ, 1],
-        [this.base, 0, baseZ, 1],
+        [-this.top, 0, topZ, 1],
+        [-this.base, 0, baseZ, 1],
       ],
     ];
+    
     this.degreesU = this.controlVertex.length - 1;
     this.degreesV = this.controlVertex[0].length - 1;
 
@@ -96,6 +94,10 @@ class cylinder2 extends CGFobject {
 
   display() {
     this.obj.display();
+    this.scene.pushMatrix();
+    this.scene.rotate(Math.PI, 0, 0, 1);
+    this.obj.display();
+    this.scene.popMatrix();
   }
 
 };
