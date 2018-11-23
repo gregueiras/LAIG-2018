@@ -157,6 +157,11 @@ class MySceneGraph {
             this.primitives[key].specs.heightScale,
             this.primitives[key].specs.texScale);
           break;
+        case "vehicle":
+          this.primitives[key].shape = new MyShip(
+            this.scene,
+          );
+          break;
         default:
           break;
       }
@@ -1846,6 +1851,10 @@ class MySceneGraph {
         this.parseChildrenWater(water, child);
         primitive.type = "water";
         primitive.specs = water;
+        break;
+      case "vehicle":
+        primitive.type = "vehicle";
+        primitive.specs = {};
         break;
       default:
         this.onXMLMinorError("unknown tag <" + child.nodeName + ">");

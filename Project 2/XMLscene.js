@@ -42,7 +42,6 @@ class XMLscene extends CGFscene {
     this.gl.depthFunc(this.gl.LEQUAL);
 
     this.axis = new CGFaxis(this);
-    this.ship = new MyShip(this);
 
   }
 
@@ -250,7 +249,6 @@ class XMLscene extends CGFscene {
 
       // Displays the scene (MySceneGraph function).
       this.graph.displayScene();
-      this.ship.display();
     } else {
       // Draw axis
       this.axis.display();

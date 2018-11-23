@@ -20,8 +20,8 @@ class MyWater extends Plane {
     super(scene, div, div);
 
     this.time = 0;
-    this.scene.idWaveMap = this.scene.graph.textures[idWaveMap];
-    this.scene.textureWater = this.scene.graph.textures[idTexture];
+    this.idWaveMap = this.scene.graph.textures[idWaveMap];
+    this.textureWater = this.scene.graph.textures[idTexture];
     this.myShader = new CGFshader(this.scene.gl, './shaders/wave.vertex', './shaders/texture2.frag');
 
     const options = {
@@ -42,15 +42,14 @@ class MyWater extends Plane {
     if (this.scene.elapsedTime) {
       this.time += this.scene.elapsedTime;
       let factor = this.time / 8;
-      console.log(this.time, factor);
       this.myShader.setUniformsValues({
         timeFactor: factor
       });
 
       this.scene.setActiveShader(this.myShader);
       this.scene.pushMatrix();
-      this.scene.idWaveMap.bind(1);
-      this.scene.textureWater.bind(0);
+      this.idWaveMap.bind(1);
+      this.textureWater.bind(0);
 
       super.display()
 

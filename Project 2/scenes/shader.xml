@@ -3,7 +3,7 @@
   <scene root="test" axis_length="3" />
   <views default="Default">
     <perspective id="Default" near="0.01" far="500" angle="60">
-      <from x="3" y="3" z="3" />
+      <from x="20" y="20" z="20" />
       <to x="0" y="0" z="0" />
     </perspective>
   </views>
@@ -55,12 +55,12 @@
     </transformation>
     <transformation id="tf2">
       <translate x="0" y="0" z="0.01" />
-       <scale x="1.5" y="1.5" z="1" />
+      <scale x="1.5" y="1.5" z="1" />
     </transformation>
     <transformation id="tf3">
-      <translate x="0" y="0" z="-0.075" />
+      <translate x="0" y="5" z="0" />
       <rotate axis="x" angle="0" />
-      <scale x="1" y="1" z="1" />
+      <scale x="0.5" y="0.5" z="0.5" />
     </transformation>
     <transformation id="tf4">
       <translate x="3.6" y="-2" z="0" />
@@ -81,7 +81,7 @@
       <controlpoint xx="5" yy="0" zz="0"/>
       <controlpoint xx="5" yy="0" zz="5"/>
     </linear>
-    <linear id="la2" span="20">
+    <linear id="la2" span="5">
       <controlpoint xx="0" yy="0" zz="0"/>
       <controlpoint xx="-5" yy="0" zz="0"/>
       <controlpoint xx="-5" yy="3" zz="-5"/>
@@ -99,6 +99,9 @@
     </primitive>
     <primitive id="wat">
       <water idtexture="text_water" idwavemap="wave_map" parts="10" heightscale="0.15" texscale="1" />
+    </primitive>
+    <primitive id="ship">
+      <vehicle />
     </primitive>
 
     <primitive id="patch0">
@@ -173,6 +176,39 @@
   <components>
     <component id="test">
       <transformation>
+      </transformation>
+      <animations>
+      </animations>
+      <materials>
+        <material id="default" />
+      </materials>
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <componentref id="ship" />
+        <componentref id="island" />
+      </children>
+    </component>
+
+    <component id="ship">
+      <transformation>
+          <transformationref id="tf3" />
+      </transformation>
+      <animations>
+        <animationref id="la1" />
+        <animationref id="la2" />
+        <animationref id="ca1" />
+      </animations>
+      <materials>
+        <material id="default" />
+      </materials>
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="ship" />
+      </children>
+    </component>
+
+    <component id="island">
+      <transformation>
         <transformationref id="tf1"/>
       </transformation>
       <animations>
@@ -182,10 +218,25 @@
       </materials>
       <texture id="none" length_s="1" length_t="1" />
       <children>
-        <primitiveref id="terr"/>
+        <componentref id="terrain"/>
         <componentref id="water" />
       </children>
     </component>
+
+    <component id="terrain">
+      <transformation>
+      </transformation>
+      <animations>
+      </animations>
+      <materials>
+        <material id="default" />
+      </materials>
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="terr" />
+      </children>
+    </component>
+
     <component id="water">
       <transformation>
         <transformationref id="tf2"/>
@@ -198,8 +249,11 @@
       <texture id="none" length_s="1" length_t="1" />
       <children>
         <primitiveref id="wat" />
+
       </children>
     </component>
+
+
   </components>
 
 </yas>
