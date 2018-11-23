@@ -51,11 +51,11 @@
     <transformation id="tf1">
       <translate x="0" y="0" z="0" />
       <rotate axis="x" angle="-90" />
-      <scale x="5" y="5" z="5" />
+      <scale x="20" y="20" z="20" />
     </transformation>
     <transformation id="tf2">
       <translate x="0" y="0" z="0.01" />
-       <scale x="5" y="5" z="1" />
+       <scale x="1.5" y="1.5" z="1" />
     </transformation>
     <transformation id="tf3">
       <translate x="0" y="0" z="-0.075" />
