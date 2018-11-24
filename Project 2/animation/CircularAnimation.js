@@ -16,19 +16,6 @@ class CircularAnimation extends Animation {
     super(graph, id, span);
 
     this.interpolateTransformations(center, radius, startAngle, rotationAngle);
-
-    /*  this.transformations.sort((a, b) => {
-        let x = a.type.toLowerCase();
-        var y = b.type.toLowerCase();
-        if (x > y) {
-          return -1;
-        }
-        if (x < y) {
-          return 1;
-        }
-        return 0;
-
-      }); */
   }
 
   interpolateTransformations(center, radius, startAngle, rotationAngle) {
