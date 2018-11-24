@@ -3,7 +3,6 @@
  * updating their moves accordingly and applying the corresponding
  * transformation.
  * 
- * @class Animation
  */
 class Animation {
 

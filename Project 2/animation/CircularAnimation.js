@@ -1,8 +1,7 @@
 /**
  * Makes the object of appliance move arround given center
  * for a set angle during a define period of time.
- * 
- * @class CircularAnimation
+ * @extends {Animation}
  */
 class CircularAnimation extends Animation {
 
