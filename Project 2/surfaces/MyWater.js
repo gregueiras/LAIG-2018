@@ -14,7 +14,7 @@ class MyWater extends Plane {
    * @param {String} idWaveMap id of the wave map texture
    * @param {String} idTexture id of the "real" texture
    * @param {Number} heightScale height scale factor, differentiates between the lower and the upper parts of the image 
-   * @param {Number} textureScale TODO
+   * @param {Number} textureScale texture will be repeated textureScale * textureScale times 
    */
   constructor(scene, div, idWaveMap, idTexture, heightScale, textureScale) {
     super(scene, div, div);
@@ -28,7 +28,8 @@ class MyWater extends Plane {
       timeFactor: 1,
       normScale: heightScale,
       myHeightmap: 1,
-      myTexture: 0
+      myTexture: 0,
+      textureScale: textureScale
     }
     this.myShader.setUniformsValues(options);
   }

@@ -27,7 +27,8 @@ class MyTerrain extends Plane {
       timeFactor: 1,
       normScale: heightScale,
       myHeightmap: 1,
-      myTexture: 0
+      myTexture: 0,
+      textureScale: 1
     }
     this.myShader.setUniformsValues(options);
   }

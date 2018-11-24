@@ -131,6 +131,6 @@ function cross(vA, vB) {
   return {
     x: vA.y * vB.z - vA.z * vB.y,
     y: vA.z * vB.x - vA.x * vB.z,
-    z: vA.x * vB.y - vA.y * vB.x
+    z: 0
   };
 }

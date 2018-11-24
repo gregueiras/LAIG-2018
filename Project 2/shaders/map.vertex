@@ -16,6 +16,8 @@ varying vec4 coords;
 varying vec4 normal;
 varying vec2 vTextureCoord;
 
+uniform float textureScale;
+
 uniform sampler2D myHeightmap;
 uniform sampler2D myTexture;
 
@@ -25,8 +27,11 @@ float map(float OrigValue, float OrigLowerBound, float OrigUpperBound, float New
 
 void main() {
   // vertex pushed outwards according to the normal and scale
-  
-  vec4 heightColor = texture2D(myHeightmap, aTextureCoord);
+  vec2 pos = aTextureCoord;
+	pos.x = mod(pos.x * textureScale, 1.0);
+	pos.y = mod(pos.y * textureScale, 1.0);
+
+  vec4 heightColor = texture2D(myHeightmap, pos);
   float heightIntensity = heightColor.x + heightColor.y + heightColor.z;
   float min = 0.0, max = 3.0;
   float height = map(heightIntensity, min, max, min, MAX_HEIGHT);
