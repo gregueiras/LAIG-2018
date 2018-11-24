@@ -2,9 +2,9 @@
 
   <scene root="test" axis_length="3" />
   <views default="Default">
-    <perspective id="Default" near="0.01" far="500" angle="60">
-      <from x="20" y="20" z="20" />
-      <to x="0" y="0" z="0" />
+    <perspective id="Default" near="0.001" far="500" angle="60">
+      <from x="0" y="5" z="4" />
+      <to x="0" y="5" z="0" />
     </perspective>
   </views>
   <ambient>
@@ -194,11 +194,6 @@
           <transformationref id="tf3" />
       </transformation>
       <animations>
-        <animationref id="la1" />
-        <animationref id="ca1" />
-        <animationref id="la2" />
-        <animationref id="ca1" />
-        <animationref id="la1" />
       </animations>
       <materials>
         <material id="default" />
