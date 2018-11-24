@@ -1,7 +1,6 @@
 /**
  * MyTerrain Class, based on Plane, creates a 1x1 plane simulating the relief
  * defined by a height map, heightScale and a texture
- * @class MyTerrain
  * @extends {Plane}
  */
 class MyTerrain extends Plane {

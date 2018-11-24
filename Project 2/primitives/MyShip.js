@@ -25,8 +25,6 @@ class MyShip {
       [1.9, -yOffset, 0, 0.707],
       [0, -yOffset, zOffset, 1],
       [0, -yOffset, 0, 1],
-
-
     ]
 
     this.side = new Patch(scene, nParts, nParts, 9, 2, controlVertices);

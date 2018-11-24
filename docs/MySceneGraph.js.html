@@ -37,10 +37,15 @@ const LIGHTS_INDEX = 3;
 const TEXTURES_INDEX = 4;
 const MATERIALS_INDEX = 5;
 const TRANSFORMATIONS_INDEX = 6;
-const PRIMITIVES_INDEX = 7;
-const COMPONENTS_INDEX = 8;
+const ANIMATIONS_INDEX = 7;
+const PRIMITIVES_INDEX = 8;
+const COMPONENTS_INDEX = 9;
+
 const INHERIT = "inherit";
 const NONE = "none";
+const LINEAR = "linear";
+const CIRCULAR = "circular";
+const CONTROL_POINT = "controlpoint";
 
 const ERROR = "ERROR";
 
@@ -124,7 +129,6 @@ class MySceneGraph {
             this.primitives[key].specs.top,
             this.primitives[key].specs.height);
           break;
-
         case "torus":
           this.primitives[key].shape = new MyTorus(
             this.scene,
@@ -139,6 +143,52 @@ class MySceneGraph {
             this.primitives[key].specs.radius,
             this.primitives[key].specs.slices,
             this.primitives[key].specs.stacks);
+          break;
+        case "plane":
+          this.primitives[key].shape = new Plane(
+            this.scene,
+            this.primitives[key].specs.npartsU,
+            this.primitives[key].specs.npartsV);
+          break;
+        case "patch":
+          this.primitives[key].shape = new Patch(
+            this.scene,
+            this.primitives[key].specs.npartsU,
+            this.primitives[key].specs.npartsV,
+            this.primitives[key].specs.npointsU,
+            this.primitives[key].specs.npointsV,
+            this.primitives[key].specs.ctrlPoints);
+          break;
+        case "cylinder2":
+          this.primitives[key].shape = new Cylinder2(
+            this.scene,
+            this.primitives[key].specs.slices,
+            this.primitives[key].specs.stacks,
+            this.primitives[key].specs.base,
+            this.primitives[key].specs.top,
+            this.primitives[key].specs.height);
+          break;
+        case "terrain":
+          this.primitives[key].shape = new MyTerrain(
+            this.scene,
+            this.primitives[key].specs.parts,
+            this.primitives[key].specs.idHeightMap,
+            this.primitives[key].specs.idTexture,
+            this.primitives[key].specs.heightScale);
+          break;
+        case "water":
+          this.primitives[key].shape = new MyWater(
+            this.scene,
+            this.primitives[key].specs.parts,
+            this.primitives[key].specs.idWaveMap,
+            this.primitives[key].specs.idTexture,
+            this.primitives[key].specs.heightScale,
+            this.primitives[key].specs.texScale);
+          break;
+        case "vehicle":
+          this.primitives[key].shape = new MyShip(
+            this.scene,
+          );
           break;
         default:
           break;
@@ -201,6 +251,9 @@ class MySceneGraph {
         break;
       case TRANSFORMATIONS_INDEX:
         error = this.parseTransformations(node);
+        break;
+      case ANIMATIONS_INDEX:
+        error = this.parseAnimations(node);
         break;
       case PRIMITIVES_INDEX:
         error = this.parsePrimitives(node);
@@ -293,6 +346,11 @@ class MySceneGraph {
 
     // &lt;ambient>
     error = this.processTag(nodes[AMBIENT_INDEX], nodeNames, "ambient", AMBIENT_INDEX);
+    if (error != null)
+      return error;
+
+    // &lt;animations>
+    error = this.processTag(nodes[ANIMATIONS_INDEX], nodeNames, "animations", ANIMATIONS_INDEX);
     if (error != null)
       return error;
 
@@ -404,7 +462,7 @@ class MySceneGraph {
       return "unable to parse near value";
     }
 
-    if(ortho.near &lt; 0) {
+    if (ortho.near &lt; 0) {
       return "near component is less than 0.";
     }
 
@@ -413,7 +471,7 @@ class MySceneGraph {
       return "unable to parse far value";
     }
 
-    if(ortho.far &lt; 0) {
+    if (ortho.far &lt; 0) {
       return "far component is less than 0.";
     }
 
@@ -700,7 +758,7 @@ class MySceneGraph {
       this.onXMLMinorError(`ambient light values missing; assuming RGBA(${this.ambient.r}, ${this.ambient.g}, ${this.ambient.b}, ${this.ambient.a})`);
     } else {
       var rep = this.parseChildrenColours(this.ambient, children[indexAmbient]);
-      if(rep != 0)
+      if (rep != 0)
         return rep;
     }
     // Background color values
@@ -717,7 +775,7 @@ class MySceneGraph {
       this.onXMLMinorError(`background light values missing; assuming RGBA(${this.background.r}, ${this.background.g}, ${this.background.b}, ${this.background.a})`);
     } else {
       var rep = this.parseChildrenColours(this.background, children[indexBackground]);
-      if(rep != 0)
+      if (rep != 0)
         return rep;
     }
   }
@@ -1022,7 +1080,8 @@ class MySceneGraph {
         return reply;
     }
 
-    let l = spot.location, t = spot.target;
+    let l = spot.location,
+      t = spot.target;
     if (l.x == t.x &amp;&amp; l.y == t.y &amp;&amp; l.z == t.z) {
       return `Spot ${spot.id}: Location can't be the same as target`;
     }
@@ -1551,6 +1610,162 @@ class MySceneGraph {
   }
 
   /**
+   * Parse a &lt;plane> block
+   * @param {Object} plane - primitive object to be populated
+   * @param {Object} child - child node to be parsed
+   * @returns {number} an error message if there was an error
+   */
+  parseChildrenPlane(plane, child) {
+    plane.npartsU = this.reader.getFloat(child, 'npartsU');
+    if (plane.npartsU == null || !isInteger(plane.npartsU)) {
+      return "unable to parse npartsU value";
+    }
+
+    plane.npartsV = this.reader.getFloat(child, 'npartsV');
+    if (plane.npartsV == null || !isInteger(plane.npartsV)) {
+      return "unable to parse npartsV value";
+    }
+  }
+
+  /**
+   * Parse a &lt;terrain> block
+   * @param {Object} terrain - primitive object to be populated
+   * @param {Object} child - child node to be parsed
+   * @returns {number} an error message if there was an error
+   */
+  parseChildrenTerrain(terrain, child) {
+    terrain.idTexture = this.reader.getString(child, 'idtexture');
+    if (terrain.idTexture == null || !isString(terrain.idTexture)) {
+      return "unable to parse idtexture value";
+    }
+
+    terrain.idHeightMap = this.reader.getString(child, 'idheightmap');
+    if (terrain.idHeightMap == null || !isString(terrain.idHeightMap)) {
+      return "unable to parse idheightmap value";
+    }
+
+    terrain.parts = this.reader.getFloat(child, 'parts');
+    terrain.parts = Math.round(terrain.parts);
+    if (terrain.parts == null || !isInteger(terrain.parts)) {
+      return "unable to parse parts value";
+    }
+
+    terrain.heightScale = this.reader.getFloat(child, 'heightscale');
+    if (terrain.heightScale == null || isNaN(terrain.heightScale)) {
+      return "unable to parse heightscale value";
+    }
+  }
+ /**
+   * Parse a &lt;water> block
+   * @param {Object} water - primitive object to be populated
+   * @param {Object} child - child node to be parsed
+   * @returns {number} an error message if there was an error
+   */
+  parseChildrenWater(water, child) {
+    water.idTexture = this.reader.getString(child, 'idtexture');
+    if (water.idTexture == null || !isString(water.idTexture)) {
+      return "unable to parse idtexture value";
+    }
+
+    water.idWaveMap = this.reader.getString(child, 'idwavemap');
+    if (water.idWaveMap == null || !isString(water.idWaveMap)) {
+      return "unable to parse idwavemap value";
+    }
+
+    water.parts = this.reader.getFloat(child, 'parts');
+    water.parts = Math.round(water.parts);
+    if (water.parts == null || !isInteger(water.parts)) {
+      return "unable to parse parts value";
+    }
+
+    water.heightScale = this.reader.getFloat(child, 'heightscale');
+    if (water.heightScale == null || isNaN(water.heightScale)) {
+      return "unable to parse heightscale value";
+    }
+
+    water.texScale = this.reader.getFloat(child, 'texscale');
+    if (water.texScale == null || isNaN(water.texScale)) {
+      return "unable to parse texscale value";
+    }
+  }
+
+  //ctrlPoints: []
+  /**
+   * Parse a &lt;patch> block
+   * @param {Object} patch - primitive object to be populated
+   * @param {Object} child - child node to be parsed
+   * @returns {number} an error message if there was an error
+   */
+  parseChildrenPatch(patch, child) { 
+    patch.npointsU = this.reader.getFloat(child, 'npointsU');
+    if (patch.npointsU == null || !isInteger(patch.npointsU)) {
+      return "unable to parse npointsU value";
+    }
+
+    patch.npointsV = this.reader.getFloat(child, 'npointsV');
+    if (patch.npointsV == null || !isInteger(patch.npointsV)) {
+      return "unable to parse npointsV value";
+    }
+
+    patch.npartsU = this.reader.getFloat(child, 'npartsU');
+    if (patch.npartsU == null || !isInteger(patch.npartsU)) {
+      return "unable to parse npartsU value";
+    }
+
+    patch.npartsV = this.reader.getFloat(child, 'npartsV');
+    if (patch.npartsV == null || !isInteger(patch.npartsV)) {
+      return "unable to parse npartsV value";
+    }
+
+    var children = child.children;
+
+    for (var j = 0; j &lt; children.length; j++) {
+      let error = this.parseChildrenPatchChildren(patch, children[j]);
+      if (error != 0) {
+        return error;
+      }
+    }
+
+    if (patch.ctrlPoints.length != patch.npointsU * patch.npointsV)
+      return "Wrong number of ctrl points";
+
+    return 0;
+
+  }
+
+  /**
+   * Parse a sub-block of a &lt;patch> block
+   * @param {Object} child - child node to be parsed
+   * @param {Object} patch - patch object to be populated
+   * @returns {number} 0 if run with sucess, message if there was an error
+   */
+  parseChildrenPatchChildren(patch, child) {
+
+    if (child.nodeName != 'controlpoint')
+      return "child name is wrong";
+
+    var xx = this.reader.getFloat(child, 'xx');
+    if (xx == null || isNaN(xx)) {
+      return "unable to parse xx value";
+    }
+
+    var yy = this.reader.getFloat(child, 'yy');
+    if (yy == null || isNaN(yy)) {
+      return "unable to parse yy value";
+    }
+
+    var zz = this.reader.getFloat(child, 'zz');
+    if (zz == null || isNaN(zz)) {
+      return "unable to parse zz value";
+    }
+
+    patch.ctrlPoints.push([xx, yy, zz, 1]);
+
+    return 0;
+
+  }
+
+  /**
    * Parse a sub-block of a &lt;primitive> block
    * @param {Object} child - child node to be parsed
    * @param {Object} primitive - primitive object to be populated
@@ -1590,6 +1805,7 @@ class MySceneGraph {
         primitive.specs = triangle;
         break;
       case "cylinder":
+      case "cylinder2":
         var cylinder = {
           base: null,
           top: null,
@@ -1598,7 +1814,11 @@ class MySceneGraph {
           stacks: null
         }
         this.parseChildrenCylinder(cylinder, child);
-        primitive.type = "cylinder";
+        if (child.nodeName == "cylinder") {
+          primitive.type = "cylinder";
+        } else {
+          primitive.type = "cylinder2";
+        }
         primitive.specs = cylinder;
         break;
       case "sphere":
@@ -1622,11 +1842,251 @@ class MySceneGraph {
         primitive.type = "torus";
         primitive.specs = torus;
         break;
+      case "plane":
+        var plane = {
+          npartsU: null,
+          npartsV: null
+        };
+        this.parseChildrenPlane(plane, child);
+        primitive.type = "plane";
+        primitive.specs = plane;
+        break;
+      case "patch":
+        var patch = {
+          npointsU: null,
+          npointsV: null,
+          npartsU: null,
+          npartsV: null,
+          ctrlPoints: []
+        };
+        this.parseChildrenPatch(patch, child);
+        primitive.type = "patch";
+        primitive.specs = patch;
+        break;
+      case "terrain":
+        var terrain = {
+          idTexture: null,
+          idHeightMap: null,
+          parts: null,
+          heightScale: null
+        };
+        this.parseChildrenTerrain(terrain, child);
+        primitive.type = "terrain";
+        primitive.specs = terrain;
+        break;
+      case "water":
+        var water = {
+          idTexture: null,
+          idWaveMap: null,
+          parts: null,
+          heightScale: null,
+          texScale: null
+        };
+        this.parseChildrenWater(water, child);
+        primitive.type = "water";
+        primitive.specs = water;
+        break;
+      case "vehicle":
+        primitive.type = "vehicle";
+        primitive.specs = {};
+        break;
       default:
         this.onXMLMinorError("unknown tag &lt;" + child.nodeName + ">");
         break;
     }
 
+    return 0;
+
+  }
+
+  /**
+   * Parse &lt;linear> block
+   * @param {Object} node - node to be parsed
+   * @returns 0 if run with sucess, an error message if there was an error
+   */
+  parseLinearAnimation(node) {
+    let pointList = [];
+    let time = 0;
+    let id = 0;
+
+    id = this.reader.getString(node, 'id');
+    if (id == null || !isString(id)) {
+      return "Linear Animation: unable to parse id value";
+    }
+
+    // Check for repeated id
+    var reply;
+    if ((reply = this.checkForRepeatedId(id, this.animations)) != 0)
+      return reply;
+
+    time = this.reader.getFloat(node, 'span');
+    if (time == null || isNaN(time)) {
+      return "Linear Animation: unable to parse span value";
+    }
+
+    var grandchildren = node.children;
+    for (let index = 0; index &lt; grandchildren.length; index++) {
+      const control_point = grandchildren[index];
+
+      if (control_point.nodeName != CONTROL_POINT)
+        return `${control_point.nodeName} is not a valid sub-block to a &lt;linear> block`;
+
+      let point = {
+        x: 0,
+        y: 0,
+        z: 0
+      };
+
+      point.x = this.reader.getFloat(control_point, 'xx');
+      if (point.x == null || isNaN(point.x)) {
+        return "Linear Animation: unable to parse xx value";
+      }
+
+      point.y = this.reader.getFloat(control_point, 'yy');
+      if (point.y == null || isNaN(point.y)) {
+        return "Linear Animation: unable to parse yy value";
+      }
+
+      point.z = this.reader.getFloat(control_point, 'zz');
+      if (point.z == null || isNaN(point.z)) {
+        return "Linear Animation: unable to parse zz value";
+      }
+
+      pointList.push(point);
+
+    }
+
+    if (pointList.length &lt; 2) {
+      return `Linear Animation ${id}: There must be at least 2 control points`;
+    }
+
+    let lA = new LinearAnimation(this, time, pointList, id);
+    this.animations[lA.id] = lA;
+    return 0;
+  }
+
+  /**
+   * Parse &lt;circular> block
+   * @param {Object} node - node to be parsed
+   * @returns 0 if run with sucess, an error message if there was an error
+   */
+  parseCircularAnimation(node) {
+
+    let
+      id,
+      span,
+      center = {
+        x: undefined,
+        y: undefined,
+        z: undefined
+      },
+      radius,
+      startAng,
+      rotAng;
+
+
+    id = this.reader.getString(node, 'id');
+    if (id == null || !isString(id)) {
+      return "Circular Animation: unable to parse id value";
+    }
+
+    // Check for repeated id
+    var reply;
+    if ((reply = this.checkForRepeatedId(id, this.animations)) != 0)
+      return reply;
+
+    span = this.reader.getFloat(node, 'span');
+    if (span == null || isNaN(span) || span &lt; 0) {
+      return "Circular Animation: unable to parse span value";
+    }
+
+    let tempCenter = this.reader.getString(node, 'center');
+    let coords = tempCenter.split(' ');
+    if (coords.length != 3) {
+      return `Circular Animation "${id}": unable to parse center value`;
+    } else {
+      center.x = parseFloat(coords[0]);
+      if (isNaN(center.x) || !isFinite(center.x)) {
+        return `Circular Animation "${id}": invalid center "x" value`;
+      }
+
+      center.y = parseFloat(coords[1]);
+      if (isNaN(center.y) || !isFinite(center.y)) {
+        return `Circular Animation "${id}": invalid center "y" value`;
+      }
+
+      center.z = parseFloat(coords[2]);
+      if (isNaN(center.z) || !isFinite(center.z)) {
+        return `Circular Animation "${id}": invalid center "z" value`;
+      }
+
+    }
+
+    radius = this.reader.getFloat(node, 'radius');
+    if (radius == null || isNaN(radius)) {
+      return "Circular Animation: unable to parse radius value";
+    }
+
+    startAng = this.reader.getFloat(node, 'startang');
+    if (startAng == null || isNaN(startAng)) {
+      return "Circular Animation: unable to parse startang value";
+    }
+
+    rotAng = this.reader.getFloat(node, 'rotang');
+    if (rotAng == null || isNaN(rotAng)) {
+      return "Circular Animation: unable to parse startang value";
+    }
+
+
+    let cA = new CircularAnimation(this, span, id, center, radius, startAng, rotAng);
+    this.animations[id] = cA;
+    return 0;
+  }
+
+  /**
+   * Parses the &lt;animations> block.
+   * @param {Object} animationsNode
+   * @returns null if run with sucess, an error message ig there was an error
+   * @memberof MySceneGraph
+   */
+  parseAnimations(animationsNode) {
+    if (animationsNode.nodeName != "animations") {
+      return `&lt;${animationsNode.nodeName}> is in &lt;animations> location`;
+    }
+
+    var children = animationsNode.children;
+
+    this.animations = {};
+
+    //Any number of primitives
+    if (children.length == 0) {
+      this.log("There were no animations to parse");
+      return 0;
+    }
+
+    for (var i = 0; i &lt; children.length; i++) {
+      let error;
+      let node = children[i];
+
+      switch (node.nodeName) {
+        case LINEAR:
+          error = this.parseLinearAnimation(node);
+          if (error != 0)
+            return error;
+          break;
+
+        case CIRCULAR:
+          error = this.parseCircularAnimation(node);
+          if (error != 0)
+            return error;
+          break;
+
+        default:
+          return `${node.nodeName} is not a valid animation type`;
+      }
+    }
+
+    this.log("Parsed animations");
     return 0;
 
   }
@@ -1853,6 +2313,51 @@ class MySceneGraph {
   }
 
   /**
+   * Parses the sub-blocks of a &lt;animations> block inside a &lt;component>
+   * @param {Object} child - child node to be parsed
+   * @param {Object} component - component object to be populated
+   * @returns 0 if run with sucess, an error message if there was an error
+   * @memberof MySceneGraph
+   */
+  parseChildrenAnimations(child, component) {
+    let children = child.children;
+    var id;
+    let timer = 0;
+
+    component.currTime = 0;
+    for (let i = 0; i &lt; children.length; i++) {
+      const aRef = children[i];
+
+      if (aRef.nodeName != "animationref") {
+        return `${aRef.nodeName} should be animationref`;
+      }
+
+      id = this.reader.getString(aRef, 'id');
+      if (id == null || !isString(id)) {
+        return `Component "${component.id}: unable to parse animationref id value`;
+      }
+
+      if (Object.keys(this.animations).indexOf(id) == -1) {
+        return `Component "${component.id}": animation ${id} doesn't exist`;
+      }
+      let anim = {
+        id: id,
+        start: null,
+        end: null
+      };
+
+
+      anim.start = timer;
+
+      timer += this.animations[id].span;
+
+      anim.end = timer;
+      component.animations.push(anim);
+    }
+    return 0;
+  }
+
+  /**
    * Parse any child node of a component
    *
    * @param {Object} child - child node to be parsed
@@ -1864,6 +2369,9 @@ class MySceneGraph {
     switch (child.nodeName) {
       case "transformation":
         return this.parseChildrenTransformation(child, component);
+
+      case "animations":
+        return this.parseChildrenAnimations(child, component);
 
       case "materials":
         return this.parseChildrenMaterials(child, component);
@@ -1927,7 +2435,8 @@ class MySceneGraph {
       children: {
         componentref: [],
         primitiveref: []
-      }
+      },
+      animations: []
     };
 
     component.id = this.reader.getString(child, 'id');
@@ -1943,6 +2452,9 @@ class MySceneGraph {
     var grandchildren = child.children;
 
     for (var j = 0; j &lt; grandchildren.length; j++) {
+      if (grandchildren[j].nodeName == "animations" &amp;&amp; grandchildren[j - 1].nodeName != "transformation")
+        return "&lt;animations> block must be directly after the &lt;transformations> block";
+
       let error = this.parseComponentsComponentChildren(grandchildren[j], component);
       if (error != 0)
         return error;
@@ -2127,7 +2639,11 @@ class MySceneGraph {
             z: 0
           };
 
-          axis[step.axis] = 1;
+          if (step.customAxis) {
+            axis = step.axis;
+          } else {
+            axis[step.axis] = 1;
+          }
           this.scene.rotate(DEGREE_TO_RAD * step.angle, axis.x, axis.y, axis.z);
           break;
         case "scale":
@@ -2172,17 +2688,19 @@ class MySceneGraph {
     this.scene.pushMatrix();
 
     var err = this.applyMaterial(component, material);
-    if(err != 0) {
+    if (err != 0) {
       this.onXMLError(err);
       return -1;
     }
 
     err = this.applyTexture(component, texture);
-    if(err != 0) {
+    if (err != 0) {
       this.onXMLError(err);
       return -1;
     }
-    
+
+    this.applyAnimations(component);
+
     this.applyTransformation(component);
 
     let primRef = component.children.primitiveref;
@@ -2220,6 +2738,32 @@ class MySceneGraph {
 
     });
     this.scene.popMatrix();
+  }
+
+  /**
+   * Applies animation to given component accordingly to current
+   * scene counter.
+   * 
+   * @param {Object} component component object
+   */
+  applyAnimations(component) {
+    if (this.scene.elapsedTime)
+      component.currTime += this.scene.elapsedTime;
+    for (let index = 0; index &lt; component.animations.length; index++) {
+      const compAnim = component.animations[index];
+      const animation = this.animations[compAnim.id];
+
+      let time;
+      if (isBetween(component.currTime, compAnim.start, compAnim.end)) {
+        time = component.currTime - compAnim.start;
+      } else if (component.currTime > compAnim.end) {
+        time = component.currTime;
+      } else {
+        time = null;
+      }
+      animation.update(time);
+      animation.apply();
+    }
   }
 
   /**
@@ -2312,13 +2856,13 @@ function isBetween(a, min, max) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MyCircle.html">MyCircle</a></li><li><a href="MyCylinder.html">MyCylinder</a></li><li><a href="MyCylinderBase.html">MyCylinderBase</a></li><li><a href="MyInterface.html">MyInterface</a></li><li><a href="MyQuad.html">MyQuad</a></li><li><a href="MySceneGraph.html">MySceneGraph</a></li><li><a href="MySphere.html">MySphere</a></li><li><a href="MyTorus.html">MyTorus</a></li><li><a href="MyTriangle.html">MyTriangle</a></li><li><a href="XMLscene.html">XMLscene</a></li></ul><h3>Global</h3><ul><li><a href="global.html#isAxis">isAxis</a></li><li><a href="global.html#isBetween">isBetween</a></li><li><a href="global.html#isBoolean">isBoolean</a></li><li><a href="global.html#isInteger">isInteger</a></li><li><a href="global.html#isString">isString</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Animation.html">Animation</a></li><li><a href="CircularAnimation.html">CircularAnimation</a></li><li><a href="Cylinder2.html">Cylinder2</a></li><li><a href="Cylinder3.html">Cylinder3</a></li><li><a href="LinearAnimation.html">LinearAnimation</a></li><li><a href="MyCircle.html">MyCircle</a></li><li><a href="MyCylinder.html">MyCylinder</a></li><li><a href="MyCylinderBase.html">MyCylinderBase</a></li><li><a href="MyInterface.html">MyInterface</a></li><li><a href="MyQuad.html">MyQuad</a></li><li><a href="MySceneGraph.html">MySceneGraph</a></li><li><a href="MySphere.html">MySphere</a></li><li><a href="MyTerrain.html">MyTerrain</a></li><li><a href="MyTorus.html">MyTorus</a></li><li><a href="MyTriangle.html">MyTriangle</a></li><li><a href="MyWater.html">MyWater</a></li><li><a href="Patch.html">Patch</a></li><li><a href="Plane.html">Plane</a></li><li><a href="XMLscene.html">XMLscene</a></li></ul><h3>Global</h3><ul><li><a href="global.html#isAxis">isAxis</a></li><li><a href="global.html#isBetween">isBetween</a></li><li><a href="global.html#isBoolean">isBoolean</a></li><li><a href="global.html#isInteger">isInteger</a></li><li><a href="global.html#isString">isString</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Oct 21 2018 17:24:36 GMT+0100 (GMT Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Nov 24 2018 19:15:44 GMT+0000 (GMT Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

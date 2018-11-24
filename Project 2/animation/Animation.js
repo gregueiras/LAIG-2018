@@ -9,9 +9,9 @@ class Animation {
   /**
    * Creates an instance of Animation.
    * 
-   * @param {*} graph the scene graph
-   * @param {*} id the id
-   * @param {*} span the time duration
+   * @param {MySceneGraph} graph the scene graph
+   * @param {number} id the id
+   * @param {number} span the time duration
    */
   constructor(graph, id, span) {
     this.graph = graph;
@@ -27,7 +27,7 @@ class Animation {
 
   /**
    * Updates animation corrent position.
-   * @param {*} currTime the scene time counter
+   * @param {number} currTime the scene time counter
    */
   update(currTime) {
     this.currTime = currTime;
