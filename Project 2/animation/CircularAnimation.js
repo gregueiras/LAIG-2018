@@ -10,13 +10,13 @@ class CircularAnimation extends Animation {
   /**
    * Creates an instance of CircularAnimation.
    * 
-   * @param {*} graph the scene graph
-   * @param {*} span the time duration
-   * @param {*} id the id
+   * @param {MySceneGraph} graph the scene graph
+   * @param {number} span the time duration
+   * @param {number} id the id
    * @param {Point} center the center of rotation
-   * @param {*} radius the rotation radius
-   * @param {*} startAngle the rotation initial angle
-   * @param {*} rotationAngle the rotation total angle variation
+   * @param {number} radius the rotation radius
+   * @param {number} startAngle the rotation initial angle
+   * @param {number} rotationAngle the rotation total angle variation
    * @memberof CircularAnimation
    */
   constructor(graph, span, id, center, radius, startAngle, rotationAngle) {
@@ -28,10 +28,10 @@ class CircularAnimation extends Animation {
   /**
    * Stores all necessary transformations preparing them for appliance.
    * 
-   * @param {*} center the center of rotation
-   * @param {*} radius the rotation radius
-   * @param {*} startAngle the rotation initial angle
-   * @param {*} rotationAngle the rotation total angle variation
+   * @param {number} center the center of rotation
+   * @param {number} radius the rotation radius
+   * @param {number} startAngle the rotation initial angle
+   * @param {number} rotationAngle the rotation total angle variation
    */
   interpolateTransformations(center, radius, startAngle, rotationAngle) {
 
