@@ -132,7 +132,7 @@ class MySceneGraph {
             this.primitives[key].specs.ctrlPoints);
           break;
         case "cylinder2":
-          this.primitives[key].shape = new cylinder2(
+          this.primitives[key].shape = new Cylinder2(
             this.scene,
             this.primitives[key].specs.slices,
             this.primitives[key].specs.stacks,

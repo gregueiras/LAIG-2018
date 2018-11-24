@@ -2,7 +2,7 @@
  * Creates a cylinder with base on XY centered on Z.
  * @extends {CGFobject}
  */
-class cylinder3 extends CGFobject {
+class Cylinder3 extends CGFobject {
 
   /**
    *Creates an instance of MyCylinder.
@@ -12,7 +12,6 @@ class cylinder3 extends CGFobject {
    * @param {number} base the base radius
    * @param {number} top the top radius
    * @param { number} height the distance from base to top
-   * @memberof MyCylinder
    */
   constructor(scene, slices, stacks, base, top, height) {
     super(scene);
@@ -36,8 +35,6 @@ class cylinder3 extends CGFobject {
 
   /**
    * Initializes this instance vertices, indices, normals and texture coordinates.
-   *
-   * @memberof MyCylinder
    */
   initObj() {
     var baseZ = 0;
