@@ -33,8 +33,8 @@
 
   </lights>
   <textures>
-    <texture id="text_text" file="./scenes/images/terrain.jpg" />
-    <texture id="map" file="./scenes/images/map.jpg" />
+    <texture id="text_text" file="./scenes/images/es8tex.png" />
+    <texture id="map" file="./scenes/images/es8.png" />
     <texture id="wave_map" file="./scenes/images/wave.jpg" />
     <texture id="text_rocks" file="./scenes/images/rocks.jpg" />
     <texture id="text_water" file="./scenes/images/water.jpg" />
@@ -72,6 +72,10 @@
       <rotate axis="x" angle="00" />
       <scale x="1" y="1" z="1" />
     </transformation>
+    <transformation id="tf6">
+      <translate x="0" y="0" z="0.05" />
+      <scale x="1.5" y="1.5" z="1" />
+    </transformation>
   </transformations>
 
   <animations>
@@ -95,10 +99,10 @@
   <primitives>
 
     <primitive id="terr">
-      <terrain idtexture="text_text" idheightmap="map" parts="10" heightscale="0.2" />
+      <terrain idtexture="text_text" idheightmap="map" parts="100" heightscale="0.11" />
     </primitive>
     <primitive id="wat">
-      <water idtexture="text_water" idwavemap="wave_map" parts="10" heightscale="0.15" texscale="1" />
+      <water idtexture="text_water" idwavemap="wave_map" parts="10" heightscale="0.04" texscale="0.8" />
     </primitive>
     <primitive id="ship">
       <vehicle />
@@ -219,7 +223,7 @@
       <texture id="none" length_s="1" length_t="1" />
       <children>
         <componentref id="terrain"/>
-        <componentref id="water" />
+        <componentref id="water"/>
       </children>
     </component>
 
@@ -234,12 +238,13 @@
       <texture id="none" length_s="1" length_t="1" />
       <children>
         <primitiveref id="terr" />
+        
       </children>
     </component>
 
     <component id="water">
       <transformation>
-        <transformationref id="tf2"/>
+        <transformationref id="tf6"/>
       </transformation>
       <animations>
       </animations>
