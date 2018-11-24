@@ -64,22 +64,33 @@ class LinearAnimation extends Animation {
         distance: this.linearDistance(currPoint, nextPoint),
         endTime: null
       };
-
+      
+      if (dir.x === 0 && dir.z === 0)
+        dir.x = 0.0001;
+        
       distSoFar += translation.distance;
       translation.endTime = distSoFar * speed;
 
+      console.log(translation);
       dir = this.normalize(dir);
+
 
       let rotAngle = this.angleBetweenVectors(oldDir, dir) / DEGREE_TO_RAD;
       let rotAxis = this.cross(oldDir, dir);
+      if (rotAxis.y < 0)
+        rotAngle = -rotAngle;
+      if (rotAxis.x === 0 && rotAxis.y === 0 && rotAxis.z === 0)
+        rotAngle = 0;
+      
+
+      console.log(rotAngle, rotAxis); 
 
       let rotation = {
         type: "rotate",
         origAngle: rotAngle,
-        axis: rotAxis,
+        axis: "y",
         endTime: translation.startTime,
         instant: true,
-        customAxis: true
       };
 
       this.transformations.push(translation);
@@ -87,6 +98,7 @@ class LinearAnimation extends Animation {
 
       oldDir = dir;
     }
+    console.dir(this);
   }
 
   /**
@@ -201,7 +213,7 @@ class LinearAnimation extends Animation {
    */
   cross(vA, vB) {
     return {
-      x: vA.y * vB.z - vA.z * vB.y,
+      x: 0,
       y: vA.z * vB.x - vA.x * vB.z,
       z: 0
     };
