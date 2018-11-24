@@ -17,7 +17,7 @@ class LinearAnimation extends Animation {
    */
   constructor(graph, span, pointList, id) {
     super(graph, id, span);
-
+    this.endRot = [];
     this.interpolateTransformations(pointList);
 
     this.transformations.sort((a, b) => {
@@ -32,6 +32,9 @@ class LinearAnimation extends Animation {
       return 0;
 
     });
+
+    this.transformations.push(this.endRot)
+    this.transformations = this.transformations.flat();
   }
 
   /**
@@ -64,10 +67,7 @@ class LinearAnimation extends Animation {
         distance: this.linearDistance(currPoint, nextPoint),
         endTime: null
       };
-      
-      if (dir.x === 0 && dir.z === 0)
-        dir.x = 0.0001;
-        
+              
       distSoFar += translation.distance;
       translation.endTime = distSoFar * speed;
 
@@ -77,10 +77,15 @@ class LinearAnimation extends Animation {
 
       let rotAngle = this.angleBetweenVectors(oldDir, dir) / DEGREE_TO_RAD;
       let rotAxis = this.cross(oldDir, dir);
+      console.log(this.id, rotAngle, rotAxis, oldDir, dir)
       if (rotAxis.y < 0)
         rotAngle = -rotAngle;
-      if (rotAxis.x === 0 && rotAxis.y === 0 && rotAxis.z === 0)
-        rotAngle = 0;
+      
+      if (dir.x === 0 && dir.y === 1 && dir.z === 0) {
+        this.transformations.push(translation);
+        oldDir = dir;
+        continue;
+      }
       
 
       console.log(rotAngle, rotAxis); 
@@ -93,9 +98,17 @@ class LinearAnimation extends Animation {
         instant: true,
       };
 
+      let reverse = {
+        type: "rotate",
+        origAngle: -rotAngle,
+        axis: "y",
+        endTime: this.span,
+        instant: true,
+      };
+
       this.transformations.push(translation);
       this.transformations.push(rotation);
-
+      this.endRot.unshift(reverse);
       oldDir = dir;
     }
     console.dir(this);
@@ -213,7 +226,7 @@ class LinearAnimation extends Animation {
    */
   cross(vA, vB) {
     return {
-      x: 0,
+      x: vA.y * vB.z - vA.z * vB.y,
       y: vA.z * vB.x - vA.x * vB.z,
       z: 0
     };

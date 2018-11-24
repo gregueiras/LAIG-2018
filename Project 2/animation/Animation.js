@@ -71,9 +71,11 @@ class Animation {
           else if (transformation.startAngle)
             transformation.angle += transformation.startAngle;
 
+
           break;
         default:
           console.error(`Invalid value for transformation type`);
+          console.dir(transformation)
           break;
       }
     });
