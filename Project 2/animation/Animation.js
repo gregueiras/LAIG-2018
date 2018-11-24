@@ -29,7 +29,7 @@ class Animation {
    * Updates animation corrent position.
    * @param {number} currTime the scene time counter
    */
-  update(currTime, rotate) {
+  update(currTime, rotate, ignoreFlag) {
     this.currTime = currTime;
     if (this.currTime === null)
       return;
@@ -49,7 +49,7 @@ class Animation {
       switch (transformation.type) {
         case "translate":
         case "scale":
-          if (rotate)
+          if (rotate && !ignoreFlag)
             completion = 0;
 
           transformation.x = transformation.origX * completion;
@@ -66,7 +66,7 @@ class Animation {
           transformation.angle = transformation.origAngle * completion;
 
 
-          if (!rotate)
+          if (!rotate && !ignoreFlag)
             transformation.angle = 0;
           else if (transformation.startAngle)
             transformation.angle += transformation.startAngle;

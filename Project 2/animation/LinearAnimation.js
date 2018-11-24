@@ -219,4 +219,8 @@ class LinearAnimation extends Animation {
     };
   }
 
+  updateAnimation(currTime, rotate) {
+    this.update(currTime, rotate, false);
+  }
+
 }

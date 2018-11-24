@@ -72,5 +72,9 @@ class CircularAnimation extends Animation {
     this.transformations.push(radiusTrans);
     this.transformations.push(placeRot);
   }
+
+  updateAnimation(currTime, rotate) {
+    this.update(currTime, rotate, true);
+  }
   
 }

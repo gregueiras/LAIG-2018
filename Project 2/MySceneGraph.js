@@ -2673,6 +2673,7 @@ class MySceneGraph {
 
     this.applyAnimations(component, false);    
     this.applyTransformation(component);
+    this.scene.pushMatrix();
     this.applyAnimations(component, true);    
 
     let primRef = component.children.primitiveref;
@@ -2682,6 +2683,8 @@ class MySceneGraph {
         prim.shape.display();
       });
     }
+
+    this.scene.popMatrix();
 
     let compRef = component.children.componentref;
     compRef.forEach(reference => {
@@ -2724,6 +2727,8 @@ class MySceneGraph {
     for (let index = 0; index < component.animations.length; index++) {
       const compAnim = component.animations[index];
       const animation = this.animations[compAnim.id];
+      if(rotate && animation instanceof CircularAnimation)
+        continue;
         
       let time;
       if (isBetween(component.currTime, compAnim.start, compAnim.end)) {
@@ -2734,7 +2739,7 @@ class MySceneGraph {
         time = null;
       }
 
-      animation.update(time, rotate);
+      animation.updateAnimation(time, rotate);
       animation.apply();
 
     }
