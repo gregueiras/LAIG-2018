@@ -19,3 +19,11 @@
  * @property {number} angle - Rotation angle (used only in rotations)
  * @property {string} axis - Rotation axis (used only in rotations)
  */
+
+/**
+ * Vector
+ * @typedef {Object} Vector
+ * @property {number} x - Vector X coordinate
+ * @property {number} y - Vector Y coordinate
+ * @property {number} z - Vector Z coordinate
+ */
