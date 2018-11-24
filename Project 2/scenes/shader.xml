@@ -33,7 +33,7 @@
 
   </lights>
   <textures>
-    <texture id="text_text" file="./scenes/images/es8tex3.png" />
+    <texture id="text_text" file="./scenes/images/es8tex4.png" />
     <texture id="map" file="./scenes/images/es8.png" />
     <texture id="wave_map" file="./scenes/images/wave.jpg" />
     <texture id="text_rocks" file="./scenes/images/rocks.jpg" />
