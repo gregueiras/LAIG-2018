@@ -1,9 +1,18 @@
 /**
- *
- * @class MyAnimation
+ * Serves as parent class for linear and circular animations
+ * updating their moves accordingly and applying the corresponding
+ * transformation.
+ * 
  */
 class Animation {
 
+  /**
+   * Creates an instance of Animation.
+   * 
+   * @param {MySceneGraph} graph the scene graph
+   * @param {number} id the id
+   * @param {number} span the time duration
+   */
   constructor(graph, id, span) {
     this.graph = graph;
     this.currTime = 0;
@@ -16,6 +25,10 @@ class Animation {
     this.transformations = [];
   }
 
+  /**
+   * Updates animation corrent position.
+   * @param {number} currTime the scene time counter
+   */
   update(currTime) {
     this.currTime = currTime;
     if (this.currTime === null)
@@ -56,6 +69,9 @@ class Animation {
     });
   }
 
+  /**
+   * Transforms this graph in accordance to this animation state.
+   */
   apply() {
     if (this.currTime === null)
       return;

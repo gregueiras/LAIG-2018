@@ -147,7 +147,7 @@
         <texture id="text_text" length_s="1" length_t="1" />
         <children>
           <!--<primitiveref id="plane1" />-->
-          <primitiveref id="cil2_1" />
+          <primitiveref id="patch1" />
         </children>
       </component>
     </components>

@@ -1,5 +1,19 @@
+/**
+ * Creates a surface based on NURBS representation, 
+ * given a list of control points.
+ */
 class Patch extends CGFobject {
 
+    /**
+     * Creates an instance of Patch.
+     * 
+     * @param {*} scene the scene
+     * @param {*} npartsU the number of division along X
+     * @param {*} npartsV the number of division along Y
+     * @param {*} npointsU the number of points to consider along X
+     * @param {*} npointsV the number of points to consider along Y
+     * @param {*} controlVertex the list of control points
+     */
     constructor(scene, npartsU, npartsV, npointsU, npointsV, controlVertex) {
 
         super(scene);
@@ -24,6 +38,11 @@ class Patch extends CGFobject {
 
     }
 
+    /**
+     * Divides control points accordingly to NURBS parameters.
+     * 
+     * @param {Points[]} controlVertex the list of control points
+     */
     initControlPoints(controlVertex) {
         this.controlVertex = [];
         for (let i = 0; i < this.npointsU; i++) {
@@ -35,12 +54,18 @@ class Patch extends CGFobject {
         }
     }
 
+    /**
+     *  Creates the displayable object based on the NURBS surface.
+     */
     initGeometry() {
         var nurbsSurface = new CGFnurbsSurface(this.degreesU, this.degreesV, this.controlVertex);
 
         this.obj = new CGFnurbsObject(this.scene, this.npartsU, this.npartsV, nurbsSurface);
     }
 
+    /**
+     * Displays the object.
+     */
     display() {
         this.obj.display();
     }

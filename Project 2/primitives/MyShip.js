@@ -28,12 +28,10 @@ class MyShip {
       [xOffset, -yOffset, 0, otherWeight],
       [0, -yOffset, zOffset, 1],
       [0, -yOffset, 0, 1],
-
-
     ]
 
     this.side = new Patch(scene, nParts, nParts, 9, 2, controlVertices);
-    this.arms = new cylinder3(scene, 8, 10, 0.7, 0.2, 2.2);
+    this.arms = new Cylinder3(scene, 8, 10, 0.7, 0.2, 2.2);
     this.center = new MySphere(scene, 1.1, 20, 20);
 
     this.text_wing = new CGFtexture(this.scene, './scenes/images/dots.png');

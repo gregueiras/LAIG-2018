@@ -1,5 +1,16 @@
+/**
+ * Creates a square plane based on NURBS representation, 
+ * with 1 unit of side.
+ */
 class Plane extends CGFobject {
 
+    /**
+     * Creates an instance of Plane.
+     * 
+     * @param {*} scene the scene
+     * @param {*} divU the number of division along X
+     * @param {*} divV the number of division along Y
+     */
     constructor(scene, divU, divV) {
 
         super(scene);
@@ -32,12 +43,18 @@ class Plane extends CGFobject {
 
     }
 
+    /**
+     * Creates the displayable object based on the NURBS surface.
+     */
     initGeometry() {
         var nurbsSurface = new CGFnurbsSurface(this.ctrlDegreesU, this.ctrlDegreesV, this.controlVertex);
 
         this.obj = new CGFnurbsObject(this.scene, this.divU, this.divV, nurbsSurface);
     }
 
+    /**
+     * Displays the object.
+     */
     display() {
         this.obj.display();
     }

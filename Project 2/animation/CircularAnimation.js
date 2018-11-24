@@ -1,15 +1,21 @@
+/**
+ * Makes the object of appliance move arround given center
+ * for a set angle during a define period of time.
+ * @extends {Animation}
+ */
 class CircularAnimation extends Animation {
 
 
   /**
-   *Creates an instance of CircularAnimation.
-   * @param {*} graph
-   * @param {*} span
-   * @param {*} id
-   * @param {Point} center
-   * @param {*} radius
-   * @param {*} startAngle
-   * @param {*} rotationAngle
+   * Creates an instance of CircularAnimation.
+   * 
+   * @param {MySceneGraph} graph the scene graph
+   * @param {number} span the time duration
+   * @param {number} id the id
+   * @param {Point} center the center of rotation
+   * @param {number} radius the rotation radius
+   * @param {number} startAngle the rotation initial angle
+   * @param {number} rotationAngle the rotation total angle variation
    * @memberof CircularAnimation
    */
   constructor(graph, span, id, center, radius, startAngle, rotationAngle) {
@@ -18,6 +24,14 @@ class CircularAnimation extends Animation {
     this.interpolateTransformations(center, radius, startAngle, rotationAngle);
   }
 
+  /**
+   * Stores all necessary transformations preparing them for appliance.
+   * 
+   * @param {number} center the center of rotation
+   * @param {number} radius the rotation radius
+   * @param {number} startAngle the rotation initial angle
+   * @param {number} rotationAngle the rotation total angle variation
+   */
   interpolateTransformations(center, radius, startAngle, rotationAngle) {
 
     let centerTrans = {

@@ -132,7 +132,7 @@ class MySceneGraph {
             this.primitives[key].specs.ctrlPoints);
           break;
         case "cylinder2":
-          this.primitives[key].shape = new cylinder2(
+          this.primitives[key].shape = new Cylinder2(
             this.scene,
             this.primitives[key].specs.slices,
             this.primitives[key].specs.stacks,
@@ -1668,7 +1668,7 @@ class MySceneGraph {
    * @param {Object} child - child node to be parsed
    * @returns {number} an error message if there was an error
    */
-  parseChildrenPatch(patch, child) { //TODO
+  parseChildrenPatch(patch, child) { 
     patch.npointsU = this.reader.getFloat(child, 'npointsU');
     if (patch.npointsU == null || !isInteger(patch.npointsU)) {
       return "unable to parse npointsU value";
@@ -1705,6 +1705,12 @@ class MySceneGraph {
 
   }
 
+  /**
+   * Parse a sub-block of a <patch> block
+   * @param {Object} child - child node to be parsed
+   * @param {Object} patch - patch object to be populated
+   * @returns {number} 0 if run with sucess, message if there was an error
+   */
   parseChildrenPatchChildren(patch, child) {
 
     if (child.nodeName != 'controlpoint')
@@ -2706,6 +2712,12 @@ class MySceneGraph {
     this.scene.popMatrix();
   }
 
+  /**
+   * Applies animation to given component accordingly to current
+   * scene counter.
+   * 
+   * @param {Object} component component object
+   */
   applyAnimations(component) {
     if (this.scene.elapsedTime)
       component.currTime += this.scene.elapsedTime;
