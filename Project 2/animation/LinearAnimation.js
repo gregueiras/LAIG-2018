@@ -1,11 +1,19 @@
+/**
+ * Makes the object of appliance move accordingly to given
+ * control points, in a linear trajectory, during a set
+ * time period.
+ * 
+ * @class LinearAnimation
+ */
 class LinearAnimation extends Animation {
 
   /**
-   *Creates an instance of LinearAnimation.
-   * @param {MySceneGraph} graph
-   * @param {number} span
-   * @param {Point[]} pointList
-   * @param {string} id
+   *  Creates an instance of LinearAnimation.
+   * 
+   * @param {MySceneGraph} graph the scene graph
+   * @param {number} span the time duration
+   * @param {Point[]} pointList the list of control points
+   * @param {string} id the id
    * @memberof LinearAnimation
    */
   constructor(graph, span, pointList, id) {
@@ -23,6 +31,11 @@ class LinearAnimation extends Animation {
     }); 
   }
 
+  /**
+   * Stores all necessary transformations preparing them for appliance.
+   * 
+   * @param {Point[]} pointList the list of control points
+   */
   interpolateTransformations(pointList) {
     let totD = totalDistance(pointList);
     let speed = this.span/totD;
@@ -71,6 +84,13 @@ class LinearAnimation extends Animation {
 
 }
 
+/**
+ * Returns the linear distance between two points.
+ * 
+ * @param {Point} pA the origin point
+ * @param {Point} pB the destination point
+ * @returns shortest distance between pA and pB
+ */
 function linearDistance(pA, pB) {
   return Math.sqrt(
       Math.pow((pA.x - pB.x), 2) + 
@@ -79,6 +99,13 @@ function linearDistance(pA, pB) {
     );   
 }
 
+/**
+ * Creates a vector from origin to destiantion.
+ * 
+ * @param {Point} pA the origin point
+ * @param {Point} pB the destination point
+ * @returns vector from pA to pB
+ */
 function vector(pA, pB) {
   let vec = {
     x: 0,
@@ -93,6 +120,12 @@ function vector(pA, pB) {
   return vec;
 }
 
+/**
+ * Calculates this animation total distance.
+ * 
+ * @param {Point[]} pointList 
+ * @returns animation total distance
+ */
 function totalDistance(pointList) {
   let distance = 0;
 
@@ -106,14 +139,33 @@ function totalDistance(pointList) {
   return distance;
 }
 
+/**
+ * Takes two vectors and calculates the scalar product.
+ * 
+ * @param {Vector} vA 
+ * @param {Vector} vB 
+ * @returns the scalar product between vA and vB
+ */
 function dotProduct(vA, vB) {
   return vA.x * vB.x + vA.y * vB.y + vA.z * vB.z;
 }
 
+/**
+ * Calculates vector norm.
+ * 
+ * @param {Vector} v 
+ * @returns v norm
+ */
 function mag(v) {
   return Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2) + Math.pow(v.z, 2));
 }
 
+/**
+ * Normalizes the given vector
+ * 
+ * @param {Vector} v 
+ * @returns v normalized
+ */
 function normalize(v) {
   let m = mag(v);
   return {
@@ -123,10 +175,25 @@ function normalize(v) {
   };
 }
 
+/**
+ * calculates angle between two vectors.
+ * 
+ * @param {Vector} vA 
+ * @param {Vector} vB 
+ * @returns the angle between vA and vB
+ */
 function angleBetweenVectors(vA, vB) {
   return Math.acos(dotProduct(vA, vB)/ (mag(vA) * mag(vB)));
 }
 
+/**
+ * Calculates the cross product between two vectors
+ * only for horizontal orientation change.
+ * 
+ * @param {Vector} vA 
+ * @param {Vector} vB 
+ * @returns the "cross product" between vA and vB.
+ */
 function cross(vA, vB) {
   return {
     x: vA.y * vB.z - vA.z * vB.y,

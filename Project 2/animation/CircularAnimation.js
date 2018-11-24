@@ -1,36 +1,38 @@
+/**
+ * Makes the object of appliance move arround given center
+ * for a set angle during a define period of time.
+ * 
+ * @class CircularAnimation
+ */
 class CircularAnimation extends Animation {
 
 
   /**
-   *Creates an instance of CircularAnimation.
-   * @param {*} graph
-   * @param {*} span
-   * @param {*} id
-   * @param {Point} center
-   * @param {*} radius
-   * @param {*} startAngle
-   * @param {*} rotationAngle
+   * Creates an instance of CircularAnimation.
+   * 
+   * @param {*} graph the scene graph
+   * @param {*} span the time duration
+   * @param {*} id the id
+   * @param {Point} center the center of rotation
+   * @param {*} radius the rotation radius
+   * @param {*} startAngle the rotation initial angle
+   * @param {*} rotationAngle the rotation total angle variation
    * @memberof CircularAnimation
    */
   constructor(graph, span, id, center, radius, startAngle, rotationAngle) {
     super(graph, id, span);
 
     this.interpolateTransformations(center, radius, startAngle, rotationAngle);
-
-    /*  this.transformations.sort((a, b) => {
-        let x = a.type.toLowerCase();
-        var y = b.type.toLowerCase();
-        if (x > y) {
-          return -1;
-        }
-        if (x < y) {
-          return 1;
-        }
-        return 0;
-
-      }); */
   }
 
+  /**
+   * Stores all necessary transformations preparing them for appliance.
+   * 
+   * @param {*} center the center of rotation
+   * @param {*} radius the rotation radius
+   * @param {*} startAngle the rotation initial angle
+   * @param {*} rotationAngle the rotation total angle variation
+   */
   interpolateTransformations(center, radius, startAngle, rotationAngle) {
 
     let centerTrans = {
