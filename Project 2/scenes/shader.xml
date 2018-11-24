@@ -2,9 +2,9 @@
 
   <scene root="test" axis_length="3" />
   <views default="Default">
-    <perspective id="Default" near="0.001" far="500" angle="60">
-      <from x="0" y="5" z="4" />
-      <to x="0" y="5" z="0" />
+    <perspective id="Default" near="0.01" far="500" angle="60">
+      <from x="20" y="20" z="20" />
+      <to x="0" y="0" z="0" />
     </perspective>
   </views>
   <ambient>
@@ -19,13 +19,19 @@
       <specular r="0.3" g="0.3" b="0.3" a="1" />
     </omni>
     <omni id="Point1" enabled="1">
-      <location x="-5" y="0" z="0" w="0" />
+      <location x="8" y="6.1" z="-2" w="0" />
       <ambient r="0" g="0" b="0" a="1" />
       <diffuse r="0.7" g="0.7" b="0.7" a="1" />
       <specular r="0.3" g="0.3" b="0.3" a="1" />
     </omni>
     <omni id="Point2" enabled="1">
-      <location x="0" y="0" z="5" w="0" />
+      <location x="8" y="6.1" z="3.5" w="0" />
+      <ambient r="0" g="0" b="0" a="1" />
+      <diffuse r="0.7" g="0.7" b="0.7" a="1" />
+      <specular r="0.3" g="0.3" b="0.3" a="1" />
+    </omni>
+    <omni id="Point3" enabled="1">
+      <location x="3" y="6.1" z="-2" w="0" />
       <ambient r="0" g="0" b="0" a="1" />
       <diffuse r="0.7" g="0.7" b="0.7" a="1" />
       <specular r="0.3" g="0.3" b="0.3" a="1" />
@@ -58,7 +64,7 @@
       <scale x="1.5" y="1.5" z="1" />
     </transformation>
     <transformation id="tf3">
-      <translate x="0" y="5" z="0" />
+      <translate x="3" y="6.1" z="-2" />
       <rotate axis="x" angle="0" />
       <scale x="0.5" y="0.5" z="0.5" />
     </transformation>
@@ -68,112 +74,49 @@
       <scale x="1" y="1" z="1" />
     </transformation>
     <transformation id="tf5">
-      <translate x="3.6" y="-3" z="0" />
-      <rotate axis="x" angle="00" />
-      <scale x="1" y="1" z="1" />
+      <scale x="1.2" y="1.2" z="1" />
     </transformation>
     <transformation id="tf6">
-      <translate x="0" y="0" z="0.05" />
+      <translate x="0" y="0" z="0.08" />
       <scale x="1.5" y="1.5" z="1" />
     </transformation>
   </transformations>
 
   <animations>
 
-    <linear id="la1" span="2">
+    <linear id="la1" span="5">
       <controlpoint xx="0" yy="0" zz="0"/>
       <controlpoint xx="5" yy="0" zz="0"/>
       <controlpoint xx="5" yy="0" zz="5"/>
     </linear>
-    <linear id="la2" span="2">
+    <linear id="la2" span="5">
       <controlpoint xx="0" yy="0" zz="0"/>
-      <controlpoint xx="-5" yy="0" zz="0"/>
-      <controlpoint xx="-5" yy="3" zz="-5"/>
+      <controlpoint xx="0" yy="0" zz="-5"/>
+      <controlpoint xx="-5" yy="0" zz="-5"/>
+    </linear>
+    <linear id="la3" span="1">
+      <controlpoint xx="0" yy="0" zz="0"/>
+      <controlpoint xx="1" yy="0" zz="0"/>
+    </linear>
+    <linear id="lift" span="5">
+      <controlpoint xx="0" yy="0" zz="0"/>
+      <controlpoint xx="0" yy="3" zz="0"/>
     </linear>
 
-    <circular id="ca1" span="10" center="5 0 0" radius="5" startang="180" rotang="720" />
-
-
+    <circular id="ca1" span="10" center="0 0 0" radius="10" startang="0" rotang="720" />
   </animations>
 
   <primitives>
 
     <primitive id="terr">
-      <terrain idtexture="text_text" idheightmap="map" parts="100" heightscale="0.11" />
+      <terrain idtexture="text_text" idheightmap="map" parts="100" heightscale="0.14" />
     </primitive>
     <primitive id="wat">
-      <water idtexture="text_water" idwavemap="wave_map" parts="10" heightscale="0.04" texscale="0.8" />
+      <water idtexture="text_water" idwavemap="wave_map" parts="10" heightscale="0.04" texscale="0.9" />
     </primitive>
     <primitive id="ship">
       <vehicle />
     </primitive>
-
-    <primitive id="patch0">
-      <patch npointsU="2" npointsV="2" npartsU="20" npartsV="20">
-        <controlpoint xx="-2" yy="-2" zz="0" />
-        <controlpoint xx="-2" yy="2" zz="0" />
-        <controlpoint xx="2" yy="-2" zz="0" />
-        <controlpoint xx="2" yy="2" zz="0" />
-      </patch>
-    </primitive>
-    <primitive id="patch1">
-      <patch npointsU="3" npointsV="2" npartsU="20" npartsV="20">
-        <controlpoint xx="-1.5" yy="-1.5" zz="0" />
-        <controlpoint xx="-1.5" yy="1.5" zz="0" />
-        <controlpoint xx="0" yy="-1.5" zz="3" />
-        <controlpoint xx="0" yy="1.5" zz="3" />
-        <controlpoint xx="1.5" yy="-1.5" zz="0" />
-        <controlpoint xx="1.5" yy="1.5" zz="0" />
-      </patch>
-    </primitive>
-    <primitive id="patch2">
-      <patch npointsU="3" npointsV="4" npartsU="20" npartsV="20">
-        <controlpoint xx="-1.5" yy="-1.5" zz="0" />
-        <controlpoint xx="-2.0" yy="-2.0" zz="2.0" />
-        <controlpoint xx="-2.0" yy="2.0" zz="2.0" />
-        <controlpoint xx="-1.5" yy="1.5" zz="0" />
-        <controlpoint xx="0" yy="0" zz="3.0" />
-        <controlpoint xx="0" yy="-2.0" zz="3.0" />
-        <controlpoint xx="0" yy="2.0" zz="3.0" />
-        <controlpoint xx="0" yy="0" zz="3.0" />
-        <controlpoint xx="1.5" yy="-1.5" zz="0" />
-        <controlpoint xx="2.0" yy="-2.0" zz="2.0" />
-        <controlpoint xx="2.0" yy="2.0" zz="2.0" />
-        <controlpoint xx="1.5" yy="1.5" zz="0.0" />
-      </patch>
-    </primitive>
-    <primitive id="patch3">
-      <patch npointsU="3" npointsV="4" npartsU="20" npartsV="20">
-        <controlpoint xx="-2.0" yy="-2.0" zz="1.0" />
-        <controlpoint xx="-2.0" yy="-1.0" zz="-2.0" />
-        <controlpoint xx="-2.0" yy="1.0" zz="5.0" />
-        <controlpoint xx="-2.0" yy="2.0" zz="-1.0" />
-        <controlpoint xx="0" yy="-2.0" zz="0" />
-        <controlpoint xx="0" yy="-1.0" zz="-1.0" />
-        <controlpoint xx="0" yy="1.0" zz="1.5" />
-        <controlpoint xx="0" yy="2.0" zz="0" />
-        <controlpoint xx="2.0" yy="-2.0" zz="-1.0" />
-        <controlpoint xx="2.0" yy="-1.0" zz="2.0" />
-        <controlpoint xx="2.0" yy="1.0" zz="-5.0" />
-        <controlpoint xx="2.0" yy="2.0" zz="1.0" />
-      </patch>
-    </primitive>
-    <primitive id="cil2_1">
-      <cylinder2 base="2" top="1" height="5" slices="20" stacks="20" />
-    </primitive>
-
-    <primitive id="cil1">
-      <cylinder base="5" top="5" height="0.5" slices="30" stacks="30" />
-    </primitive >
-    <primitive id="cil2">
-      <cylinder base="4.7" top="4.7" height="0.65" slices="30" stacks="30" />
-    </primitive >
-    <primitive id="cil2_2">
-      <cylinder2 base="1" top="1" height="0.9" slices="20" stacks="2" />
-    </primitive>
-    <primitive id="cil3">
-      <cylinder base="1" top="1" height="0.5" slices="20" stacks="2" />
-    </primitive >
 
   </primitives>
 
@@ -198,6 +141,13 @@
           <transformationref id="tf3" />
       </transformation>
       <animations>
+        <animationref id="lift" />
+        <animationref id="la1" />
+        <animationref id="la2" />
+        <animationref id="ca1" />
+        <!--<animationref id="lift" />
+        <animationref id="la1" />
+        -->
       </animations>
       <materials>
         <material id="default" />
@@ -226,6 +176,7 @@
 
     <component id="terrain">
       <transformation>
+        <transformationref id="tf5"/>
       </transformation>
       <animations>
       </animations>

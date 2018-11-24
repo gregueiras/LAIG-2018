@@ -72,5 +72,14 @@ class CircularAnimation extends Animation {
     this.transformations.push(radiusTrans);
     this.transformations.push(placeRot);
   }
+
+  /**
+   * Updates animation corrent position.
+   * @param {number} currTime the scene time counter
+   * @param {number} rotate the flag indicating if should update rotation and not translation
+   */
+  update(currTime, rotate) {
+    super.update(currTime, rotate, true);
+  }
   
 }

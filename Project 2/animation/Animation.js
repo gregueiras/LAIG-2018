@@ -28,8 +28,10 @@ class Animation {
   /**
    * Updates animation corrent position.
    * @param {number} currTime the scene time counter
+   * @param {number} rotate the flag indicating if should update rotation and not translation
+   * @param {number} ignoreFlag the flag indicating if rotate param should be ignored
    */
-  update(currTime) {
+  update(currTime, rotate, ignoreFlag) {
     this.currTime = currTime;
     if (this.currTime === null)
       return;
@@ -49,21 +51,25 @@ class Animation {
       switch (transformation.type) {
         case "translate":
         case "scale":
+          if (rotate && !ignoreFlag)
+            completion = 0;
+
           transformation.x = transformation.origX * completion;
           transformation.y = transformation.origY * completion;
           transformation.z = transformation.origZ * completion;
           break;
-
         case "rotate":
 
           transformation.angle = transformation.origAngle * completion;
 
-          if (transformation.startAngle)
+          if (!rotate && !ignoreFlag)
+            transformation.angle = 0;
+          else if (transformation.startAngle)
             transformation.angle += transformation.startAngle;
-
           break;
         default:
           console.error(`Invalid value for transformation type`);
+          console.dir(transformation)
           break;
       }
     });

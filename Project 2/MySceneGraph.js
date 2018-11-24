@@ -1320,12 +1320,12 @@ class MySceneGraph {
   }
 
   /**
-   * Parse one of the <tranformation> sub-blocks
+   * Parse one of the <transformation> sub-blocks
    * @param {Object} child - block to be parsed
-   * @param {Object} tranformation - tranformation object to be populated
+   * @param {Object} transformation - transformation object to be populated
    * @memberof MySceneGraph
    */
-  parseTransformationsTransformationChildren(child, tranformation) {
+  parseTransformationsTransformationChildren(child, transformation) {
     switch (child.nodeName) {
       case "translate":
       case "scale":
@@ -1340,9 +1340,9 @@ class MySceneGraph {
         tmpCoor.type = child.nodeName;
 
         if (child.nodeName == "translate") {
-          tranformation.steps.push(tmpCoor);
+          transformation.steps.push(tmpCoor);
         } else {
-          tranformation.steps.push(tmpCoor);
+          transformation.steps.push(tmpCoor);
         }
         break;
       case "rotate":
@@ -1352,7 +1352,7 @@ class MySceneGraph {
           type: "rotate"
         };
         this.parseChildrenRotation(tmpRot, child);
-        tranformation.steps.push(tmpRot);
+        transformation.steps.push(tmpRot);
         break;
       default:
         this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
@@ -1627,7 +1627,7 @@ class MySceneGraph {
       return "unable to parse heightscale value";
     }
   }
- /**
+  /**
    * Parse a <water> block
    * @param {Object} water - primitive object to be populated
    * @param {Object} child - child node to be parsed
@@ -1668,7 +1668,7 @@ class MySceneGraph {
    * @param {Object} child - child node to be parsed
    * @returns {number} an error message if there was an error
    */
-  parseChildrenPatch(patch, child) { 
+  parseChildrenPatch(patch, child) {
     patch.npointsU = this.reader.getFloat(child, 'npointsU');
     if (patch.npointsU == null || !isInteger(patch.npointsU)) {
       return "unable to parse npointsU value";
@@ -2671,9 +2671,10 @@ class MySceneGraph {
       return -1;
     }
 
-    this.applyAnimations(component);
-
+    this.applyAnimations(component, false);    
     this.applyTransformation(component);
+    this.scene.pushMatrix();
+    this.applyAnimations(component, true);    
 
     let primRef = component.children.primitiveref;
     if (Object.keys(primRef).length != 0) {
@@ -2682,6 +2683,8 @@ class MySceneGraph {
         prim.shape.display();
       });
     }
+
+    this.scene.popMatrix();
 
     let compRef = component.children.componentref;
     compRef.forEach(reference => {
@@ -2718,13 +2721,15 @@ class MySceneGraph {
    * 
    * @param {Object} component component object
    */
-  applyAnimations(component) {
+  applyAnimations(component, rotate) {
     if (this.scene.elapsedTime)
       component.currTime += this.scene.elapsedTime;
     for (let index = 0; index < component.animations.length; index++) {
       const compAnim = component.animations[index];
       const animation = this.animations[compAnim.id];
-
+      if(rotate && animation instanceof CircularAnimation)
+        continue;
+        
       let time;
       if (isBetween(component.currTime, compAnim.start, compAnim.end)) {
         time = component.currTime - compAnim.start;
@@ -2733,8 +2738,10 @@ class MySceneGraph {
       } else {
         time = null;
       }
-      animation.update(time);
+
+      animation.update(time, rotate);
       animation.apply();
+
     }
   }
 

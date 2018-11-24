@@ -17,7 +17,7 @@ class LinearAnimation extends Animation {
    */
   constructor(graph, span, pointList, id) {
     super(graph, id, span);
-
+    this.endRot = [];
     this.interpolateTransformations(pointList);
 
     this.transformations.sort((a, b) => {
@@ -32,6 +32,9 @@ class LinearAnimation extends Animation {
       return 0;
 
     });
+
+    this.transformations.push(this.endRot)
+    this.transformations = this.transformations.flat();
   }
 
   /**
@@ -64,27 +67,42 @@ class LinearAnimation extends Animation {
         distance: this.linearDistance(currPoint, nextPoint),
         endTime: null
       };
-
+              
       distSoFar += translation.distance;
       translation.endTime = distSoFar * speed;
-
       dir = this.normalize(dir);
+
 
       let rotAngle = this.angleBetweenVectors(oldDir, dir) / DEGREE_TO_RAD;
       let rotAxis = this.cross(oldDir, dir);
+      if (rotAxis.y < 0)
+        rotAngle = -rotAngle;
+      
+      if (dir.x === 0 && dir.y === 1 && dir.z === 0) {
+        this.transformations.push(translation);
+        oldDir = dir;
+        continue;
+      }
 
       let rotation = {
         type: "rotate",
         origAngle: rotAngle,
-        axis: rotAxis,
+        axis: "y",
         endTime: translation.startTime,
         instant: true,
-        customAxis: true
+      };
+
+      let reverse = {
+        type: "rotate",
+        origAngle: -rotAngle,
+        axis: "y",
+        endTime: this.span,
+        instant: true,
       };
 
       this.transformations.push(translation);
       this.transformations.push(rotation);
-
+      this.endRot.unshift(reverse);
       oldDir = dir;
     }
   }
@@ -205,6 +223,15 @@ class LinearAnimation extends Animation {
       y: vA.z * vB.x - vA.x * vB.z,
       z: 0
     };
+  }
+
+  /**
+   * Updates animation corrent position.
+   * @param {number} currTime the scene time counter
+   * @param {number} rotate the flag indicating if should update rotation and not translation
+   */
+  update(currTime, rotate) {
+    super.update(currTime, rotate, false);
   }
 
 }
