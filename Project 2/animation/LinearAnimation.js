@@ -70,14 +70,11 @@ class LinearAnimation extends Animation {
               
       distSoFar += translation.distance;
       translation.endTime = distSoFar * speed;
-
-      console.log(translation);
       dir = this.normalize(dir);
 
 
       let rotAngle = this.angleBetweenVectors(oldDir, dir) / DEGREE_TO_RAD;
       let rotAxis = this.cross(oldDir, dir);
-      console.log(this.id, rotAngle, rotAxis, oldDir, dir)
       if (rotAxis.y < 0)
         rotAngle = -rotAngle;
       
@@ -86,9 +83,6 @@ class LinearAnimation extends Animation {
         oldDir = dir;
         continue;
       }
-      
-
-      console.log(rotAngle, rotAxis); 
 
       let rotation = {
         type: "rotate",
@@ -111,7 +105,6 @@ class LinearAnimation extends Animation {
       this.endRot.unshift(reverse);
       oldDir = dir;
     }
-    console.dir(this);
   }
 
   /**
@@ -232,8 +225,13 @@ class LinearAnimation extends Animation {
     };
   }
 
-  updateAnimation(currTime, rotate) {
-    this.update(currTime, rotate, false);
+  /**
+   * Updates animation corrent position.
+   * @param {number} currTime the scene time counter
+   * @param {number} rotate the flag indicating if should update rotation and not translation
+   */
+  update(currTime, rotate) {
+    super.update(currTime, rotate, false);
   }
 
 }

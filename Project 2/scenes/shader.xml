@@ -141,12 +141,10 @@
           <transformationref id="tf3" />
       </transformation>
       <animations>
-        <animationref id="ca1" />
-        <animationref id="la1" />
-        <animationref id="la2" />
         <animationref id="lift" />
         <animationref id="la1" />
         <animationref id="la2" />
+        <animationref id="ca1" />
         <!--<animationref id="lift" />
         <animationref id="la1" />
         -->

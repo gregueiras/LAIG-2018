@@ -2739,7 +2739,7 @@ class MySceneGraph {
         time = null;
       }
 
-      animation.updateAnimation(time, rotate);
+      animation.update(time, rotate);
       animation.apply();
 
     }
