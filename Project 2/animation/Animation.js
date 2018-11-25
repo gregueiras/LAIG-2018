@@ -26,9 +26,9 @@ class Animation {
   }
 
   /**
-   * Updates animation corrent position.
+   * Updates animation current position.
    * @param {number} currTime the scene time counter
-   * @param {number} rotate the flag indicating if should update rotation and not translation
+   * @param {number} rotate the flag indicating if it should update rotation and not translation
    * @param {number} ignoreFlag the flag indicating if rotate param should be ignored
    * @param {boolean} lastAnimation the flag indicating if this animation is the last one to be made
    */

@@ -2673,7 +2673,6 @@ class MySceneGraph {
 
     this.applyTransformation(component);
     this.applyAnimations(component, false);    
-    this.scene.pushMatrix();
     this.applyAnimations(component, true);    
 
     let primRef = component.children.primitiveref;
@@ -2683,8 +2682,6 @@ class MySceneGraph {
         prim.shape.display();
       });
     }
-
-    this.scene.popMatrix();
 
     let compRef = component.children.componentref;
     compRef.forEach(reference => {
@@ -2720,6 +2717,7 @@ class MySceneGraph {
    * scene counter.
    * 
    * @param {Object} component component object
+   * @param {boolean} rotate if true, only does the rotations in the LinearAnimations, else does the CircularAnimations and the translation in LinearAnimations
    */
   applyAnimations(component, rotate) {
     if (this.scene.elapsedTime)
@@ -2743,7 +2741,7 @@ class MySceneGraph {
 
       if (index + 1 === component.animations.length)
         lastAnimation = true;
-        
+
       animation.update(time, rotate, lastAnimation);
       animation.apply();
 
