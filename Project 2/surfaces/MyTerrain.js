@@ -7,7 +7,7 @@ class MyTerrain extends Plane {
 
   /**
    *Creates an instance of MyTerrain.
-   * Calls Plane contructor
+   * Calls Plane constructor
    * @param {CGFscene} scene this instance CGFscene
    * @param {Number} div number of parts to divide the plane, in both axis
    * @param {String} idHeightMap id of the height map texture

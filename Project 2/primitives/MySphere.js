@@ -10,9 +10,9 @@ class MySphere extends CGFobject {
   /**
    *Creates an instance of MySphere.
    * @param {CGFscene} scene this instance CGFscene
-   * @param {number} radius the radious
+   * @param {number} radius the radius
    * @param {number} slices the number of radial segments
-   * @param {number} stacks the number of segments along the heigth
+   * @param {number} stacks the number of segments along the height
    * @memberof MySphere
    */
   constructor(scene, radius, slices, stacks) {

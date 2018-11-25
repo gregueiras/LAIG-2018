@@ -1,5 +1,3 @@
-/*jshint esversion: 6 */
-
 // Order of the groups in the XML document.
 const YAS_INDEX = 0;
 const SCENE_INDEX = 0;
@@ -197,7 +195,7 @@ class MySceneGraph {
    *
    * @param {Object} node specific subsection on the XML tree
    * @param {number} index the index that specifies the type of node
-   * @returns 0 on sucess, error message on failure
+   * @returns 0 on success, error message on failure
    * @memberof MySceneGraph
    */
   parseBlock(node, index) {
@@ -342,7 +340,7 @@ class MySceneGraph {
    *  Parses the <scene> block.
    *
    * @param {Object} sceneNode XML scene element
-   * @returns null on sucess, error message on failure
+   * @returns null on success, error message on failure
    * @memberof MySceneGraph
    */
   parseScene(sceneNode) {
@@ -392,7 +390,7 @@ class MySceneGraph {
    * Parses XML file ortho tag
    *
    * @param {Object} child XML view ortho element
-   * @returns 0 on sucess, error message on failure
+   * @returns 0 on success, error message on failure
    * @memberof MySceneGraph
    */
   parseViewOrtho(child) {
@@ -540,7 +538,7 @@ class MySceneGraph {
    * Parses XML file perspective tag
    *
    * @param {Object} child XML view perspective element
-   * @returns 0 on sucess, error message on failure
+   * @returns 0 on success, error message on failure
    * @memberof MySceneGraph
    */
   parseViewPerspective(child) {
@@ -612,12 +610,12 @@ class MySceneGraph {
   }
 
   /**
-   * Checks existance of default view
+   * Checks existence of default view
    *
    * @returns false on success
    * @memberof MySceneGraph
    */
-  checkDefaultViewExistance() {
+  checkDefaultViewExistence() {
 
     let def = this.views.default;
     let orthos = this.views.orthos;
@@ -693,7 +691,7 @@ class MySceneGraph {
         this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
     }
 
-    if (!this.checkDefaultViewExistance()) {
+    if (!this.checkDefaultViewExistence()) {
       return "Nonexistent default view";
     }
     this.log("Parsed views");
@@ -757,7 +755,7 @@ class MySceneGraph {
    *
    * @param {*} id The id value to check
    * @param {*} arr The array to check
-   * @returns null on sucess, error message on failure
+   * @returns null on success, error message on failure
    * @memberof MySceneGraph
    */
   checkForRepeatedId(id, arr) {
@@ -774,7 +772,7 @@ class MySceneGraph {
    *
    * @param {*} param The variable to complete with colours specifications
    * @param {*} child The holder of colours specifications
-   * @returns 0 on sucess, error message on failure
+   * @returns 0 on success, error message on failure
    * @memberof MySceneGraph
    */
   parseChildrenColours(param, child) {
@@ -815,7 +813,7 @@ class MySceneGraph {
    * @param {*} param The variable to complete with coordinates specifications
    * @param {*} child The holder of coordinates specifications
    * @param {*} forthCoor boolean indicating presence of a forth parameter
-   * @returns 0 on sucess, error message on failure
+   * @returns 0 on success, error message on failure
    * @memberof MySceneGraph
    */
   parseChildrenCoordinates(param, child, forthCoor) {
@@ -849,7 +847,7 @@ class MySceneGraph {
    *
    * @param {*} child The <perspective> node subparameters
    * @param {*} omni The holder of parsed information from child
-   * @returns 0 on sucess, error message on failure
+   * @returns 0 on success, error message on failure
    * @memberof MySceneGraph
    */
   parseLightsOmniChildren(child, omni) {
@@ -876,7 +874,7 @@ class MySceneGraph {
    * Parses the <ligths>\<omni> node.
    *
    * @param {*} child The <omni> node
-   * @returns 0 on sucess, error message on failure
+   * @returns 0 on success, error message on failure
    * @memberof MySceneGraph
    */
   parseLightsOmni(child) {
@@ -976,7 +974,7 @@ class MySceneGraph {
   /**
    * Parse <spot> block
    * @param {Object} child - <spot> block to be parsed
-   * @returns null if run with sucess, an error message if there was an error
+   * @returns null if run with success, an error message if there was an error
    * @memberof MySceneGraph
    */
   parseLightsSpot(child) {
@@ -1065,7 +1063,7 @@ class MySceneGraph {
    * Parses the <ligths> block. 
    * 
    * @param {Object} lightsNode
-   * @returns null if run with sucess, an error message if there was an error
+   * @returns null if run with success, an error message if there was an error
    * @memberof MySceneGraph
    */
   parseLights(lightsNode) {
@@ -1104,7 +1102,7 @@ class MySceneGraph {
   /**
    * Parse <texture> block
    * @param {Object} child - block to be parsed
-   * @returns 0 if run with sucess, an error message if there was an error
+   * @returns 0 if run with success, an error message if there was an error
    * @memberof MySceneGraph
    */
   parseTexturesTexture(child) {
@@ -1145,7 +1143,7 @@ class MySceneGraph {
   /**
    * Parses the <textures> block.
    * @param {Object} texturesNode
-   * @returns null if run with sucess, an error message if there was an error
+   * @returns null if run with success, an error message if there was an error
    * @memberof MySceneGraph
    */
   parseTextures(texturesNode) {
@@ -1194,7 +1192,7 @@ class MySceneGraph {
   /**
    * Parse a <material> block and add it to the graph
    * @param {Object} child - material block to be parsed
-   * @returns 0 if run with sucess, an error message if there was an error
+   * @returns 0 if run with success, an error message if there was an error
    */
   parseMaterial(child) {
     var material = {
@@ -1279,7 +1277,7 @@ class MySceneGraph {
   /**
    * Parses the <materials> block.
    * @param {Object} materialsNode
-   * @returns null if run with sucess, an error message if there is an error
+   * @returns null if run with success, an error message if there is an error
    * @memberof MySceneGraph
    */
   parseMaterials(materialsNode) {
@@ -1304,7 +1302,7 @@ class MySceneGraph {
    * Parse a <rotate> block
    * @param {Object} param - block to be parsed
    * @param {Object} child - object to be populated
-   * @returns Undefined if run with sucess, an error message if there is an error
+   * @returns Undefined if run with success, an error message if there is an error
    * @memberof MySceneGraph
    */
   parseChildrenRotation(param, child) {
@@ -1363,7 +1361,7 @@ class MySceneGraph {
   /**
    * Parse a <transformation> block and add it to the graph
    * @param {Object} child - transformation block to be parsed
-   * @returns 0 if run with sucess, an error message if there was an error
+   * @returns 0 if run with success, an error message if there was an error
    * @memberof MySceneGraph
    */
   parseTransformation(child) {
@@ -1395,7 +1393,7 @@ class MySceneGraph {
   /**
    * Parses the <transformations> block.
    * @param {Object} transformationsNode
-   * @returns null if run with sucess, an error message if there was an error
+   * @returns null if run with success, an error message if there was an error
    * @memberof MySceneGraph
    */
   parseTransformations(transformationsNode) {
@@ -1709,7 +1707,7 @@ class MySceneGraph {
    * Parse a sub-block of a <patch> block
    * @param {Object} child - child node to be parsed
    * @param {Object} patch - patch object to be populated
-   * @returns {number} 0 if run with sucess, message if there was an error
+   * @returns {number} 0 if run with success, message if there was an error
    */
   parseChildrenPatchChildren(patch, child) {
 
@@ -1741,7 +1739,7 @@ class MySceneGraph {
    * Parse a sub-block of a <primitive> block
    * @param {Object} child - child node to be parsed
    * @param {Object} primitive - primitive object to be populated
-   * @returns {number} 0 if run with sucess, -1 if there was an error
+   * @returns {number} 0 if run with success, -1 if there was an error
    */
   parsePrimitivesPrimitiveChildren(child, primitive) {
 
@@ -1874,7 +1872,7 @@ class MySceneGraph {
   /**
    * Parse <linear> block
    * @param {Object} node - node to be parsed
-   * @returns 0 if run with sucess, an error message if there was an error
+   * @returns 0 if run with success, an error message if there was an error
    */
   parseLinearAnimation(node) {
     let pointList = [];
@@ -1940,7 +1938,7 @@ class MySceneGraph {
   /**
    * Parse <circular> block
    * @param {Object} node - node to be parsed
-   * @returns 0 if run with sucess, an error message if there was an error
+   * @returns 0 if run with success, an error message if there was an error
    */
   parseCircularAnimation(node) {
 
@@ -2018,7 +2016,7 @@ class MySceneGraph {
   /**
    * Parses the <animations> block.
    * @param {Object} animationsNode
-   * @returns null if run with sucess, an error message ig there was an error
+   * @returns null if run with success, an error message ig there was an error
    * @memberof MySceneGraph
    */
   parseAnimations(animationsNode) {
@@ -2066,7 +2064,7 @@ class MySceneGraph {
   /**
    * Parse <primitive> block
    * @param {Object} node - node to be parsed
-   * @returns 0 if run with sucess, an error message if there was an error
+   * @returns 0 if run with success, an error message if there was an error
    */
   parsePrimitive(node) {
     var primitive = {
@@ -2102,7 +2100,7 @@ class MySceneGraph {
   /**
    * Parses the <primitives> block.
    * @param {Object} primitivesNode
-   * @returns null if run with sucess, an error message ig there was an error
+   * @returns null if run with success, an error message ig there was an error
    * @memberof MySceneGraph
    */
   parsePrimitives(primitivesNode) {
@@ -2127,7 +2125,7 @@ class MySceneGraph {
    * Parse <transformation> sub-block of a component
    * @param {Object} child - child node to be parsed
    * @param {Object} component - component object to be populated
-   * @returns 0 if run with sucess, an error message if there was an error
+   * @returns 0 if run with success, an error message if there was an error
    */
   parseChildrenTransformation(child, component) {
     let children = child.children;
@@ -2180,7 +2178,7 @@ class MySceneGraph {
    * Parse <materials> sub-block of a component
    * @param {Object} child - child node to be parsed
    * @param {Object} component - component object to be populated
-   * @returns 0 if run with sucess, an error message if there was an error
+   * @returns 0 if run with success, an error message if there was an error
    * @memberof MySceneGraph
    */
   parseChildrenMaterials(child, component) {
@@ -2204,7 +2202,7 @@ class MySceneGraph {
    * Parse <texture> sub-block of a component
    * @param {Object} child - child node to be parsed
    * @param {Object} component - component object to be populated
-   * @returns 0 if run with sucess, an error message if there was an error
+   * @returns 0 if run with success, an error message if there was an error
    */
   parseChildrenTexture(child, component) {
     var id;
@@ -2253,7 +2251,7 @@ class MySceneGraph {
    * Parses the sub-blocks of a <children> block
    * @param {Object} child - child node to be parsed
    * @param {Object} component - component object to be populated
-   * @returns 0 if run with sucess, an error message if there was an error
+   * @returns 0 if run with success, an error message if there was an error
    * @memberof MySceneGraph
    */
   parseChildrenChildren(child, component) {
@@ -2288,7 +2286,7 @@ class MySceneGraph {
    * Parses the sub-blocks of a <animations> block inside a <component>
    * @param {Object} child - child node to be parsed
    * @param {Object} component - component object to be populated
-   * @returns 0 if run with sucess, an error message if there was an error
+   * @returns 0 if run with success, an error message if there was an error
    * @memberof MySceneGraph
    */
   parseChildrenAnimations(child, component) {
@@ -2334,7 +2332,7 @@ class MySceneGraph {
    *
    * @param {Object} child - child node to be parsed
    * @param {Object} component - component object to be populated
-   * @returns 0 if run with sucess, an error message if there was an error
+   * @returns 0 if run with success, an error message if there was an error
    * @memberof MySceneGraph
    */
   parseComponentsComponentChildren(child, component) {
@@ -2364,7 +2362,7 @@ class MySceneGraph {
   /**
    * Checks if a component has the right number of transformations, materials, texture and childrens.
    * @param {Object} component - component object
-   * @returns "OK" if run with sucess, an error message if there was an error
+   * @returns "OK" if run with success, an error message if there was an error
    * @memberof MySceneGraph
    */
   componentErrCheck(component) {
@@ -2387,7 +2385,7 @@ class MySceneGraph {
   /**
    * Parse the <component> block.
    * @param {Object} child
-   * @returns 0 if run with sucess, an error message if there was an error
+   * @returns 0 if run with success, an error message if there was an error
    * @memberof MySceneGraph
    */
   parseComponent(child) {
@@ -2443,7 +2441,7 @@ class MySceneGraph {
    * Parses the <components> block.
    * 
    * @param {Object} componentsNode
-   * @returns null if run with sucess, an error message if there was an error
+   * @returns null if run with success, an error message if there was an error
    * @memberof MySceneGraph
    */
   parseComponents(componentsNode) {
@@ -2562,7 +2560,7 @@ class MySceneGraph {
    * Applies component material  
    * @param {Object} component - component object
    * @param {string} material - material id
-   * @returns null if run with sucess, an error message if there was an error
+   * @returns null if run with success, an error message if there was an error
    * @memberof MySceneGraph
    */
   applyMaterial(component, material) {
@@ -2773,7 +2771,7 @@ class MySceneGraph {
 
 
 /**
- * Returns true if value is a booleanm, false if it isn't
+ * Returns true if value is a boolean, false if it isn't
  * @param {*} value
  * @returns true if value is a boolean, false if it isn't
  */
@@ -2784,9 +2782,9 @@ function isBoolean(value) {
 }
 
 /**
- * Returns true if axis has all the axis propertys, false if it hasn't
+ * Returns true if axis has all the axis properties, false if it hasn't
  * @param {Object} axis
- * @returns {boolean} true if axis has all the axis propertys, false if it hasn't
+ * @returns {boolean} true if axis has all the axis properties, false if it hasn't
  */
 function isAxis(axis) {
 

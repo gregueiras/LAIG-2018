@@ -124,7 +124,7 @@ class LinearAnimation extends Animation {
   }
 
   /**
-   * Creates a vector from origin to destiantion.
+   * Creates a vector from origin to destination.
    * 
    * @param {Point} pA the origin point
    * @param {Point} pB the destination point

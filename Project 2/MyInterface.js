@@ -82,7 +82,6 @@ class MyInterface extends CGFinterface {
 
 
     /**
-     * TODO: Confirmar que é mesmo isto
      * Overrides processKeyboard function from WebCGF and starts listening for pressed keys
      * @memberof MyInterface
      */

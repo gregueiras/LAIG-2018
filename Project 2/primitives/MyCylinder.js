@@ -9,7 +9,7 @@ class MyCylinder extends CGFobject {
    *Creates an instance of MyCylinder.
    * @param {CGFscene} scene this instance CGFscene
    * @param {number} slices the number of radial segments
-   * @param {number} stacks the number of segments along the heigth
+   * @param {number} stacks the number of segments along the height
    * @param {number} base the base radius
    * @param {number} top the top radius
    * @param { number} height the distance from base to top

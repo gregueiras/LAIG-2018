@@ -19,9 +19,9 @@ class Patch extends CGFobject {
         super(scene);
 
         npartsU = typeof npartsU !== 'undefined' ? npartsU : 1;
-        npartsV = typeof npartsV !== 'Vndefined' ? npartsV : 1;
+        npartsV = typeof npartsV !== 'undefined' ? npartsV : 1;
         npointsU = typeof npointsU !== 'undefined' ? npointsU : 1;
-        npointsV = typeof npointsV !== 'Vndefined' ? npointsV : 1;
+        npointsV = typeof npointsV !== 'undefined' ? npointsV : 1;
 
         this.npartsU = npartsU;
         this.npartsV = npartsV;

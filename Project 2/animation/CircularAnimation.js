@@ -1,5 +1,5 @@
 /**
- * Makes the object of appliance move arround given center
+ * Makes the object of appliance move around given center
  * for a set angle during a define period of time.
  * @extends {Animation}
  */
