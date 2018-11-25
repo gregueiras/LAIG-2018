@@ -142,7 +142,6 @@ class XMLscene extends CGFscene {
   loadCamera() {
     if (this.interface.cameras) {
       let selectedCamera = this.interface.cameras[ACTIVE_CAMERA];
-      //TODO: Launch error on XML parser when default camera is not loaded
       this.applyCamera(selectedCamera);
     }
   }
