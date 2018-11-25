@@ -1,5 +1,6 @@
 /**
  * Creates a cylinder with base on XY centered on Z.
+ * Slightly crooked, kept for style reas
  * @extends {CGFobject}
  */
 class Cylinder3 extends CGFobject {
