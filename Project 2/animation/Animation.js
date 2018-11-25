@@ -30,8 +30,9 @@ class Animation {
    * @param {number} currTime the scene time counter
    * @param {number} rotate the flag indicating if should update rotation and not translation
    * @param {number} ignoreFlag the flag indicating if rotate param should be ignored
+   * @param {boolean} lastAnimation the flag indicating if this animation is the last one to be made
    */
-  update(currTime, rotate, ignoreFlag) {
+  update(currTime, rotate, ignoreFlag, lastAnimation) {
     this.currTime = currTime;
     if (this.currTime === null)
       return;
@@ -62,7 +63,7 @@ class Animation {
 
           transformation.angle = transformation.origAngle * completion;
 
-          if (!rotate && !ignoreFlag)
+          if ( (!rotate && !ignoreFlag) || (transformation.lastRot && lastAnimation) )
             transformation.angle = 0;
           else if (transformation.startAngle && !transformation.instant)
             transformation.angle += transformation.startAngle;

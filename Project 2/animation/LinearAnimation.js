@@ -32,7 +32,7 @@ class LinearAnimation extends Animation {
       return 0;
 
     });
-
+    
     this.transformations.push(this.endRot)
     this.transformations = this.transformations.flat();
   }
@@ -67,7 +67,7 @@ class LinearAnimation extends Animation {
         distance: this.linearDistance(currPoint, nextPoint),
         endTime: null
       };
-              
+
       distSoFar += translation.distance;
       translation.endTime = distSoFar * speed;
       dir = this.normalize(dir);
@@ -77,7 +77,7 @@ class LinearAnimation extends Animation {
       let rotAxis = this.cross(oldDir, dir);
       if (rotAxis.y < 0)
         rotAngle = -rotAngle;
-      
+
       if (dir.x === 0 && dir.y === 1 && dir.z === 0) {
         this.transformations.push(translation);
         oldDir = dir;
@@ -98,6 +98,7 @@ class LinearAnimation extends Animation {
         axis: "y",
         endTime: this.span,
         instant: true,
+        lastRot: true
       };
 
       this.transformations.push(translation);
@@ -229,9 +230,10 @@ class LinearAnimation extends Animation {
    * Updates animation corrent position.
    * @param {number} currTime the scene time counter
    * @param {number} rotate the flag indicating if should update rotation and not translation
+   * @param {boolean} lastAnimation the flag indicating if this animation is the last one to be made
    */
-  update(currTime, rotate) {
-    super.update(currTime, rotate, false);
+  update(currTime, rotate, lastAnimation) {
+    super.update(currTime, rotate, false, lastAnimation);
   }
 
 }

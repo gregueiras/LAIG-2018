@@ -73,6 +73,7 @@ class CircularAnimation extends Animation {
       axis: "y",
       endTime: this.span,
       instant: true,
+      lastRot: true
     };
     
     let counterRotation2 = {
@@ -82,6 +83,7 @@ class CircularAnimation extends Animation {
       axis: "y",
       endTime: this.span,
       instant: true,
+      lastRot: true
     };
 
     this.transformations.push(centerTrans);
@@ -96,9 +98,10 @@ class CircularAnimation extends Animation {
    * Updates animation corrent position.
    * @param {number} currTime the scene time counter
    * @param {number} rotate the flag indicating if should update rotation and not translation
+   * @param {boolean} lastAnimation the flag indicating if this animation is the last one to be made
    */
-  update(currTime, rotate) {
-    super.update(currTime, rotate, true);
+  update(currTime, rotate, lastAnimation) {
+    super.update(currTime, rotate, true, lastAnimation);
   }
   
 }

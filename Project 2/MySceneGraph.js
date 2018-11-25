@@ -2727,6 +2727,8 @@ class MySceneGraph {
     for (let index = 0; index < component.animations.length; index++) {
       const compAnim = component.animations[index];
       const animation = this.animations[compAnim.id];
+      let lastAnimation = false;
+
       if(rotate && animation instanceof CircularAnimation)
         continue;
         
@@ -2739,7 +2741,10 @@ class MySceneGraph {
         time = null;
       }
 
-      animation.update(time, rotate);
+      if (index + 1 === component.animations.length)
+        lastAnimation = true;
+        
+      animation.update(time, rotate, lastAnimation);
       animation.apply();
 
     }
