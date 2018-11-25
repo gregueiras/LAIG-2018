@@ -2671,8 +2671,8 @@ class MySceneGraph {
       return -1;
     }
 
-    this.applyAnimations(component, false);    
     this.applyTransformation(component);
+    this.applyAnimations(component, false);    
     this.scene.pushMatrix();
     this.applyAnimations(component, true);    
 
