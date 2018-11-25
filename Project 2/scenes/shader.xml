@@ -138,7 +138,7 @@
 
     <component id="ship">
       <transformation>
-          <transformationref id="tf3" />
+        <transformationref id="tf3" />
       </transformation>
       <animations>
         <animationref id="lift" />
@@ -151,6 +151,20 @@
         <!--
         <animationref id="lift" />
         -->
+      </animations>
+      <materials>
+        <material id="default" />
+      </materials>
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <componentref id="ship2" />
+      </children>
+    </component>
+
+    <component id="ship2">
+      <transformation>
+      </transformation>
+      <animations>
       </animations>
       <materials>
         <material id="default" />
@@ -189,7 +203,7 @@
       <texture id="none" length_s="1" length_t="1" />
       <children>
         <primitiveref id="terr" />
-        
+
       </children>
     </component>
 
