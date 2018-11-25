@@ -60,17 +60,36 @@ class CircularAnimation extends Animation {
     
     let mainRot = {
       type: "rotate",
-      startAngle: 90, //TODO: Remover start angle
+      startAngle: 90,
       origAngle: rotationAngle,
       axis: "y",
       startTime: 0,
       endTime: this.span,
     };
 
+    let counterRotation1 = { //rotation to startAngle
+      type: "rotate",
+      origAngle: -placeRot.origAngle,
+      axis: "y",
+      endTime: this.span,
+      instant: true,
+    };
+    
+    let counterRotation2 = {
+      type: "rotate",
+      startAngle: mainRot.startAngle,
+      origAngle: -mainRot.origAngle,
+      axis: "y",
+      endTime: this.span,
+      instant: true,
+    };
+
     this.transformations.push(centerTrans);
     this.transformations.push(mainRot);
     this.transformations.push(radiusTrans);
     this.transformations.push(placeRot);
+    this.transformations.push(counterRotation2);
+    this.transformations.push(counterRotation1);
   }
 
   /**

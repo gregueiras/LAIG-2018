@@ -64,7 +64,7 @@ class Animation {
 
           if (!rotate && !ignoreFlag)
             transformation.angle = 0;
-          else if (transformation.startAngle)
+          else if (transformation.startAngle && !transformation.instant)
             transformation.angle += transformation.startAngle;
           break;
         default:
