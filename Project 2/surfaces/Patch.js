@@ -8,11 +8,11 @@ class Patch extends CGFobject {
      * Creates an instance of Patch.
      * 
      * @param {*} scene the scene
-     * @param {*} npartsU the number of division along X
-     * @param {*} npartsV the number of division along Y
-     * @param {*} npointsU the number of points to consider along X
-     * @param {*} npointsV the number of points to consider along Y
-     * @param {*} controlVertex the list of control points
+     * @param {number} npartsU the number of division along X
+     * @param {number} npartsV the number of division along Y
+     * @param {number} npointsU the number of points to consider along X
+     * @param {number} npointsV the number of points to consider along Y
+     * @param {Array} controlVertex the list of control points
      */
     constructor(scene, npartsU, npartsV, npointsU, npointsV, controlVertex) {
 

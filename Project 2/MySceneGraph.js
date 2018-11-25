@@ -495,7 +495,7 @@ class MySceneGraph {
    * Parses XML file perspective tag children
    *
    * @param {Object} child XML perspective view element children
-   * @param {*} perspective The struct used to save information about this perspective camera
+   * @param {Object} perspective The struct used to save information about this perspective camera
    * @returns error message on failure
    * @memberof MySceneGraph
    */
@@ -753,8 +753,8 @@ class MySceneGraph {
   /**
    * Checks for repeated id on arr
    *
-   * @param {*} id The id value to check
-   * @param {*} arr The array to check
+   * @param {number} id The id value to check
+   * @param {Array} arr The array to check
    * @returns null on success, error message on failure
    * @memberof MySceneGraph
    */
@@ -770,8 +770,8 @@ class MySceneGraph {
   /**
    * Gets colour parameters from child
    *
-   * @param {*} param The variable to complete with colours specifications
-   * @param {*} child The holder of colours specifications
+   * @param {Object} param The variable to complete with colours specifications
+   * @param {Object} child The holder of colours specifications
    * @returns 0 on success, error message on failure
    * @memberof MySceneGraph
    */
@@ -810,9 +810,9 @@ class MySceneGraph {
   /**
    * Gets coordinates parameters from child
    *
-   * @param {*} param The variable to complete with coordinates specifications
-   * @param {*} child The holder of coordinates specifications
-   * @param {*} forthCoor boolean indicating presence of a forth parameter
+   * @param {Object} param The variable to complete with coordinates specifications
+   * @param {Object} child The holder of coordinates specifications
+   * @param {Boolean} forthCoor boolean indicating presence of a forth parameter
    * @returns 0 on success, error message on failure
    * @memberof MySceneGraph
    */
@@ -845,8 +845,8 @@ class MySceneGraph {
   /**
    * Parses the <views>\<perspective> node.
    *
-   * @param {*} child The <perspective> node subparameters
-   * @param {*} omni The holder of parsed information from child
+   * @param {Object} child The <perspective> node subparameters
+   * @param {Object} omni The holder of parsed information from child
    * @returns 0 on success, error message on failure
    * @memberof MySceneGraph
    */
@@ -873,7 +873,7 @@ class MySceneGraph {
   /**
    * Parses the <ligths>\<omni> node.
    *
-   * @param {*} child The <omni> node
+   * @param {Object} child The <omni> node
    * @returns 0 on success, error message on failure
    * @memberof MySceneGraph
    */

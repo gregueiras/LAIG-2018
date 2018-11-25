@@ -8,8 +8,8 @@ class Plane extends CGFobject {
      * Creates an instance of Plane.
      * 
      * @param {*} scene the scene
-     * @param {*} divU the number of division along X
-     * @param {*} divV the number of division along Y
+     * @param {number} divU the number of division along X
+     * @param {number} divV the number of division along Y
      */
     constructor(scene, divU, divV) {
 

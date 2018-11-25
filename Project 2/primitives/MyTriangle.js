@@ -100,8 +100,8 @@ class MyTriangle extends CGFobject {
 	/**
 	 * Modifies texture appliance parameters to this instance.
 	 *
-	 * @param {*} ls the number of units that texture should occupy on X coordinate
-	 * @param {*} lt the number of units that texture should occupy on Y coordinate
+	 * @param {number} ls the number of units that texture should occupy on X coordinate
+	 * @param {number} lt the number of units that texture should occupy on Y coordinate
 	 * @memberof MyTriangle
 	 */
 	setTexCoords(ls, lt) {
