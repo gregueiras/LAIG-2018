@@ -542,6 +542,7 @@
                 <material id="inherit" />
             </materials>
             <texture id="none" />
+            <matmarked id="mat_red" />
             <children>
                 <componentref id="donut_plate" />
                 <componentref id="simpson_donut" />

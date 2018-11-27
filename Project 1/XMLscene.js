@@ -19,6 +19,7 @@ class XMLscene extends CGFscene {
 
     this.interface = myInterface;
     this.lightValues = {};
+    this.marked = false;  
   }
 
   /**

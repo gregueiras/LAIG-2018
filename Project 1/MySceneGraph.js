@@ -112,6 +112,15 @@ class MySceneGraph {
             this.primitives[key].specs.slices,
             this.primitives[key].specs.stacks);
           break;
+        case "rect2":
+          this.primitives[key].shape = new MyRect2(
+            this.scene,
+            this.primitives[key].specs.x1,
+            this.primitives[key].specs.x2,
+            this.primitives[key].specs.y1,
+            this.primitives[key].specs.y2,
+            this.primitives[key].specs.cornerOffset);
+          break;
         default:
           break;
       }
@@ -996,7 +1005,8 @@ class MySceneGraph {
         return reply;
     }
 
-    let l = spot.location, t = spot.target;
+    let l = spot.location,
+      t = spot.target;
     if (l.x == t.x && l.y == t.y && l.z == t.z) {
       return `Spot ${spot.id}: Location can't be the same as target`;
     }
@@ -1388,6 +1398,46 @@ class MySceneGraph {
   }
 
   /**
+   * Parse a <rect2> block
+   * @param {Object} rect2 - primitive object to be populated
+   * @param {Object} child - child node to be parsed
+   * @returns {number} an error message if there was an error
+   */
+  parseChildrenRect2(rectangle, child) {
+    let args = this.reader.getString(child, 'args');
+    if (args == null) {
+      return "unable to parse args value";
+    }
+    let coords = args.split(' ');
+
+    rectangle.x1 = coords[0];
+    if (rectangle.x1 == null || isNaN(rectangle.x1)) {
+      return "unable to parse x1 value";
+    }
+
+    rectangle.x2 = coords[1];
+    if (rectangle.x2 == null || isNaN(rectangle.x2)) {
+      return "unable to parse x2 value";
+    }
+
+    rectangle.y1 = coords[2];
+    if (rectangle.y1 == null || isNaN(rectangle.y1)) {
+      return "unable to parse y1 value";
+    }
+
+    rectangle.y2 = coords[3];
+    if (rectangle.y2 == null || isNaN(rectangle.y2)) {
+      return "unable to parse y2 value";
+    }
+
+
+    rectangle.cornerOffset = this.reader.getFloat(child, 'corneroffset');
+    if (rectangle.cornerOffset == null || isNaN(rectangle.cornerOffset)) {
+      return "unable to parse x1 value";
+    }
+  }
+
+  /**
    * Parse a <triangle> block
    * @param {Object} triangle - primitive object to be populated
    * @param {Object} child - child node to be parsed
@@ -1596,6 +1646,18 @@ class MySceneGraph {
         primitive.type = "torus";
         primitive.specs = torus;
         break;
+      case "rect2":
+        let rect2 = {
+          x1: null,
+          y1: null,
+          x2: null,
+          y2: null,
+          cornerOffset: null
+        };
+        this.parseChildrenRect2(rect2, child);
+        primitive.type = "rect2";
+        primitive.specs = rect2;
+        break;  
       default:
         this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
         break;
@@ -1742,6 +1804,17 @@ class MySceneGraph {
     return 0;
   }
 
+  parseChildrenMatMark(child, component) {
+    var id;
+    console.log(child, component);
+    id = this.reader.getString(child, 'id');
+    if (id == null || !isString(id)) {
+      return `Component "${component.id}: unable to parse id value`;
+    }
+    component.matMark = id;
+    return 0;
+  }
+
   /**
    * Parse <texture> sub-block of a component
    * @param {Object} child - child node to be parsed
@@ -1844,6 +1917,10 @@ class MySceneGraph {
 
       case "texture":
         return this.parseChildrenTexture(child, component);
+
+      case "matmarked":
+        return this.parseChildrenMatMark(child,
+        component);
 
       case "children":
         return this.parseChildrenChildren(child, component);
@@ -2057,7 +2134,11 @@ class MySceneGraph {
    * @memberof MySceneGraph
    */
   applyMaterial(component) {
-
+    if (this.scene.marked && component.matMark != null) {
+      this.materials[component.matMark].apply();
+      return 0;
+    }
+    
     let matID = component.materials[component.materialID];
     switch (matID) {
       case INHERIT:
@@ -2163,9 +2244,15 @@ class MySceneGraph {
       });
     }
 
+    let matMark = null;
+    if (this.scene.marked && component.matMark != null) {
+      matMark = component.matMark;
+    }
     let compRef = component.children.componentref;
     compRef.forEach(reference => {
       let child = this.components[reference];
+      if (matMark)
+        child.matMark = matMark;
       this.displayComponent(child);
 
     });

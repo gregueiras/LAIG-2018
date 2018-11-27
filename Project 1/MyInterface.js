@@ -23,6 +23,7 @@ class MyInterface extends CGFinterface {
         //  http://workshop.chromeexperiments.com/examples/gui
 
         this.gui = new dat.GUI();
+        this.gui.add(this.scene, 'marked')
         this.initKeys();
 
         return true;
