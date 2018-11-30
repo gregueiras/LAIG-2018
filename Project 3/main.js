@@ -63,6 +63,10 @@ serialInclude(['./lib/CGF.js',
     'surfaces/MyTerrain.js',
     'surfaces/MyWater.js',
     'primitives/MyShip.js',
+    'primitives/MyPrism.js',
+    'primitives/MyHollowPrism.js',
+    'primitives/MyBoardCell.js',
+    'primitives/MyBoard.js',
 
     main = function () {
         // Standard application, scene and interface setup
@@ -80,7 +84,7 @@ serialInclude(['./lib/CGF.js',
         // get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
         // or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
 
-        var filename = getUrlVars()['file'] || "shader.xml";
+        var filename = getUrlVars()['file'] || "alpha.xml";
 
         // create and load graph, and associate it to scene. 
         // Check console for loading errors

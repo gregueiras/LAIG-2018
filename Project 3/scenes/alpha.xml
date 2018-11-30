@@ -29,7 +29,7 @@
     </ambient>
     <lights>
         <omni id="Office" enabled="1">
-            <location x="3" y="5" z="3" w="0" />
+            <location x="3" y="-5" z="3" w="0" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.7" g="0.7" b="0.7" a="1" />
             <specular r="0.3" g="0.3" b="0.3" a="1" />
@@ -718,7 +718,6 @@
                 <transformationref id="tf1" />
             </transformation>
             <animations>
-                <animationref id="la1"/>
             </animations>
             <materials>
                 <material id="inherit" />
@@ -733,7 +732,6 @@
                 <transformationref id="tf5" />
             </transformation>
             <animations>
-                <animationref id="la2"/>
             </animations>
             <materials>
                 <material id="inherit" />
