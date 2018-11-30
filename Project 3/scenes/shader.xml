@@ -1,0 +1,229 @@
+<yas>
+
+  <scene root="test" axis_length="3" />
+  <views default="Default">
+    <perspective id="Default" near="0.01" far="500" angle="60">
+      <from x="20" y="20" z="20" />
+      <to x="0" y="0" z="0" />
+    </perspective>
+  </views>
+  <ambient>
+    <ambient r="0.3" g="0.3" b="0.3" a="1" />
+    <background r="0.53" g="0.81" b="0.92" a="1" />
+  </ambient>
+  <lights>
+    <omni id="Office" enabled="1">
+      <location x="3" y="5" z="3" w="0" />
+      <ambient r="0" g="0" b="0" a="1" />
+      <diffuse r="0.7" g="0.7" b="0.7" a="1" />
+      <specular r="0.3" g="0.3" b="0.3" a="1" />
+    </omni>
+    <omni id="Point1" enabled="1">
+      <location x="8" y="6.1" z="-2" w="0" />
+      <ambient r="0" g="0" b="0" a="1" />
+      <diffuse r="0.7" g="0.7" b="0.7" a="1" />
+      <specular r="0.3" g="0.3" b="0.3" a="1" />
+    </omni>
+    <omni id="Point2" enabled="1">
+      <location x="8" y="6.1" z="3.5" w="0" />
+      <ambient r="0" g="0" b="0" a="1" />
+      <diffuse r="0.7" g="0.7" b="0.7" a="1" />
+      <specular r="0.3" g="0.3" b="0.3" a="1" />
+    </omni>
+    <omni id="Point3" enabled="1">
+      <location x="3" y="6.1" z="-2" w="0" />
+      <ambient r="0" g="0" b="0" a="1" />
+      <diffuse r="0.7" g="0.7" b="0.7" a="1" />
+      <specular r="0.3" g="0.3" b="0.3" a="1" />
+    </omni>
+
+  </lights>
+  <textures>
+    <texture id="text_text" file="./scenes/images/es8tex4.png" />
+    <texture id="map" file="./scenes/images/es8.png" />
+    <texture id="wave_map" file="./scenes/images/wave.jpg" />
+    <texture id="text_rocks" file="./scenes/images/rocks.jpg" />
+    <texture id="text_water" file="./scenes/images/water.jpg" />
+  </textures>
+  <materials>
+    <material id="default" shininess = "0.1">
+      <emission r="0" g="0" b="0" a="0" />
+      <ambient r="0.1" g="0.1" b="0.1" a="1" />
+      <diffuse r="0.1" g="0.1" b="0.1" a="1" />
+      <specular r="0.1" g="0.1" b="0.1" a="1" />
+    </material>
+  </materials>
+  <transformations>
+    <transformation id="tf1">
+      <translate x="0" y="0" z="0" />
+      <rotate axis="x" angle="-90" />
+      <scale x="20" y="20" z="20" />
+    </transformation>
+    <transformation id="tf2">
+      <translate x="0" y="0" z="0.01" />
+      <scale x="1.5" y="1.5" z="1" />
+    </transformation>
+    <transformation id="tf3">
+      <translate x="3" y="6.1" z="-2" />
+      <rotate axis="x" angle="0" />
+      <scale x="0.5" y="0.5" z="0.5" />
+    </transformation>
+    <transformation id="tf4">
+      <translate x="3.6" y="-2" z="0" />
+      <rotate axis="x" angle="90" />
+      <scale x="1" y="1" z="1" />
+    </transformation>
+    <transformation id="tf5">
+      <scale x="1.2" y="1.2" z="1" />
+    </transformation>
+    <transformation id="tf6">
+      <translate x="0" y="0" z="0.08" />
+      <scale x="1.5" y="1.5" z="1" />
+    </transformation>
+  </transformations>
+
+  <animations>
+
+    <linear id="la1" span="5">
+      <controlpoint xx="0" yy="0" zz="0"/>
+      <controlpoint xx="10" yy="0" zz="0"/>
+      <controlpoint xx="10" yy="0" zz="10"/>
+    </linear>
+    <linear id="la2" span="5">
+      <controlpoint xx="0" yy="0" zz="0"/>
+      <controlpoint xx="0" yy="0" zz="-10"/>
+      <controlpoint xx="-10" yy="0" zz="-10"/>
+    </linear>
+    <linear id="la3" span="1">
+      <controlpoint xx="0" yy="0" zz="0"/>
+      <controlpoint xx="7" yy="0" zz="0"/>
+    </linear>
+    <linear id="lift" span="5">
+      <controlpoint xx="0" yy="0" zz="0"/>
+      <controlpoint xx="0" yy="5" zz="0"/>
+    </linear>
+
+    <circular id="ca1" span="10" center="-7 0 -2" radius="10" startang="10" rotang="720" />
+  </animations>
+
+  <primitives>
+
+    <primitive id="terr">
+      <terrain idtexture="text_text" idheightmap="map" parts="100" heightscale="0.14" />
+    </primitive>
+    <primitive id="wat">
+      <water idtexture="text_water" idwavemap="wave_map" parts="10" heightscale="0.04" texscale="0.9" />
+    </primitive>
+    <primitive id="ship">
+      <vehicle />
+    </primitive>
+
+  </primitives>
+
+  <components>
+    <component id="test">
+      <transformation>
+      </transformation>
+      <animations>
+      </animations>
+      <materials>
+        <material id="default" />
+      </materials>
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <componentref id="ship" />
+        <componentref id="island" />
+      </children>
+    </component>
+
+    <component id="ship">
+      <transformation>
+        <transformationref id="tf3" />
+      </transformation>
+      <animations>
+        <animationref id="lift" />
+        <animationref id="la1" />
+        <animationref id="la2" />
+        <animationref id="la3" />
+        <animationref id="ca1" />
+        <animationref id="la1" />
+        <animationref id="la2" />
+        <!--
+        <animationref id="lift" />
+        -->
+      </animations>
+      <materials>
+        <material id="default" />
+      </materials>
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <componentref id="ship2" />
+      </children>
+    </component>
+
+    <component id="ship2">
+      <transformation>
+      </transformation>
+      <animations>
+      </animations>
+      <materials>
+        <material id="default" />
+      </materials>
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="ship" />
+      </children>
+    </component>
+
+    <component id="island">
+      <transformation>
+        <transformationref id="tf1"/>
+      </transformation>
+      <animations>
+      </animations>
+      <materials>
+        <material id="default" />
+      </materials>
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <componentref id="terrain"/>
+        <componentref id="water"/>
+      </children>
+    </component>
+
+    <component id="terrain">
+      <transformation>
+        <transformationref id="tf5"/>
+      </transformation>
+      <animations>
+      </animations>
+      <materials>
+        <material id="default" />
+      </materials>
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="terr" />
+
+      </children>
+    </component>
+
+    <component id="water">
+      <transformation>
+        <transformationref id="tf6"/>
+      </transformation>
+      <animations>
+      </animations>
+      <materials>
+        <material id="default" />
+      </materials>
+      <texture id="none" length_s="1" length_t="1" />
+      <children>
+        <primitiveref id="wat" />
+
+      </children>
+    </component>
+
+
+  </components>
+
+</yas>

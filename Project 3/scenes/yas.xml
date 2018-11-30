@@ -1,0 +1,143 @@
+<!-- Os comentarios devem ter espacos no inicio e no fim, a -->
+<!-- separar dos hifens -->
+<!-- Nao devem ser usados caracteres especiais (p.ex. acentos) -->
+<!-- Todas as tags e atributos sao obrigatorios, exceto onde for -->
+<!-- referido o contrario -->
+<!-- Na descricao abaixo, os simbolos utilizados tem o seguinte significado: -->
+<!-- ii: integer value -->
+<!-- ff: float value -->
+<!-- ss: string value -->
+<!-- cc: character "x" or "y" or "z" -->
+<!-- tt: "0" or "1" with Boolean significance -->
+<yas>
+    <!-- deve definir-se um objeto para raiz da arvore, assim -->
+    <!-- como o comprimento dos tres eixos (cilindros) -->
+    <scene root="ss" axis_length="ff" />
+    <views default="ss">
+        <!-- tem de existir, pelo menos, uma vista de -->
+        <!-- entre as seguintes (perspective ou ortho) -->
+        <perspective id="ss" near="1" far="2" angle="3">
+            <from x="4" y="5" z="6" />
+            <to x="7" y="8" z="9" />
+        </perspective>
+        <ortho id="ss" near="10" far="11" left="12" right="13" top="14" bottom="15" />
+    </views>
+    <ambient>
+        <ambient r="ff" g="ff" b="ff" a="ff" />
+        <background r="ff" g="ff" b="ff" a="ff" />
+    </ambient>
+    <lights>
+        <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
+        <!-- Os identificadores "id" nao podem ser repetidos -->
+        <omni id="ss" enabled="1">
+            <location x="2" y="3" z="4" w="5" />
+            <ambient r="6" g="7" b="8" a="9" />
+            <diffuse r="10" g="11" b="12" a="13" />
+            <specular r="14" g="15" b="16" a="17" />
+        </omni>
+        <spot id="sss" enabled="0" angle="1" exponent="2">
+            <!-- atencao, "target" e' diferente de "direction" -->
+            <location x="3" y="4" z="5" w="6" />
+            <target x="7" y="8" z="9" />
+            <ambient r="10" g="11" b="12" a="13" />
+            <diffuse r="14" g="15" b="16" a="17" />
+            <specular r="18" g="19" b="20" a="21" />
+        </spot>
+    </lights>
+    <textures>
+        <!-- Deve existir um ou mais blocos "texture" -->
+        <!-- Os identificadores "id" nao podem ser repetidos -->
+        <texture id="sstexttures" file="ss/file/exemple.txt" />
+    </textures>
+    <materials>
+        <!-- Deve existir um ou mais blocos "material" -->
+        <!-- Os identificadores "id" nao podem ser repetidos -->
+        <material id="ss" shininess = "22">
+            <emission r="23" g="24" b="25" a="26" />
+            <ambient r="27" g="28" b="29" a="30" />
+            <diffuse r="31" g="32" b="33" a="34" />
+            <specular r="35" g="36" b="37" a="38" />
+        </material>
+    </materials>
+    <transformations>
+        <!-- Deve existir um ou mais blocos "transformation" -->
+        <!-- Os identificadores "id" nao podem ser repetidos -->
+        <!-- Os angulos sao expressos em graus -->
+        <transformation id="ss">
+            <!-- instrucoes a usar sem limite nem ordem -->
+            <!-- deve existir pelo menos uma transformacao -->
+            <translate x="39" y="40" z="50" />
+            <rotate axis="x" angle="51" />
+            <scale x="52" y="53" z="54" />
+            <scale x="55" y="56" z="57" />
+        </transformation>
+    </transformations>
+    <primitives>
+        <!-- Uma "primitive" e' uma primitiva e pode ser usada em nos folha -->
+        <!-- Deve existir um ou mais blocos "primitive" -->
+        <!-- Os identificadores "id" nao podem ser repetidos -->
+        <primitive id="ss">
+            <!-- apenas pode existir UMA das seguintes tags: -->
+            <!-- rectangle, triangle, cylinder, sphere, torus -->
+            <!-- os parametros devem ser interpretados, genericamente, -->
+            <!-- como em WebGL; o cilindro deve adicionalmente ter tampas -->
+            <rectangle x1="ff" y1="ff" x2="ff" y2="ff" />
+            <triangle x1="ff" y1="ff" z1="ff" x2="ff" y2="ff" z2="ff" x3="ff" y3="ff" z3="ff" />
+            <cylinder base="ff" top="ff" height="ff" slices="ii" stacks="ii" />
+            <sphere radius="ff" slices="ii" stacks="ii" />
+            <torus inner="ff" outer="ff" slices="ii" loops="ii" />
+        </primitive >
+    </primitives >
+    <components>
+        <component id="ss">
+            <!-- Uma "component" e' um objeto composto e pode ser -->
+            <!-- usada em nos intermédios -->
+            <!-- bloco "transformation" e' obrigatorio -->
+            <transformation>
+                <!-- deve conter uma referencia a uma das "transformation" -->
+                <!-- declaradas anteriormente -->
+                <transformationref id="ss" />
+                <!-- ou, ALTERNATIVAMENTE, transformacoes explicitas, -->
+                <!-- usando zero ou mais das instrucoes seguintes, sem -->
+                <!-- limite nem ordem -->
+                <!-- ex: bloco transformation pode ficar sem conteudo -->
+                <translate x="ff" y="ff" z="ff" />
+                <rotate axis="cc" angle="ff" />
+                <scale x="ff" y="ff" z="ff" />
+            </transformation>
+            <!-- declaracao obrigatoria de pelo menos um material; -->
+            <!-- o material id="inherit", mantem (herda) material do "pai" -->
+            <!-- se varios materiais declarados, o default e' o -->
+            <!-- primeiro material; de cada vez que se pressione a tecla m/M, -->
+            <!-- o material muda para o proximo material da lista; do -->
+            <!-- ultimo material da lista volta ao primeiro -->
+            <materials>
+                <material id="ss" />
+            </materials>
+            <!-- declaracao obrigatoria de texture -->
+            <!-- id="inherit" mantem (herda) a textura do objecto "pai" -->
+            <!-- id="none" remove a textura recebida do pai -->
+            <!-- a textura declarada sobrepoe a textura recebida do -->
+            <!-- objecto "pai" -->
+            <!-- length_s e length_t sao fatores de escala de textura:-->
+            <!-- Exemplo length_s=3.0: uma ocorrencia da textura, em -->
+            <!-- comprimento, deve cobrir um comprimento igual -->
+            <!-- a 3 unidades; -->
+            <!-- Exemplo length_t=0.4, uma ocorrencia da textura, em -->
+            <!-- largura, deve cobrir uma largura igual a 0.4 unidades. -->
+            <!-- E' permitido que objetos afetados por Transf. Geometr. -->
+            <!-- do tipo escalamento violem esta regra. -->
+            <!-- Nao e' necessario aplicar fatores de escala em -->
+            <!-- quadricas (esfera, cilindro...) -->
+            <texture id="ss" length_s="ff" length_t="ff" />
+            <!-- bloco "children" obrigatorio num "component" -->
+            <children>
+                <!-- deve existir uma ou mais tags "componentref" e/ou -->
+                <!-- "primitiveref", identificando outros -->
+                <!-- componentes ou primitivas -->
+                <componentref id="ss" />
+                <primitiveref id="ss" />
+            </children>
+        </component>
+    </components>
+</yas>

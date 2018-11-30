@@ -1,0 +1,49 @@
+#ifdef GL_ES
+precision highp float;
+#endif
+
+#define MAX_HEIGHT 2.0
+
+attribute vec3 aVertexPosition;
+attribute vec3 aVertexNormal;
+attribute vec2 aTextureCoord;
+uniform mat4 uMVMatrix;
+uniform mat4 uPMatrix;
+uniform mat4 uNMatrix;
+uniform float timeFactor;
+uniform float normScale;
+varying vec4 coords;
+varying vec4 normal;
+varying vec2 vTextureCoord;
+
+uniform float textureScale;
+
+uniform sampler2D myHeightmap;
+uniform sampler2D myTexture;
+
+float map(float OrigValue, float OrigLowerBound, float OrigUpperBound, float NewLowerBound, float NewUpperBound) {
+  return NewLowerBound + OrigValue / (OrigUpperBound - OrigLowerBound) * (NewUpperBound - NewLowerBound);
+}
+
+void main() {
+  // vertex pushed outwards according to the normal and scale
+  vec2 pos = aTextureCoord;
+	pos.x = mod(pos.x * textureScale, 1.0);
+	pos.y = mod(pos.y * textureScale, 1.0);
+
+  vec4 heightColor = texture2D(myHeightmap, pos);
+  float heightIntensity = heightColor.x + heightColor.y + heightColor.z;
+  float min = 0.0, max = 3.0;
+  float height = map(heightIntensity, min, max, min, MAX_HEIGHT);
+
+  vec3 temp = aVertexNormal;
+  temp.z += height * normScale;
+  vec4 vertex= vec4(temp, 1.0);
+  //vertex.z += height*0.1;
+
+  // projected vertex
+  gl_Position = uPMatrix * uMVMatrix * vertex;
+    
+  vTextureCoord = aTextureCoord;
+  
+}
