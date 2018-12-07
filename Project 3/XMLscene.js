@@ -42,7 +42,7 @@ class XMLscene extends CGFscene {
     this.gl.depthFunc(this.gl.LEQUAL);
 
     this.axis = new CGFaxis(this);
-    this.board = new MyBoard(this);
+    this.game = new Manalath(this);
 
   }
 
@@ -249,7 +249,7 @@ class XMLscene extends CGFscene {
 
       // Displays the scene (MySceneGraph function).
       //this.graph.displayScene();
-      this.board.display();
+      this.game.display();
     } else {
       // Draw axis
       this.axis.display();

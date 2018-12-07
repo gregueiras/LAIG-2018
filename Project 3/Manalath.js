@@ -1,9 +1,8 @@
 class Manalath {
 
   constructor(scene) {
+    this.scene = scene;
     this.board = new MyBoard(scene);
-    this.blackPiece = new MyPiece(scene, 'Black');
-    this.whitePiece = new MyPiece(scene, 'White');
 
     this.moves = [];
     this.pieces = [];
@@ -21,12 +20,5 @@ class Manalath {
 
   display() {
     this.board.display();
-
-    this.scene.pushMatrix();
-
-    
-
-    this.scene.popMatrix();
-
   }
 }
