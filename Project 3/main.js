@@ -67,6 +67,8 @@ serialInclude(['./lib/CGF.js',
     'primitives/MyHollowPrism.js',
     'primitives/MyBoardCell.js',
     'primitives/MyBoard.js',
+    'primitives/MyPiece.js',
+    'Manalath.js',
 
     main = function () {
         // Standard application, scene and interface setup

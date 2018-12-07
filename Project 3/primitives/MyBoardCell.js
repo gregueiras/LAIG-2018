@@ -2,7 +2,7 @@ class MyBoardCell {
   constructor(scene, borderFactor, heightFactor) {
     this.scene = scene;
     this.border = new MyHollowPrism(scene, 6, 1, borderFactor);
-    this.base = new MyPrism(scene, 6, 1);
+    this.base = new MyCylinderBase(scene, 6, 1);
     this.heightFactor = heightFactor;
   }
 
