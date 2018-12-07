@@ -11,7 +11,7 @@ class MyBoardCell {
 
     this.border.display();
     
-    this.scene.translate(0, 0, 1);
+    this.scene.translate(0, 0, -this.heightFactor);
     this.scene.scale(1, 1, this.heightFactor);
     this.base.display();
     
