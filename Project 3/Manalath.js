@@ -3,20 +3,21 @@ class Manalath {
   constructor(scene) {
     this.scene = scene;
     this.board = new MyBoard(scene);
-
+    this.selectedPiece = null;
     this.moves = [];
     this.pieces = [];
-    
-    this.board.grid.forEach(cell => {
-      this.pieces.push({
-        x: cell.pX,
-        y: cell.pY,
-        value: CellState.empty
-      });
-    });
 
   }
 
+  animate(cell) {
+    if (this.selectedPiece) {
+      console.log(this.selectedPiece, cell);
+      //this.selectedPiece.animate = new CircularAnimation(this.scene.graph, 10, )
+      this.selectedPiece = null;
+    } else {
+      console.warn(`You must select a piece first`);
+    }
+  }
 
   display() {
     this.board.display();

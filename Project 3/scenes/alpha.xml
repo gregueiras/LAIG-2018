@@ -19,8 +19,8 @@
             <to x="-8" y="0" z="0" />
         </ortho >
         <perspective id="Garden" near="0.01" far="500" angle="90">
-            <from x="8.5" y="5" z="-8.5" />
-            <to x="0" y="0" z="0" />
+            <from x="9" y="10" z="-3" />
+            <to x="3" y="0" z="-1" />
         </perspective>
     </views>
     <ambient>

@@ -1,4 +1,4 @@
-// Multiply for this const to convert from degrees to radians 
+// Multiply for this const to convert from degrees to radians
 const DEGREE_TO_RAD = Math.PI / 180;
 
 //Default key code for changing objects materials
@@ -8,10 +8,9 @@ const CHANGE_MATERIAL = "KeyM";
  * XMLscene class, representing the scene that is to be rendered.
  */
 class XMLscene extends CGFscene {
-
   /**
    *Creates an instance of XMLscene and binds it to a interface
-   * @param {CGFinterface} myInterface 
+   * @param {CGFinterface} myInterface
    * @memberof XMLscene
    */
   constructor(myInterface) {
@@ -20,7 +19,6 @@ class XMLscene extends CGFscene {
     this.interface = myInterface;
     this.lightValues = {};
     this.oldtime = 0;
-    
   }
 
   /**
@@ -44,13 +42,20 @@ class XMLscene extends CGFscene {
     this.axis = new CGFaxis(this);
     this.game = new Manalath(this);
 
+    this.setPickEnabled(true);
   }
 
   /**
    * Initializes the scene cameras.
    */
   initCameras() {
-    this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+    this.camera = new CGFcamera(
+      0.1,
+      0.1,
+      500,
+      vec3.fromValues(10, 15, 15),
+      vec3.fromValues(0, 0, 0)
+    );
   }
   /**
    * Initializes the scene lights with the values read from the XML file.
@@ -58,8 +63,7 @@ class XMLscene extends CGFscene {
   initLights() {
     let index = 0;
 
-    for (let i = 0;
-      (i < this.graph.light.omnis.length) && (index < 8); i++) {
+    for (let i = 0; i < this.graph.light.omnis.length && index < 8; i++) {
       const light = this.graph.light.omnis[i];
       this.lightValues[light.id] = light;
 
@@ -81,8 +85,7 @@ class XMLscene extends CGFscene {
       index++;
     }
 
-    for (let i = 0;
-      (i < this.graph.light.spots.length) && (index < 8); i++) {
+    for (let i = 0; i < this.graph.light.spots.length && index < 8; i++) {
       const light = this.graph.light.spots[i];
       this.lightValues[light.id] = light;
 
@@ -110,13 +113,10 @@ class XMLscene extends CGFscene {
     }
   }
 
-
-  /* Handler called when the graph is finally loaded. 
+  /* Handler called when the graph is finally loaded.
    * As loading is asynchronous, this may be called already after the application has started the run loop
    */
   onGraphLoaded() {
-
-
     this.axis = new CGFaxis(this, this.graph.axis_length);
 
     this.loadAmbient();
@@ -131,10 +131,9 @@ class XMLscene extends CGFscene {
 
     this.loadCamera();
     this.sceneInited = true;
-    
+
     this.oldtime = 0;
     this.setUpdatePeriod(10);
-
   }
 
   /**
@@ -159,18 +158,31 @@ class XMLscene extends CGFscene {
       let cam = defOrtho;
       let target = cam.to;
       let from = cam.from;
-      this.camera = new CGFcameraOrtho(cam.left, cam.right, cam.bottom, cam.top, cam.near, cam.far,
-        vec3.fromValues(from.x, from.y, from.z), vec3.fromValues(target.x, target.y, target.z), vec3.fromValues(0, 1, 0));
+      this.camera = new CGFcameraOrtho(
+        cam.left,
+        cam.right,
+        cam.bottom,
+        cam.top,
+        cam.near,
+        cam.far,
+        vec3.fromValues(from.x, from.y, from.z),
+        vec3.fromValues(target.x, target.y, target.z),
+        vec3.fromValues(0, 1, 0)
+      );
       this.camera.id = selectedCamera;
       this.interface.setActiveCamera(this.camera);
-
     }
     if (defPerspective != null) {
       let cam = defPerspective;
       let target = cam.to;
       let from = cam.from;
-      let newC = new CGFcamera(DEGREE_TO_RAD * cam.angle, cam.near, cam.far, vec3.fromValues(from.x, from.y, from.z),
-        vec3.fromValues(target.x, target.y, target.z));
+      let newC = new CGFcamera(
+        DEGREE_TO_RAD * cam.angle,
+        cam.near,
+        cam.far,
+        vec3.fromValues(from.x, from.y, from.z),
+        vec3.fromValues(target.x, target.y, target.z)
+      );
       this.camera = newC;
       this.camera.id = selectedCamera;
       this.interface.setActiveCamera(this.camera);
@@ -207,11 +219,29 @@ class XMLscene extends CGFscene {
       }
     }
   }
+
+  logPicking() {
+    if (this.pickMode == false) {
+      if (this.pickResults != null && this.pickResults.length > 0) {
+        for (var i = 0; i < this.pickResults.length; i++) {
+          var obj = this.pickResults[i][0];
+          if (obj) {
+            console.log(obj);
+          }
+        }
+        this.pickResults.splice(0, this.pickResults.length);
+      }
+    }
+  }
+
   /**
    * Displays the scene.
    */
   // Quando trocar de shader, usar this.setActiveShader(this.defaultShader);
   display() {
+    this.logPicking();
+    this.clearPickRegistration();
+
     // ---- BEGIN Background, camera and axis setup
 
     // Clear image and depth buffer everytime we update the scene
@@ -274,10 +304,9 @@ class XMLscene extends CGFscene {
         if (component.materialID >= component.materials.length) {
           component.materialID = 0;
         }
-      };
+      }
       this.interface.releaseKey(CHANGE_MATERIAL);
     }
-
   }
 
   update(currentTime) {
