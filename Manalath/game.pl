@@ -285,7 +285,7 @@ play(Board,X,Y,Color,NewBoard,Winner) :-
 play(Board,_,_,_,NewBoard,Winner) :-
   printInvalidPlay,
   NewBoard = Board,
-  Winner = 0.
+  Winner = -2.
 
 % create_move(X,Y,Color, Move)
 % creates a move (list [X,Y,Color]) with the X,Y and Color values received
