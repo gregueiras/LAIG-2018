@@ -116,7 +116,9 @@ class XMLscene extends CGFscene {
    */
   onGraphLoaded() {
 
-
+    let client = new Client();
+    client.request('startCvP(1)');
+    
     this.axis = new CGFaxis(this, this.graph.axis_length);
 
     this.loadAmbient();

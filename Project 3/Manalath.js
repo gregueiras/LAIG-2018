@@ -4,6 +4,7 @@ class Manalath {
     this.scene = scene;
     this.board = new MyBoard(scene);
 
+    // x, y, state
     this.moves = [];
     this.pieces = [];
     
