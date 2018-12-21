@@ -22,12 +22,14 @@ class MyPiece {
     switch (color) {
       case CellState.white:
       case -1:
-        this.color = new CGFtexture(this.scene, "./scenes/images/metal.jpg");
-        break;
-
+      this.color = new CGFtexture(this.scene, "./scenes/images/metal.jpg");
+      this.state = CellState.white;
+      break;
+      
       case CellState.black:
       case 1:
-        this.color = new CGFtexture(this.scene, "./scenes/images/space.jpg");
+      this.color = new CGFtexture(this.scene, "./scenes/images/space.jpg");
+      this.state = CellState.black;
         break;
     }
 
