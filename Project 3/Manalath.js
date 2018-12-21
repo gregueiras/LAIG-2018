@@ -11,10 +11,11 @@ class Manalath {
     this.state = GameStates.READY;
 
     this.animationSpan = 2;
+    this.client = new Client();
   }
 
   animate(cell) {
-    if (this.selectedPiece && this.state === GameStates.READY) {
+    if (this.selectedPiece && this.state === GameStates.READY && cell.state === CellState.empty) {
 
       const options = {
         upOffset: 3,
@@ -50,16 +51,28 @@ class Manalath {
         ]
       );
 
-      this.state = GameStates.ANIMATING;
-      this.selectedPiece = null;
-
-      setTimeout(() => {
-        this.state = GameStates.READY;
-      }, this.animationSpan * 1000)
+      this.play(cell);
 
     } else {
       console.warn(`You must select a piece first`);
     }
+  }
+
+  play(cell) {
+    cell.state = this.selectedPiece.state;
+    this.moves.push({
+      x: cell.pX,
+      y: cell.pY,
+      state: cell.state
+    });
+    this.state = GameStates.ANIMATING;
+    this.selectedPiece = null;
+    setTimeout(() => {
+      this.state = GameStates.READY;
+    }, this.animationSpan * 1000);
+
+    console.log(this.moves)
+    console.log(cell)
   }
 
   display() {
