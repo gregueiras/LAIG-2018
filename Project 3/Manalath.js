@@ -4,6 +4,8 @@ class Manalath {
     this.scene = scene;
     this.board = new MyBoard(scene);
     this.selectedPiece = null;
+
+    // x, y, state
     this.moves = [];
     this.pieces = [];
     this.state = GameStates.READY;
