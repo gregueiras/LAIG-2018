@@ -7,6 +7,7 @@ const CHANGE_MATERIAL = "KeyM";
 /**
  * XMLscene class, representing the scene that is to be rendered.
  */
+let game;
 class XMLscene extends CGFscene {
   /**
    *Creates an instance of XMLscene and binds it to a interface
@@ -41,6 +42,7 @@ class XMLscene extends CGFscene {
 
     this.axis = new CGFaxis(this);
     this.game = new Manalath(this);
+    game = this.game;
 
     this.setPickEnabled(true);
   }

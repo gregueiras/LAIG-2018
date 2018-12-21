@@ -73,10 +73,6 @@ class Manalath {
     setTimeout(() => {
       this.state = GameStates.READY;
     }, this.animationSpan * 1000);
-    
-
-    console.log(this.moves)
-    console.log(cell)
   }
 
   AIPlay(play) {
@@ -87,10 +83,10 @@ class Manalath {
       if (tempPiece.available && tempPiece.state === play.state) {
         this.selectedPiece = tempPiece;
       }
-
-    } while (this.selectedPiece !== undefined);
-    //TODO Ir buscar a celula
-    play(cell);
+      
+    } while (this.selectedPiece === undefined);
+    let cell = this.board.board.find(element => element.pX === play.x && element.pY === play.y);
+    this.animate(cell);
   }
 
   display() {
