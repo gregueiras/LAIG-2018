@@ -226,7 +226,12 @@ class XMLscene extends CGFscene {
         for (var i = 0; i < this.pickResults.length; i++) {
           var obj = this.pickResults[i][0];
           if (obj) {
-            console.log(obj);
+            console.log(obj)
+            if (obj.constructor.name === 'MyPiece') {
+              this.game.selectedPiece = obj;
+            } else if (obj.constructor.name === 'MyBoardCell') {
+              this.game.animate(obj);
+            }
           }
         }
         this.pickResults.splice(0, this.pickResults.length);

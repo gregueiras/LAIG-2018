@@ -27,7 +27,7 @@ class CircularAnimation extends Animation {
   /**
    * Stores all necessary transformations preparing them for appliance.
    * 
-   * @param {number} center the center of rotation
+   * @param {Point} center the center of rotation
    * @param {number} radius the rotation radius
    * @param {number} startAngle the rotation initial angle
    * @param {number} rotationAngle the rotation total angle variation
