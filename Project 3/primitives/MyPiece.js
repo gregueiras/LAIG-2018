@@ -6,6 +6,8 @@ class MyPiece {
     this.id = id;
     this.set = null;
     this.currTime = 0;
+    this.available = true;
+    this.state = CellState.empty;
   }
 
   setPosition(pos) {

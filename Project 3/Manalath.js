@@ -7,7 +7,6 @@ class Manalath {
 
     // x, y, state
     this.moves = [];
-    this.pieces = [];
     this.state = GameStates.READY;
 
     this.animationSpan = 2;
@@ -60,19 +59,38 @@ class Manalath {
 
   play(cell) {
     cell.state = this.selectedPiece.state;
+    this.selectedPiece.available = false;
+    
     this.moves.push({
       x: cell.pX,
       y: cell.pY,
       state: cell.state
     });
+    
     this.state = GameStates.ANIMATING;
     this.selectedPiece = null;
+    
     setTimeout(() => {
       this.state = GameStates.READY;
     }, this.animationSpan * 1000);
+    
 
     console.log(this.moves)
     console.log(cell)
+  }
+
+  AIPlay(play) {
+    this.selectedPiece = undefined;
+    do {
+      let pieces = this.board.pieces;
+      let tempPiece = pieces[Math.floor(Math.random()*pieces.length)];
+      if (tempPiece.available && tempPiece.state === play.state) {
+        this.selectedPiece = tempPiece;
+      }
+
+    } while (this.selectedPiece !== undefined);
+    //TODO Ir buscar a celula
+    play(cell);
   }
 
   display() {
