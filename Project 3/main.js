@@ -69,6 +69,7 @@ serialInclude(['./lib/CGF.js',
     'primitives/MyBoard.js',
     'primitives/MyPiece.js',
     'Manalath.js',
+    'logic/Client.js',
 
     main = function () {
         // Standard application, scene and interface setup
