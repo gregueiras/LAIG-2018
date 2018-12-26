@@ -49,6 +49,8 @@ class Manalath {
         [options.start, up, down, options.end]
       );
       this.play(cell);
+    } else if (this.moviePlaying) {
+      console.warn(`Sit back and enjoy the movie of your last game`);
     } else if (this.state !== GameStates.READY) {
       console.warn(`You can't play now. Please try again after a few moments`);
     } else if (this.selectedPiece === null) {
@@ -61,6 +63,7 @@ class Manalath {
   }
 
   play(cell) {
+    console.log(this.selectedPiece)
     cell.state = this.selectedPiece.state;
     this.selectedPiece.available = false;
 
@@ -113,7 +116,7 @@ class Manalath {
     if (obj.constructor.name === "MyPiece") {
       if (!obj.available) {
         console.warn(`You can't selected an already placed piece`);
-      } else {
+      } else if (!this.moviePlaying) {
         this.selectedPiece = obj;
         obj.setHighlight(true);
       }
@@ -123,5 +126,27 @@ class Manalath {
   }
   display() {
     this.board.display();
+  }
+
+  playGameMovie() {
+    let moves = this.moves.slice();
+    while (this.moves.length !== 0) {
+      this.undo();
+    }
+    let i = 1;
+    this.moviePlaying = true;
+    moves.forEach(move => {
+      setTimeout(() => {
+        this.state = GameStates.READY;
+        this.selectedPiece = move.piece;
+        console.log(this.selectedPiece)
+        console.log(move.cell)
+        this.animate(move.cell);
+      }, i++ * this.animationSpan * 1000);
+    });
+
+    setTimeout(() => {
+      this.moviePlaying = false;
+    }, i * this.animationSpan * 1000);
   }
 }
