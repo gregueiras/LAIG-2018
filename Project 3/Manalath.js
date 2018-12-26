@@ -14,8 +14,11 @@ class Manalath {
   }
 
   animate(cell) {
-    if (this.selectedPiece && this.state === GameStates.READY && cell.state === CellState.empty) {
-
+    if (
+      this.selectedPiece &&
+      this.state === GameStates.READY &&
+      cell.state === CellState.empty
+    ) {
       const options = {
         upOffset: 3,
         start: {
@@ -27,7 +30,7 @@ class Manalath {
           x: cell.xC,
           y: 0,
           z: cell.yC
-        },
+        }
       };
       let up = {
         x: this.selectedPiece.xC,
@@ -38,44 +41,40 @@ class Manalath {
         x: cell.xC,
         y: options.upOffset,
         z: cell.yC
-      }      
+      };
+      this.selectedPiece.reverse = false;
       this.selectedPiece.animate = new LinearAnimation(
         this.scene.graph,
         this.animationSpan,
-        [
-          options.start,
-          up,
-          down,
-          options.end
-        ]
+        [options.start, up, down, options.end]
       );
-
       this.play(cell);
-
     } else if (this.state !== GameStates.READY) {
-      console.warn(`You can't play now. Please try again after a few moments`)
+      console.warn(`You can't play now. Please try again after a few moments`);
     } else if (this.selectedPiece === null) {
       console.warn(`You must select a piece first`);
     } else if (cell.state !== CellState.empty) {
-      console.warn(`Please select an empty cell`)
+      console.warn(`Please select an empty cell`);
     } else {
-      console.warn(`Invalid Play`)
+      console.warn(`Invalid Play`);
     }
   }
 
   play(cell) {
     cell.state = this.selectedPiece.state;
     this.selectedPiece.available = false;
-    
+
     this.moves.push({
       x: cell.pX,
       y: cell.pY,
-      state: cell.state
+      state: cell.state,
+      piece: this.selectedPiece,
+      cell: cell
     });
-    
+
     this.state = GameStates.ANIMATING;
     this.selectedPiece = null;
-    
+
     setTimeout(() => {
       this.state = GameStates.READY;
     }, this.animationSpan * 1000);
@@ -85,16 +84,43 @@ class Manalath {
     this.selectedPiece = undefined;
     do {
       let pieces = this.board.pieces;
-      let tempPiece = pieces[Math.floor(Math.random()*pieces.length)];
+      let tempPiece = pieces[Math.floor(Math.random() * pieces.length)];
       if (tempPiece.available && tempPiece.state === play.state) {
         this.selectedPiece = tempPiece;
       }
-      
     } while (this.selectedPiece === undefined);
-    let cell = this.board.board.find(element => element.pX === play.x && element.pY === play.y);
+    let cell = this.board.board.find(
+      element => element.pX === play.x && element.pY === play.y
+    );
     this.animate(cell);
   }
 
+  undo() {
+    if (this.moves.length === 0) return;
+
+    let lastMove = this.moves.pop();
+    let piece = lastMove.piece;
+    let cell = lastMove.cell;
+
+    piece.reverse = true;
+    piece.available = true;
+    cell.state = CellState.empty;
+  }
+
+  handlePicking(obj) {
+    if (this.selectedPiece) this.selectedPiece.setHighlight(false);
+
+    if (obj.constructor.name === "MyPiece") {
+      if (!obj.available) {
+        console.warn(`You can't selected an already placed piece`);
+      } else {
+        this.selectedPiece = obj;
+        obj.setHighlight(true);
+      }
+    } else if (obj.constructor.name === "MyBoardCell") {
+      this.animate(obj);
+    }
+  }
   display() {
     this.board.display();
   }

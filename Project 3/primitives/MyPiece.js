@@ -54,7 +54,14 @@ class MyPiece {
     }
 
     if (this.animate && this.scene.elapsedTime) {
-      this.currTime += this.scene.elapsedTime;
+      if (this.reverse) {
+        if (this.currTime > this.animate.span) this.currTime = this.animate.span;
+        this.currTime -= this.scene.elapsedTime;
+      } else {
+        if (this.currTime < 0) this.currTime = 0;
+        this.currTime += this.scene.elapsedTime;
+      }
+
       this.animate.update(this.currTime);
       this.animate.apply();
     }

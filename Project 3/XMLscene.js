@@ -239,19 +239,7 @@ class XMLscene extends CGFscene {
         for (var i = 0; i < this.pickResults.length; i++) {
           var obj = this.pickResults[i][0];
           if (obj) {
-            if (this.game.selectedPiece)
-              this.game.selectedPiece.setHighlight(false);
-
-            if (obj.constructor.name === 'MyPiece') {
-              if (!obj.available) {
-                console.warn(`You can't selected an already placed piece`)
-              } else {
-                this.game.selectedPiece = obj;
-                obj.setHighlight(true);
-              }
-            } else if (obj.constructor.name === 'MyBoardCell') {
-              this.game.animate(obj);
-            }
+            this.game.handlePicking(obj);
           }
         }
         this.pickResults.splice(0, this.pickResults.length);
