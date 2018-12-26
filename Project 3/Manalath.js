@@ -63,7 +63,6 @@ class Manalath {
   }
 
   play(cell) {
-    console.log(this.selectedPiece)
     cell.state = this.selectedPiece.state;
     this.selectedPiece.available = false;
 
@@ -125,7 +124,13 @@ class Manalath {
     }
   }
   display() {
+    this.scene.pushMatrix();
+
+    this.scene.rotate(90 * DEGREE_TO_RAD, 1, 0, 0);
+    this.scene.scale(0.5, 1, 0.5);
     this.board.display();
+
+    this.scene.popMatrix();
   }
 
   playGameMovie() {
@@ -139,8 +144,8 @@ class Manalath {
       setTimeout(() => {
         this.state = GameStates.READY;
         this.selectedPiece = move.piece;
-        console.log(this.selectedPiece)
-        console.log(move.cell)
+        console.log(this.selectedPiece);
+        console.log(move.cell);
         this.animate(move.cell);
       }, i++ * this.animationSpan * 1000);
     });

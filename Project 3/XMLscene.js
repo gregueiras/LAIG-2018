@@ -7,8 +7,8 @@ const CHANGE_MATERIAL = "KeyM";
 /**
  * XMLscene class, representing the scene that is to be rendered.
  */
-let game;
-class XMLscene extends CGFscene {
+let scene;
+ class XMLscene extends CGFscene {
   /**
    *Creates an instance of XMLscene and binds it to a interface
    * @param {CGFinterface} myInterface
@@ -20,6 +20,7 @@ class XMLscene extends CGFscene {
     this.interface = myInterface;
     this.lightValues = {};
     this.oldtime = 0;
+    scene = this;
   }
 
   /**
@@ -41,8 +42,6 @@ class XMLscene extends CGFscene {
     this.gl.depthFunc(this.gl.LEQUAL);
 
     this.axis = new CGFaxis(this);
-    this.game = new Manalath(this);
-    game = this.game;
 
     let color = {
       r: 1,
@@ -54,7 +53,11 @@ class XMLscene extends CGFscene {
     this.highlightMaterial.setColor(color.r, color.g, color.b, color.a);
 
     this.defaultMaterial = new CGFappearance(this);
-
+    let val = 0.5;
+    this.defaultMaterial.setDiffuse(val, val, val, 1);
+    this.defaultMaterial.setSpecular(val, val, val, 1);
+    this.defaultMaterial.setAmbient(0.2, 0.2, 0.2, 1);
+    this.defaultMaterial.setShininess(10.0);
     this.setPickEnabled(true);
   }
 
@@ -234,19 +237,33 @@ class XMLscene extends CGFscene {
   }
 
   logPicking() {
-    if (this.pickMode == false) {
-      if (this.pickResults != null && this.pickResults.length > 0) {
-        for (var i = 0; i < this.pickResults.length; i++) {
-          var obj = this.pickResults[i][0];
-          if (obj) {
-            this.game.handlePicking(obj);
-          }
+    if (!this.game && this.graph.primitives) {
+      for(const key of Object.keys(this.graph.primitives)) {
+        let primitive = this.graph.primitives[key];
+        if (primitive.type === "manalath") {
+          this.game = primitive.shape;
         }
-        this.pickResults.splice(0, this.pickResults.length);
+      }
+      this.graph.primitives.forEach(primitive => {
+        console.log(primitive.type)
+        if (primitive.type === "manalath")
+          this.game = primitive;
+      });
+    }
+    if (this.game) {
+      if (this.pickMode == false) {
+        if (this.pickResults != null && this.pickResults.length > 0) {
+          for (var i = 0; i < this.pickResults.length; i++) {
+            var obj = this.pickResults[i][0];
+            if (obj) {
+              this.game.handlePicking(obj);
+            }
+          }
+          this.pickResults.splice(0, this.pickResults.length);
+        }
       }
     }
   }
-
   /**
    * Displays the scene.
    */
@@ -291,8 +308,7 @@ class XMLscene extends CGFscene {
       }
 
       // Displays the scene (MySceneGraph function).
-      //this.graph.displayScene();
-      this.game.display();
+      this.graph.displayScene();
     } else {
       // Draw axis
       this.axis.display();

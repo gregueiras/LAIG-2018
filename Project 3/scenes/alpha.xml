@@ -320,6 +320,9 @@
         </transformation>
         <transformation id="tf46">
         </transformation>
+        <transformation id="tfGame">
+            <translate x="5" y="10" z="0" />
+        </transformation>
     </transformations>
 
     <animations>
@@ -419,6 +422,10 @@
         <primitive id = "torus2">
             <torus inner="1" outer="2" slices="20" loops="30" />
         </primitive>
+        <primitive id = "game">
+            <manalath />
+        </primitive>
+
     </primitives >
     <components>
         <component id="house">
@@ -605,6 +612,19 @@
             <texture id="text_metal" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="torus2" />
+                <componentref id="manalath" />
+            </children>
+        </component>
+        <component id="manalath">
+            <transformation>
+                <transformationref id="tfGame" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="game" />
             </children>
         </component>
         <component id="outside_windows">
