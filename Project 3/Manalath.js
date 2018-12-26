@@ -52,8 +52,14 @@ class Manalath {
 
       this.play(cell);
 
-    } else {
+    } else if (this.state !== GameStates.READY) {
+      console.warn(`You can't play now. Please try again after a few moments`)
+    } else if (this.selectedPiece === null) {
       console.warn(`You must select a piece first`);
+    } else if (cell.state !== CellState.empty) {
+      console.warn(`Please select an empty cell`)
+    } else {
+      console.warn(`Invalid Play`)
     }
   }
 

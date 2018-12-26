@@ -46,8 +46,6 @@ class MyBoard {
           side = -1;
         }
 
-        console.log((q + R) * 2, r + 4);
-
         const pos = {
           xC: x + origin.x,
           yC: y + origin.y,

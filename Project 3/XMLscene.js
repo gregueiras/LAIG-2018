@@ -44,6 +44,17 @@ class XMLscene extends CGFscene {
     this.game = new Manalath(this);
     game = this.game;
 
+    let color = {
+      r: 1,
+      g: 1,
+      b: 0,
+      a: 0
+    };
+    this.highlightMaterial = new CGFappearance(this);
+    this.highlightMaterial.setColor(color.r, color.g, color.b, color.a);
+
+    this.defaultMaterial = new CGFappearance(this);
+
     this.setPickEnabled(true);
   }
 
@@ -228,9 +239,16 @@ class XMLscene extends CGFscene {
         for (var i = 0; i < this.pickResults.length; i++) {
           var obj = this.pickResults[i][0];
           if (obj) {
-            console.log(obj)
+            if (this.game.selectedPiece)
+              this.game.selectedPiece.setHighlight(false);
+
             if (obj.constructor.name === 'MyPiece') {
-              this.game.selectedPiece = obj;
+              if (!obj.available) {
+                console.warn(`You can't selected an already placed piece`)
+              } else {
+                this.game.selectedPiece = obj;
+                obj.setHighlight(true);
+              }
             } else if (obj.constructor.name === 'MyBoardCell') {
               this.game.animate(obj);
             }

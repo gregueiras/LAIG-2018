@@ -1,4 +1,5 @@
 class MyPiece {
+  
   constructor(scene, id) {
     this.scene = scene;
     this.piece = new MySphere(scene, 1, 20, 20);
@@ -8,6 +9,8 @@ class MyPiece {
     this.currTime = 0;
     this.available = true;
     this.state = CellState.empty;
+    this.highlight = false;
+
   }
 
   setPosition(pos) {
@@ -60,10 +63,23 @@ class MyPiece {
     this.scene.scale(0.5, 2, 0.5);
 
     if (this.color) this.color.bind();
+    
     this.scene.registerForPick(this.id, this);
-
+    
+    this.scene.pushMatrix();
+    
+    if (this.highlight) this.scene.highlightMaterial.apply();
+    
     this.piece.display();
+    
+    if (this.highlight) this.scene.defaultMaterial.apply(); 
 
     this.scene.popMatrix();
+
+    this.scene.popMatrix();
+  }
+
+  setHighlight(enable) {
+    this.highlight = enable;
   }
 }
