@@ -29,10 +29,18 @@ class Manalath {
 		//TODO Implement on the menu
 		this.lvl = GameDifficulty.EASY;
 
-		this.mode = GameModes.PvP;
+		this.mode = GameModes.CvP;
 
 		this.client.request(
 			this.client.buildRequestParams(this.mode, this.lvl)
+    );
+    
+    this.client.request(
+			this.client.buildRequestParams(
+				this.mode,
+				this.lvl,
+				this.board.board
+			)
 		);
 	}
 

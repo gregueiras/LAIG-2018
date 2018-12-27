@@ -4,8 +4,14 @@ class Client {
 
 		this.port = typeof port !== "undefined" ? port : this.defaultPort;
 
-		this.requestComplete = false;
 		this.winnerCode = 0;
+
+		//stores sent board
+		this.board = [];
+		//receives new board
+		this.newBoard = [];
+		//last change
+		this.move = null;
 	}
 
 	//Tipo de jogadas  : PvP , PvC, CvP
@@ -48,27 +54,33 @@ class Client {
 			//player play
 			if (typeof move !== "undefined") {
 				if (mode == GameModes.CvC) {
-					return -1;
+					console.error("Cant send moves on bot play");
 				}
 
 				let moveStr = this.moveToString(move);
 				requestStr += "," + moveStr;
 			} else {
 				if (mode == GameModes.PvP) {
-					return -2;
+					console.error("Have to send moves on player play");
 				}
 			}
 
 			requestStr += ")";
 		}
 
-		console.log(requestStr);
 		return requestStr;
 	}
 
 	boardToString(board) {
+		this.board = [];
 		let boardStr = "[";
 		board.forEach(cell => {
+			let boardCell = {
+				x: cell.pX,
+				y: cell.pY,
+				state: cell.state
+			};
+
 			let x = cell.pX.toString();
 			let y = cell.pY.toString();
 
@@ -82,6 +94,7 @@ class Client {
 			}
 
 			boardStr += "cell(" + x + "," + y + "," + state + "),";
+			this.board.push(boardCell);
 		});
 
 		boardStr = boardStr.slice(0, -1);
@@ -93,23 +106,28 @@ class Client {
 	moveToString(move) {
 		let x = move.x;
 		let y = move.y;
-		let color;
+		let state;
 		if ((move.state = CellState.empty)) {
-			color = "emptyCell";
+			state = "emptyCell";
 		} else if ((move.state = CellState.white)) {
-			color = "whitePiece";
+			state = "whitePiece";
 		} else if ((move.state = CellState.black)) {
-			color = "blackPiece";
+			state = "blackPiece";
 		}
 
-		return x + "," + y + "," + color;
+		return x + "," + y + "," + state;
 	}
 
 	request(message) {
+
+		console.log(message);
+
 		let request = new XMLHttpRequest();
 
-		this.requestComplete = false;
-		request.addEventListener("load", this.requestCompleted);
+		let client = this;
+		request.addEventListener("load", function() {
+			client.requestCompleted(event, this.responseText);
+		});
 		request.addEventListener("error", this.requestFailed);
 		request.open(
 			"GET",
@@ -123,9 +141,7 @@ class Client {
 		request.send();
 	}
 
-	requestCompleted(event) {
-		let response = this.responseText;
-
+	requestCompleted(event, response) {
 		if (!isNaN(parseInt(response))) {
 			switch (parseInt(response)) {
 				case 0:
@@ -140,31 +156,34 @@ class Client {
 
 		let splited = response.split("]");
 
-		console.log(response);
-
-		this.winnerCode = splited[1].slice(1);
-
-		if (!isNaN(parseInt(this.winnerCode))) {
-			switch (parseInt(this.winnerCode)) {
-                //TODO confirm codes
-				case 0:
-					console.log(parseInt(this.winnerCode));
-					console.log("Valid Play, No Winner");
-					return;
-				case -2:
-					console.log(parseInt(this.winnerCode));
-					console.log("Invalid Play");
-					return;
-				default:
-					console.log("Undefined Err");
-					return;
-			}
-		}
-
 		let cellArr = splited[0].slice(2);
+
+		this.buildNewBoard(cellArr);
+
+		console.log(this.board);
+		console.log(this.newBoard);
+
+		this.findMove();
+
+		console.log(this.move);
+
+		this.winnerCode = parseInt(splited[1].slice(1));
+
+		this.handleWinnerCode();
+	}
+
+	requestFailed(event) {
+		console.warn("Request failed.");
+	}
+
+	buildNewBoard(cellArr) {
 		cellArr = cellArr.split("),");
 
-		this.board = [];
+		let lastCell = cellArr.pop();
+		lastCell = lastCell.replace(")", "");
+		cellArr.push(lastCell);
+
+		this.newBoard = [];
 
 		cellArr.forEach(cell => {
 			let vals = cell.slice(5);
@@ -174,22 +193,85 @@ class Client {
 			cell = {
 				x: parseInt(cellVals[0]),
 				y: parseInt(cellVals[1]),
-				state: cellVals[2]
+				state: null
 			};
 
-			this.board.push(cell);
+			if (cellVals[2] == "emptyCell") {
+				cell.state = CellState.empty;
+			} else if (cellVals[2] == "whitePiece") {
+				cell.state = CellState.white;
+			} else if (cellVals[2] == "blackPiece") {
+				cell.state = CellState.black;
+			}
+
+			this.newBoard.push(cell);
 		});
-
-		let lastCell = this.board.pop();
-		lastCell.state = lastCell.state.replace(")", "");
-		this.board.push(lastCell);
-
-		this.requestComplete = true;
-
-		console.log(this.board);
 	}
 
-	requestFailed(event) {
-		console.warn("Request failed.");
+	//TODO confirm codes
+	handleWinnerCode() {
+		if (!isNaN(this.winnerCode)) {
+			switch (this.winnerCode) {
+				case 0:
+					console.log("Valid Play, No Winner");
+					return;
+				case 1:
+					console.log("Valid Play, Winner is Player 1");
+					return;
+				case 2:
+					console.log("Valid Play, Winner is Player 2");
+					return;
+				case -1:
+					console.log("Valid Play, Draw");
+					return;
+				case -2:
+					console.log("Invalid Play");
+					return;
+				default:
+					console.log("Undefined Err");
+					return;
+			}
+		}
+	}
+
+	orderBoard(board) {
+		board.sort(function(a, b) {
+			if (a.x == b.x) {
+				return a.y - b.y;
+			}
+			return a.x - b.x;
+		});
+	}
+
+	findMove() {
+
+		this.orderBoard(this.board);
+		this.orderBoard(this.newBoard);
+
+		for(let i = 0; i < this.board.length; ++i) {
+			let x = this.board[i].x;
+			let y = this.board[i].y;
+			let s = this.board[i].state;
+			let nx = this.newBoard[i].x;
+			let ny = this.newBoard[i].y;
+			let ns = this.newBoard[i].state;
+
+			if(!(x == nx && y == ny)) {
+				console.error('order fail');
+			}
+
+			if(x == nx && y == ny && s != ns) {
+				this.move = {
+					x: x,
+					y: y,
+					state: ns
+				};
+
+				return;
+			}
+		}
+
+		console.error("Move not found");
+	
 	}
 }

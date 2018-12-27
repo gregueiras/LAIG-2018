@@ -276,22 +276,11 @@ play_game_loop(Board,Lvl,_Winner) :-
 % executes a play if possible
 play(Board,X,Y,Color,NewBoard,Winner) :-
   valid_moves(Board,ListOfMoves),
-  write('1'), nl,
-  write(X), nl,
-  write(Y), nl,
-  write(Color), nl,
-  write(ListOfMoves), nl,
-  write(Board), nl,
   member((X,Y,Color), ListOfMoves),
-  write('2'), nl,
   create_move(X,Y,Color, Move),
-  write('3'), nl,
   move(Move, Board,NewBoard), 
-  write('4'), nl,
   game_over(NewBoard, Winner),
-  write('5'), nl,
-  switchCurrentPlayer,
-  write('6'), nl.
+  switchCurrentPlayer.
 
 play(Board,_,_,_,NewBoard,Winner) :-
   printInvalidPlay,

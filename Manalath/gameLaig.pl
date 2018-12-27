@@ -18,27 +18,10 @@ getInformation(Board,Lvl, X,Y,Color) :-
   getCurrentPlayerBot(1),
   choose_move(Board, Lvl, X, Y, Color).
 
-play_game_loop(Board,_Lvl, 1, _) :-
-  display_game_winner(Board, 1), !.
-
-play_game_loop(Board,_Lvl, 2, _) :-
-  display_game_winner(Board, 2), !.
-
-play_game_loop(Board,_Lvl, -1, _) :-
-  display_game_winner(Board, -1), !.
-
-play_game_loop(Board,Lvl,Winner, _, _, _) :-
-  play_game_loop(Board,Lvl,Winner, _).
-
-play_game_loop(Board,Lvl,Winner, _) :-
-  countValidMoves(Board, 0),
-  switchCurrentPlayer,
-  printIsImpossiblePlay.
-
 %BOT play
 play_game_loop(Board,Lvl,NewWinner, NewBoard) :-
   getCurrentPlayer(Player), !,
-  getInformation(Board,Lvl, X,Y,Color),
+  getInformation(Board,Lvl, X,Y,Color), 
   play(Board,X,Y,Color,NewBoard,NewWinner).
 
 %Player play
@@ -62,6 +45,4 @@ start_game_CvP(Lvl) :-
 start_game_CvC(Lvl) :-
   initial_board(Board),
   assertPlayers_CvC. %initializes the players
-
-  
 
