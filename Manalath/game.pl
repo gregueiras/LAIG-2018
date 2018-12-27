@@ -272,26 +272,26 @@ play_game_loop(Board,Lvl,_Winner) :-
   play(Board,X,Y,Color,NewBoard,NewWinner),
   play_game_loop(NewBoard,Lvl,NewWinner).
 
-play_game_loop(Board,Lvl,NewWinner, NewBoard) :-
-  getCurrentPlayer(Player),
-  display_game(Board,Player), !,
-  getInfo(Board,Lvl, X,Y,Color),
-  play(Board,X,Y,Color,NewBoard,NewWinner).
-
-play_game_loop(Board,Lvl, X, Y, Color, NewWinner, NewBoard) :-
-  getCurrentPlayer(Player),
-  display_game(Board,Player), !,
-  play(Board,X,Y,Color,NewBoard,NewWinner).
-
 % play(+Board,+X,+Y,+Color,-NewBoard,-Winner) 
 % executes a play if possible
 play(Board,X,Y,Color,NewBoard,Winner) :-
- valid_moves(Board,ListOfMoves),
- member((X,Y,Color), ListOfMoves),
- create_move(X,Y,Color, Move),
- move(Move, Board,NewBoard), 
- game_over(NewBoard, Winner),
- switchCurrentPlayer.
+  valid_moves(Board,ListOfMoves),
+  write('1'), nl,
+  write(X), nl,
+  write(Y), nl,
+  write(Color), nl,
+  write(ListOfMoves), nl,
+  write(Board), nl,
+  member((X,Y,Color), ListOfMoves),
+  write('2'), nl,
+  create_move(X,Y,Color, Move),
+  write('3'), nl,
+  move(Move, Board,NewBoard), 
+  write('4'), nl,
+  game_over(NewBoard, Winner),
+  write('5'), nl,
+  switchCurrentPlayer,
+  write('6'), nl.
 
 play(Board,_,_,_,NewBoard,Winner) :-
   printInvalidPlay,
@@ -330,11 +330,6 @@ play_game_CvP(Lvl) :-
   initial_board(Board),
   assertPlayers_CvP, %initializes the players
   play_game_loop(Board,Lvl,0).
-
-play_game_CvP(Lvl, NewBoard, Winner) :-
-  initial_board(Board),
-  assertPlayers_CvP, %initializes the players
-  play_game_loop(Board,Lvl,Winner, NewBoard).
 
 % play_game_CvC
 % plays the game in the 'Computer vs Computer'

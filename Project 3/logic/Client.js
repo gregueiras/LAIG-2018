@@ -1,108 +1,195 @@
 class Client {
+	constructor(port) {
+		this.defaultPort = 8081;
 
-    constructor(port) {
-        this.defaulPort = 8081;
+		this.port = typeof port !== "undefined" ? port : this.defaultPort;
 
-        this.port = typeof port !== 'undefined' ? port : this.defaulPort;
+		this.requestComplete = false;
+		this.winnerCode = 0;
+	}
 
-        this.requestComplete = false;
-        this.winnerCode = 0;
+	//Tipo de jogadas  : PvP , PvC, CvP
 
-    }
+	/**
+	 * For player made move
+	 * @param {*} mode Manalath.mode (TODO)
+	 * @param {*} lvl Manalath.lvl (TODO)
+	 * @param {*} board MyBoard.board
+	 * @param {*} move Manalath.moves(last)
+	 */
+	buildRequestParams(mode, lvl, board, move) {
+		let lvlStr = lvl.toString();
 
-    //Tipo de jogadas  : PvP , PvC, CvP
+		let requestStr = "";
 
-    /**
-     * 
-     * @param {*} board MyBoard.board
-     * @param {*} move Manalath.moves(last)
-     */
-    buildRequestParams(board, move) {
-        let boardStr = '[';
-        board.forEach(cell => {
-            let x = toString(cell.pX);
-            let y = toString(cell.pY);
+		//starting a game
+		if (typeof board === "undefined") {
+			switch (mode) {
+				case GameModes.PvP:
+					requestStr = "startPvP(" + lvlStr + ")";
+					break;
+				case GameModes.PvC:
+					requestStr = "startPvC(" + lvlStr + ")";
+					break;
+				case GameModes.CvP:
+					requestStr = "startCvP(" + lvlStr + ")";
+					break;
+				case GameModes.CvC:
+					requestStr = "startCvC(" + lvlStr + ")";
+					break;
+			}
+		}
+		//playing move
+		else {
+			let boardStr = this.boardToString(board);
 
-            let state;
-            if (cell.state = CellState.empty) {
-                state = "emptyCell";
-            } else if (cell.state = CellState.white) {
-                state = "whitePiece";
-            } else if (cell.state = CellState.black) {
-                state = "blackPiece";
-            }
+			requestStr = "playLoop(" + boardStr + "," + lvlStr;
 
-            boardStr += "cell(" + x + "," + y + "," + state + "),";
-        });
+			//player play
+			if (typeof move !== "undefined") {
+				if (mode == GameModes.CvC) {
+					return -1;
+				}
 
-        boardStr = boardStr.slice(0, -1);
-        boardStr += ']';
+				let moveStr = this.moveToString(move);
+				requestStr += "," + moveStr;
+			} else {
+				if (mode == GameModes.PvP) {
+					return -2;
+				}
+			}
 
-        let x = (move.x);
-        let y = (move.y);
-        let color;
-        if (move.state = CellState.empty) {
-            color = "emptyCell";
-        } else if (move.state = CellState.white) {
-            color = "whitePiece";
-        } else if (move.state = CellState.black) {
-            color = "blackPiece";
-        }
+			requestStr += ")";
+		}
 
-        let requestStr = "[" + boardStr + "," + x + "," + y + "," + color + "]"
+		console.log(requestStr);
+		return requestStr;
+	}
 
-        return requestStr;
-    }
+	boardToString(board) {
+		let boardStr = "[";
+		board.forEach(cell => {
+			let x = cell.pX.toString();
+			let y = cell.pY.toString();
 
-    request(message) {
-        let request = new XMLHttpRequest();
+			let state;
+			if (cell.state == CellState.empty) {
+				state = "emptyCell";
+			} else if (cell.state == CellState.white) {
+				state = "whitePiece";
+			} else if (cell.state == CellState.black) {
+				state = "blackPiece";
+			}
 
-        this.requestComplete = false;
-        request.addEventListener('load', this.requestCompleted);
-        request.addEventListener('error', this.requestFailed);
-        request.open('GET', 'http://localhost:' + this.port + '/' + message, true);
-        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        request.send();
-    }
+			boardStr += "cell(" + x + "," + y + "," + state + "),";
+		});
 
-    requestCompleted(event) {
-        let response = this.responseText;
-        let splited = response.split(']');
+		boardStr = boardStr.slice(0, -1);
+		boardStr += "]";
 
-        this.winnerCode = splited[1].slice(1);
+		return boardStr;
+	}
 
-        let cellArr = splited[0].slice(2);
-        cellArr = cellArr.split('),');
+	moveToString(move) {
+		let x = move.x;
+		let y = move.y;
+		let color;
+		if ((move.state = CellState.empty)) {
+			color = "emptyCell";
+		} else if ((move.state = CellState.white)) {
+			color = "whitePiece";
+		} else if ((move.state = CellState.black)) {
+			color = "blackPiece";
+		}
 
-        this.board = [];
+		return x + "," + y + "," + color;
+	}
 
-        cellArr.forEach(cell => {
+	request(message) {
+		let request = new XMLHttpRequest();
 
-            let vals = cell.slice(5);
+		this.requestComplete = false;
+		request.addEventListener("load", this.requestCompleted);
+		request.addEventListener("error", this.requestFailed);
+		request.open(
+			"GET",
+			"http://localhost:" + this.port + "/" + message,
+			true
+		);
+		request.setRequestHeader(
+			"Content-Type",
+			"application/x-www-form-urlencoded"
+		);
+		request.send();
+	}
 
-            let cellVals = vals.split(',');
+	requestCompleted(event) {
+		let response = this.responseText;
 
-            cell = {
-                x: parseInt(cellVals[0]),
-                y: parseInt(cellVals[1]),
-                state: cellVals[2]
-            };
+		if (!isNaN(parseInt(response))) {
+			switch (parseInt(response)) {
+				case 0:
+					console.log("Started Successfully");
+					return;
+				default:
+					console.log(parseInt(response));
+					console.log("Undefined Err");
+					return;
+			}
+		}
 
-            this.board.push(cell);
+		let splited = response.split("]");
 
-        });
+		console.log(response);
 
-        let lastCell = this.board.pop();
-        lastCell.state = lastCell.state.replace(")", "");
-        this.board.push(lastCell);
+		this.winnerCode = splited[1].slice(1);
 
-        this.requestComplete = true;
+		if (!isNaN(parseInt(this.winnerCode))) {
+			switch (parseInt(this.winnerCode)) {
+                //TODO confirm codes
+				case 0:
+					console.log(parseInt(this.winnerCode));
+					console.log("Valid Play, No Winner");
+					return;
+				case -2:
+					console.log(parseInt(this.winnerCode));
+					console.log("Invalid Play");
+					return;
+				default:
+					console.log("Undefined Err");
+					return;
+			}
+		}
 
-        console.log(this.board);
-    }
+		let cellArr = splited[0].slice(2);
+		cellArr = cellArr.split("),");
 
-    requestFailed(event) {
-        console.warn('Request failed.');
-    }
+		this.board = [];
 
+		cellArr.forEach(cell => {
+			let vals = cell.slice(5);
+
+			let cellVals = vals.split(",");
+
+			cell = {
+				x: parseInt(cellVals[0]),
+				y: parseInt(cellVals[1]),
+				state: cellVals[2]
+			};
+
+			this.board.push(cell);
+		});
+
+		let lastCell = this.board.pop();
+		lastCell.state = lastCell.state.replace(")", "");
+		this.board.push(lastCell);
+
+		this.requestComplete = true;
+
+		console.log(this.board);
+	}
+
+	requestFailed(event) {
+		console.warn("Request failed.");
+	}
 }
