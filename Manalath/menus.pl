@@ -1,4 +1,4 @@
-:- ensure_loaded(game).
+:- ensure_loaded(gameLaig).
 
 % print_InvalidOption
 % Prints error message when an invalid option has been chosen
