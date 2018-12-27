@@ -72,6 +72,8 @@ class Manalath {
 				[options.start, up, down, options.end]
 			);
 			this.play(cell);
+		} else if (this.moviePlaying) {
+			console.warn(`Sit back and enjoy the movie of your last game`);
 		} else if (this.state !== GameStates.READY) {
 			console.warn(
 				`You can't play now. Please try again after a few moments`
@@ -103,8 +105,8 @@ class Manalath {
 				this.board.board,
 				move
 			)
-    );
-    
+		);
+
 		cell.state = this.selectedPiece.state;
 
 		this.moves.push(move);
@@ -160,7 +162,35 @@ class Manalath {
 	}
 
 	display() {
+		this.scene.pushMatrix();
+
+		this.scene.rotate(90 * DEGREE_TO_RAD, 1, 0, 0);
+		this.scene.scale(0.5, 1, 0.5);
 		this.board.display();
+
+		this.scene.popMatrix();
+	}
+
+	playGameMovie() {
+		let moves = this.moves.slice();
+		while (this.moves.length !== 0) {
+			this.undo();
+		}
+		let i = 1;
+		this.moviePlaying = true;
+		moves.forEach(move => {
+			setTimeout(() => {
+				this.state = GameStates.READY;
+				this.selectedPiece = move.piece;
+				console.log(this.selectedPiece);
+				console.log(move.cell);
+				this.animate(move.cell);
+			}, i++ * this.animationSpan * 1000);
+		});
+
+		setTimeout(() => {
+			this.moviePlaying = false;
+		}, i * this.animationSpan * 1000);
 	}
 }
 
