@@ -104,8 +104,14 @@ print_header_line(_).
 % Require your Prolog Files here
 :- ensure_loaded(menus).
 
-parse_input(startCvP(Lvl), [NewBoard, NewWinner]):-play_game_CvP(Lvl, NewBoard, NewWinner).
-parse_input(playCvP(Board, Lvl), [NewBoard, NewWinner]):-play_game_loop(Board,Lvl,NewWinner, NewBoard).
+parse_input(startPvP(Lvl), 0):-start_game_PvP(Lvl).
+parse_input(startPvC(Lvl), 0):-start_game_PvC(Lvl).
+parse_input(startCvP(Lvl), 0):-start_game_CvP(Lvl).
+parse_input(startCvC(Lvl), 0):-start_game_CvC(Lvl).
+%loop for bot play time
+parse_input(playLoop(Board, Lvl), [NewBoard, NewWinner]):-play_game_loop(Board, Lvl,NewWinner, NewBoard).
+%loop for player play time
+parse_input(playLoop(Board, Lvl, X, Y, Color), [NewBoard, NewWinner]):-play_game_loop(Board, Lvl, X, Y, Color, NewWinner, NewBoard).
 
 
 	
