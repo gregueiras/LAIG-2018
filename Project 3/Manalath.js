@@ -209,8 +209,12 @@ class Manalath {
 	AIPlay(play) {
 		this.selectedPiece = undefined;
 		do {
-			let pieces = this.board.pieces;
-			let tempPiece = pieces[Math.floor(Math.random() * pieces.length)];
+      let pieces = this.board.pieces;
+      let index = Math.floor(Math.random() * pieces.length);
+      if(index == 30) {
+        ++index;
+      }
+			let tempPiece = pieces[index];
 			if (tempPiece.available && tempPiece.state === play.state) {
 				this.selectedPiece = tempPiece;
 			}
