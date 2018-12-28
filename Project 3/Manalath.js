@@ -13,6 +13,11 @@ const GameDifficulty = Object.freeze({
 	EASY: 1,
 	HARD: 2
 });
+const PlayStatus = Object.freeze({
+	OnGoing: 0,
+	Finished: 1,
+	Error: 2
+});
 class Manalath {
 	constructor(scene) {
 		this.scene = scene;
@@ -24,24 +29,22 @@ class Manalath {
 		this.state = GameStates.READY;
 
 		this.animationSpan = 2;
-    this.client = new Client();
-    
-    //TODO Implement on the menu
+		this.client = new Client();
+
+		//TODO Implement on the menu
 		this.lvl = GameDifficulty.EASY;
 
-		this.mode = GameModes.CvP;
+		this.mode = GameModes.CvC;
+
+		this.activePlayer = 0; //0 || 1
+
+		this.playStatus = PlayStatus.OnGoing;
 
 		this.client.request(
 			this.client.buildRequestParams(this.mode, this.lvl)
-    );
-    
-    this.client.request(
-			this.client.buildRequestParams(
-				this.mode,
-				this.lvl,
-				this.board.board
-			)
 		);
+
+		this.decideAIPlay();
 	}
 
 	animate(cell) {
@@ -106,14 +109,7 @@ class Manalath {
 			cell: cell
 		};
 
-		this.client.request(
-			this.client.buildRequestParams(
-				this.mode,
-				this.lvl,
-				this.board.board,
-				move
-			)
-		);
+		this.validatePlayerPlay(move);
 
 		cell.state = this.selectedPiece.state;
 
@@ -122,9 +118,92 @@ class Manalath {
 		this.state = GameStates.ANIMATING;
 		this.selectedPiece = null;
 
+		this.changeActivePlayer();
+
 		setTimeout(() => {
 			this.state = GameStates.READY;
+			if (this.client.isWon()) {
+				this.playStatus = PlayStatus.Finished;
+				alert(
+					"Game Won By Player " + this.client.getWinner().toString()
+				);
+			} else if (this.isAIAllowed()) {
+				this.decideAIPlay();
+			}
 		}, this.animationSpan * 1000);
+	}
+
+	changeActivePlayer() {
+		this.activePlayer++;
+		this.activePlayer %= 2;
+	}
+
+	validatePlayerPlay(move) {
+		//case of computer play, this was already done when searching for a play
+		if (
+			this.mode == GameModes.PvP ||
+			(this.activePlayer == 0 && this.mode == GameModes.CvP) ||
+			(this.activePlayer == 1 && this.mode == GameModes.PvC)
+		) {
+			this.client.request(
+				this.client.buildRequestParams(
+					this.mode,
+					this.lvl,
+					this.board.board,
+					move
+				)
+			);
+
+			const maxTry = 10;
+			let cnt = 0;
+
+			let game = this;
+			let interval = setInterval(function() {
+				++cnt;
+				if (cnt > maxTry) {
+					clearInterval(interval);
+					console.error(
+						"Can't get play... Something must have gone wrong"
+					);
+					game.playStatus = PlayStatus.Error;
+				}
+				let play = game.client.getMove();
+				if (play != -1) {
+					clearInterval(interval);
+					game.playStatus = PlayStatus.OnGoing;
+				}
+			}, 500);
+		}
+	}
+
+	decideAIPlay() {
+		this.client.request(
+			this.client.buildRequestParams(
+				this.mode,
+				this.lvl,
+				this.board.board
+			)
+		);
+
+		const maxTry = 10;
+		let cnt = 0;
+
+		let game = this;
+		let interval = setInterval(function() {
+			++cnt;
+			if (cnt > maxTry) {
+				clearInterval(interval);
+				console.error("Can't get AI play...");
+				game.playStatus = PlayStatus.Error;
+				return;
+			}
+			let play = game.client.getMove();
+			if (play != -1) {
+				clearInterval(interval);
+				game.playStatus = PlayStatus.OnGoing;
+				game.AIPlay(play);
+			}
+		}, 500);
 	}
 
 	AIPlay(play) {
@@ -155,6 +234,11 @@ class Manalath {
 	}
 
 	handlePicking(obj) {
+		if (!this.isPlayerAllowed()) {
+			console.warn("Not your turn to play");
+			return;
+		}
+
 		if (this.selectedPiece) this.selectedPiece.setHighlight(false);
 
 		if (obj.constructor.name === "MyPiece") {
@@ -168,6 +252,7 @@ class Manalath {
 			this.animate(obj);
 		}
 	}
+
 	display() {
 		this.scene.pushMatrix();
 
@@ -198,5 +283,45 @@ class Manalath {
 		setTimeout(() => {
 			this.moviePlaying = false;
 		}, i * this.animationSpan * 1000);
+	}
+
+	isPlayerAllowed() {
+		switch (this.mode) {
+			case GameModes.PvP:
+				return true;
+			case GameModes.PvC:
+				if (this.activePlayer == 0) {
+					return true;
+				}
+				break;
+			case GameModes.CvP:
+				if (this.activePlayer == 1) {
+					return true;
+				}
+				break;
+			case GameModes.CvC:
+				return false;
+		}
+		return false;
+	}
+
+	isAIAllowed() {
+		switch (this.mode) {
+			case GameModes.PvP:
+				return false;
+			case GameModes.PvC:
+				if (this.activePlayer == 1) {
+					return true;
+				}
+				break;
+			case GameModes.CvP:
+				if (this.activePlayer == 0) {
+					return true;
+				}
+				break;
+			case GameModes.CvC:
+				return true;
+		}
+		return false;
 	}
 }

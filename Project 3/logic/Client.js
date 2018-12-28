@@ -4,6 +4,8 @@ class Client {
 
 		this.port = typeof port !== "undefined" ? port : this.defaultPort;
 
+		this.moveRequestComplete = false;
+
 		this.winnerCode = 0;
 
 		//stores sent board
@@ -117,8 +119,7 @@ class Client {
 	}
 
 	request(message) {
-
-		console.log(message);
+		this.moveRequestComplete = false;
 
 		let request = new XMLHttpRequest();
 
@@ -140,6 +141,7 @@ class Client {
 	}
 
 	requestCompleted(event, response) {
+
 		if (!isNaN(parseInt(response))) {
 			switch (parseInt(response)) {
 				case 0:
@@ -148,9 +150,12 @@ class Client {
 				default:
 					console.log(parseInt(response));
 					console.log("Undefined Err");
+					this.moveRequestComplete = false;
 					return;
 			}
 		}
+
+		this.moveRequestComplete = true;
 
 		let splited = response.split("]");
 
@@ -158,12 +163,7 @@ class Client {
 
 		this.buildNewBoard(cellArr);
 
-		console.log(this.board);
-		console.log(this.newBoard);
-
 		this.findMove();
-
-		console.log(this.move);
 
 		this.winnerCode = parseInt(splited[1].slice(1));
 
@@ -206,7 +206,6 @@ class Client {
 		});
 	}
 
-	//TODO confirm codes
 	handleWinnerCode() {
 		if (!isNaN(this.winnerCode)) {
 			switch (this.winnerCode) {
@@ -227,6 +226,7 @@ class Client {
 					return;
 				default:
 					console.log("Undefined Err");
+					this.moveRequestComplete = false;
 					return;
 			}
 		}
@@ -242,11 +242,10 @@ class Client {
 	}
 
 	findMove() {
-
 		this.orderBoard(this.board);
 		this.orderBoard(this.newBoard);
 
-		for(let i = 0; i < this.board.length; ++i) {
+		for (let i = 0; i < this.board.length; ++i) {
 			let x = this.board[i].x;
 			let y = this.board[i].y;
 			let s = this.board[i].state;
@@ -254,11 +253,11 @@ class Client {
 			let ny = this.newBoard[i].y;
 			let ns = this.newBoard[i].state;
 
-			if(!(x == nx && y == ny)) {
-				console.error('order fail');
+			if (!(x == nx && y == ny)) {
+				console.error("order fail");
 			}
 
-			if(x == nx && y == ny && s != ns) {
+			if (x == nx && y == ny && s != ns) {
 				this.move = {
 					x: x,
 					y: y,
@@ -270,6 +269,19 @@ class Client {
 		}
 
 		console.error("Move not found");
-	
+	}
+
+	getMove() {
+		if (this.moveRequestComplete) return this.move;
+		return -1;
+	}
+
+	getWinner() {
+		if (this.moveRequestComplete) return this.winnerCode;
+		return -1;
+	}
+
+	isWon() {
+		return this.winnerCode > 0;
 	}
 }
