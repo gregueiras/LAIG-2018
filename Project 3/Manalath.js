@@ -158,7 +158,7 @@ class Manalath {
 			let cnt = 0;
 
 			let game = this;
-			let interval = setInterval(function() {
+			let interval = setInterval(function () {
 				++cnt;
 				if (cnt > maxTry) {
 					clearInterval(interval);
@@ -189,7 +189,7 @@ class Manalath {
 		let cnt = 0;
 
 		let game = this;
-		let interval = setInterval(function() {
+		let interval = setInterval(function () {
 			++cnt;
 			if (cnt > maxTry) {
 				clearInterval(interval);
@@ -209,11 +209,11 @@ class Manalath {
 	AIPlay(play) {
 		this.selectedPiece = undefined;
 		do {
-      let pieces = this.board.pieces;
-      let index = Math.floor(Math.random() * pieces.length);
-      if(index == 30) {
-        ++index;
-      }
+			let pieces = this.board.pieces;
+			let index = Math.floor(Math.random() * pieces.length);
+			if (index == 30) {
+				++index;
+			}
 			let tempPiece = pieces[index];
 			if (tempPiece.available && tempPiece.state === play.state) {
 				this.selectedPiece = tempPiece;

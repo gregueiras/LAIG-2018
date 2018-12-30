@@ -655,10 +655,10 @@ class MySceneGraph {
       return "unable to parse angle value";
     }
 
-    if (!isBetween(perspective.angle, 0, 90)) {
+    if (!isBetween(perspective.angle, 0, 180)) {
       return `Camera ${
         perspective.id
-      }: angle must be between 0 and 360 degrees`;
+      }: angle must be between 0 and 180 degrees`;
     }
 
     var grandchildren = child.children;
