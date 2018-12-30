@@ -145,6 +145,9 @@ let scene;
     // Adds camera options
     this.interface.addCameraOptions(this.graph.views);
 
+    // Adds Game options
+    this.interface.addGame(this.graph.game);
+
     this.loadCamera();
     this.sceneInited = true;
 

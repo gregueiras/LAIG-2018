@@ -16,7 +16,7 @@ const GameDifficulty = Object.freeze({
 const PlayStatus = Object.freeze({
 	OnGoing: 0,
 	Finished: 1,
-	Error: 2
+	Error: 2, 
 });
 class Manalath {
 	constructor(scene) {
@@ -32,9 +32,11 @@ class Manalath {
 		this.client = new Client();
 
 		//TODO Implement on the menu
+		this.selectedLvl = GameDifficulty.EASY;
 		this.lvl = GameDifficulty.EASY;
 
-		this.mode = GameModes.CvC;
+		this.selectedMode = GameModes.PvP;
+		this.mode = GameModes.PvP;
 
 		this.activePlayer = 0; //0 || 1
 
@@ -44,7 +46,35 @@ class Manalath {
 			this.client.buildRequestParams(this.mode, this.lvl)
 		);
 
-		this.decideAIPlay();
+		if(this.isAIAllowed()) {
+			this.decideAIPlay();
+		}
+	}
+
+	reset() {
+		this.board = new MyBoard(scene);
+		this.mode = this.selectedMode;
+		this.lvl = this.selectedLvl;
+		this.selectedPiece = null;
+		this.moves = [];
+		this.state = GameStates.READY;
+		this.activePlayer = 0; //0 || 1
+		this.playStatus = PlayStatus.OnGoing;
+
+		if (typeof this.lvl === "string"){
+			this.lvl = parseInt(this.lvl);
+		}
+		if (typeof this.mode === "string"){
+			this.mode = parseInt(this.mode);
+		}
+
+		this.client.request(
+			this.client.buildRequestParams(this.mode, this.lvl)
+		);
+
+		if(this.isAIAllowed()) {
+			this.decideAIPlay();
+		}
 	}
 
 	animate(cell) {
@@ -140,11 +170,7 @@ class Manalath {
 
 	validatePlayerPlay(move) {
 		//case of computer play, this was already done when searching for a play
-		if (
-			this.mode == GameModes.PvP ||
-			(this.activePlayer == 0 && this.mode == GameModes.CvP) ||
-			(this.activePlayer == 1 && this.mode == GameModes.PvC)
-		) {
+		if (this.isPlayerAllowed()) {
 			this.client.request(
 				this.client.buildRequestParams(
 					this.mode,
@@ -177,6 +203,10 @@ class Manalath {
 	}
 
 	decideAIPlay() {
+		if(this.state == GameStates.ANIMATING) {
+			console.warn("The game is in animation state");
+			return;
+		}
 		this.client.request(
 			this.client.buildRequestParams(
 				this.mode,
@@ -241,6 +271,9 @@ class Manalath {
 		if (!this.isPlayerAllowed()) {
 			console.warn("Not your turn to play");
 			return;
+		} else if(this.state == GameStates.ANIMATING) {
+			console.warn("The game is in animation state");
+			return;
 		}
 
 		if (this.selectedPiece) this.selectedPiece.setHighlight(false);
@@ -278,8 +311,6 @@ class Manalath {
 			setTimeout(() => {
 				this.state = GameStates.READY;
 				this.selectedPiece = move.piece;
-				console.log(this.selectedPiece);
-				console.log(move.cell);
 				this.animate(move.cell);
 			}, i++ * this.animationSpan * 1000);
 		});
@@ -306,6 +337,7 @@ class Manalath {
 			case GameModes.CvC:
 				return false;
 		}
+
 		return false;
 	}
 

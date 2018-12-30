@@ -35,7 +35,7 @@ class MyInterface extends CGFinterface {
     addLightsGroup(lights) {
 
         var group = this.gui.addFolder("Lights");
-        group.open();
+        //group.open();
 
         for (let i = 0; i < lights.omnis.length; i++) {
             const light = lights.omnis[i];
@@ -80,13 +80,45 @@ class MyInterface extends CGFinterface {
         this.gui.add(this.cameras, ACTIVE_CAMERA, cameras);
     }
 
+    addGame(game) {
+        var configs = this.gui.addFolder("Configurations");
+        configs.open();
+
+        let modeArr = {};
+        modeArr['PvP'] = GameModes.PvP;
+        modeArr['PvC'] = GameModes.PvC;
+        modeArr['CvP'] = GameModes.CvP;
+        modeArr['CvC'] = GameModes.CvC;
+
+        let lvlArr = {};
+        lvlArr['Easy'] = GameDifficulty.EASY;
+        lvlArr['Hard'] = GameDifficulty.HARD;
+
+        configs.add(game, "selectedMode", modeArr).name("Mode");
+        configs.add(game, "selectedLvl", lvlArr).name("Level");
+        configs.add(game, "animationSpan", 0.1, 5).name("Animation Span");
+
+        let actions = this.gui.addFolder("Actions");
+        actions.open();
+
+        let actionsFuncs = {
+            reset: function(){ game.reset() },
+            undo: function(){ game.undo() },
+            movie: function(){ game.playGameMovie() }
+        };
+
+        actions.add(actionsFuncs, "reset").name("Reset Game");
+        actions.add(actionsFuncs, "undo").name("Undo Play");
+        actions.add(actionsFuncs, "movie").name("Play Game Movie");
+    }
+
 
     /**
      * Overrides processKeyboard function from WebCGF and starts listening for pressed keys
      * @memberof MyInterface
      */
     initKeys() {
-        this.processKeyboard = function () { };
+        this.processKeyboard = function () {};
         this.activeKeys = {};
     }
 
@@ -100,11 +132,11 @@ class MyInterface extends CGFinterface {
     };
 
     /**
-    * Overrides processKeyUp function from WebCGF
-    * @param {keyEvent} event
-    * @memberof MyInterface
-    */
-    processKeyUp(event) { };
+     * Overrides processKeyUp function from WebCGF
+     * @param {keyEvent} event
+     * @memberof MyInterface
+     */
+    processKeyUp(event) {};
 
 
     /**
@@ -116,7 +148,7 @@ class MyInterface extends CGFinterface {
         this.activeKeys[event] = false;
     };
 
-    
+
     /**
      * Returns true if a key is active, false if it isn't
      *
@@ -126,6 +158,6 @@ class MyInterface extends CGFinterface {
      */
     isKeyPressed(keyCode) {
         return this.activeKeys[keyCode] || false;
-        let a = [1, 2 , 4];
+        let a = [1, 2, 4];
     };
 }

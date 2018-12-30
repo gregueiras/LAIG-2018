@@ -55,6 +55,9 @@ class MySceneGraph {
      */
 
     this.reader.open("scenes/" + filename, this);
+
+    //set by parser
+    this.game = null;
   }
 
   /**
@@ -168,7 +171,9 @@ class MySceneGraph {
           this.primitives[key].shape = new MyShip(this.scene);
           break;
         case "manalath":
-          this.primitives[key].shape = new Manalath(this.scene);
+          let game = new Manalath(this.scene);
+          this.primitives[key].shape = game;
+          this.game = game;
           break;
         default:
           break;
@@ -2441,7 +2446,7 @@ class MySceneGraph {
 
     if (
       component.children.componentref.length +
-        component.children.primitiveref.length ==
+      component.children.primitiveref.length ==
       0
     )
       return "Invalid number of children";
