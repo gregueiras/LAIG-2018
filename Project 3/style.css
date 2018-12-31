@@ -1,0 +1,58 @@
+body,
+html {
+    border:
+        0;
+    padding:
+        0;
+    margin:
+        0;
+    overflow:
+        hidden;
+}
+
+canvas {
+    width:
+        100%;
+    height:
+        100%;
+}
+
+.panel {
+    background-color: rgba(0, 0, 0, 0.4);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+#content {
+    margin: 1em 0 0.5em 2em;
+    color: white;
+}
+
+h1 {
+    font-size: 1.2em;
+}
+
+#content p{
+    margin-left: 1em;
+}
+
+#player::before {
+    content: "Active Player: ";
+}
+
+#score::before {
+    content: "Player's Score: ";
+}
+
+#timer::before {
+    content: "Player's Time: ";
+}
+
+#message::before {
+    content: "> ";
+}
+
+#message {
+    font-size: 1.1em;
+}

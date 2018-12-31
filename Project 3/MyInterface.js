@@ -101,15 +101,35 @@ class MyInterface extends CGFinterface {
         let actions = this.gui.addFolder("Actions");
         actions.open();
 
+        let inter = this;
         let actionsFuncs = {
-            reset: function(){ game.reset() },
-            undo: function(){ game.undo() },
-            movie: function(){ game.playGameMovie() }
+            reset: function () {
+                game.reset();
+                inter.cameras[ACTIVE_CAMERA] = "GameBoard";
+            },
+            undo: function () {
+                game.undo()
+            },
+            movie: function () {
+                game.playGameMovie()
+            },
+            quit: function () {
+                if(game.pause()) {
+                    inter.cameras[ACTIVE_CAMERA] = "GameBoard2";
+                }
+            },
+            resume: function () {
+                if(game.resume()) {
+                    inter.cameras[ACTIVE_CAMERA] = "GameBoard";
+                }
+            }
         };
 
         actions.add(actionsFuncs, "reset").name("Reset Game");
         actions.add(actionsFuncs, "undo").name("Undo Play");
         actions.add(actionsFuncs, "movie").name("Play Game Movie");
+        actions.add(actionsFuncs, "quit").name("Exit Game");
+        actions.add(actionsFuncs, "resume").name("Resume Game");
     }
 
 

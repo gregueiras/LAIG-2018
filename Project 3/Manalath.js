@@ -1,7 +1,8 @@
 const GameStates = Object.freeze({
 	READY: 0,
 	ANIMATING: 1,
-	END: 2
+	END: 2,
+	STOPPED: 3
 });
 const GameModes = Object.freeze({
 	PvP: 0,
@@ -46,6 +47,8 @@ class Manalath {
 			this.client.buildRequestParams(this.mode, this.lvl)
 		);
 
+		this.updatePanelInfo();
+
 		if(this.isAIAllowed()) {
 			this.decideAIPlay();
 		}
@@ -68,9 +71,13 @@ class Manalath {
 			this.mode = parseInt(this.mode);
 		}
 
+		this.client = new Client();
+
 		this.client.request(
 			this.client.buildRequestParams(this.mode, this.lvl)
 		);
+
+		this.updatePanelInfo();
 
 		if(this.isAIAllowed()) {
 			this.decideAIPlay();
@@ -154,18 +161,44 @@ class Manalath {
 			this.state = GameStates.READY;
 			if (this.client.isWon()) {
 				this.playStatus = PlayStatus.Finished;
-				alert(
-					"Game Won By Player " + this.client.getWinner().toString()
-				);
-			} else if (this.isAIAllowed()) {
+				return;
+			}
+			
+			this.updatePanelInfo();
+			
+			if (this.isAIAllowed()) {
 				this.decideAIPlay();
 			}
-		}, this.animationSpan * 1000);
+		}, this.animationSpan * 1000 + 250);
 	}
 
 	changeActivePlayer() {
 		this.activePlayer++;
 		this.activePlayer %= 2;
+		
+	}
+
+	updatePanelInfo() {
+		document.getElementById("player").innerHTML = this.activePlayer + 1;
+
+		let cnt = 0;
+		let maxTry = 5;
+		let game = this;
+		let interval = setInterval(function () {
+			++cnt;
+			if (cnt > maxTry) {
+				clearInterval(interval);
+				console.error("Err getting start response");
+				return;
+			}
+			let mp = game.client.getMessagePanel();
+			if (mp != -1) {
+				clearInterval(interval);
+				document.getElementById("message").innerHTML = mp;
+			} else {
+				document.getElementById("message").innerHTML = "...";
+			}
+		}, 500);
 	}
 
 	validatePlayerPlay(move) {
@@ -205,6 +238,9 @@ class Manalath {
 	decideAIPlay() {
 		if(this.state == GameStates.ANIMATING) {
 			console.warn("The game is in animation state");
+			return;
+		} else if (this.state == GameStates.STOPPED){
+			console.warn("The game is paused");
 			return;
 		}
 		this.client.request(
@@ -273,6 +309,9 @@ class Manalath {
 			return;
 		} else if(this.state == GameStates.ANIMATING) {
 			console.warn("The game is in animation state");
+			return;
+		} else if (this.state == GameStates.STOPPED){
+			console.warn("The game is paused");
 			return;
 		}
 
@@ -358,6 +397,25 @@ class Manalath {
 			case GameModes.CvC:
 				return true;
 		}
+		return false;
+	}
+
+	pause() {
+		if (this.state == GameStates.READY){
+			this.state = GameStates.STOPPED;
+			return true;
+		}
+		return false;
+	}
+
+	resume() {
+		if (this.state == GameStates.STOPPED){
+			this.state = GameStates.READY;
+			if(this.isAIAllowed()) {
+				this.decideAIPlay();
+			}
+			return true;
+		} 
 		return false;
 	}
 }

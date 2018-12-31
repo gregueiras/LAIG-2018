@@ -3,7 +3,8 @@ class Client {
 		this.defaultPort = 8081;
 
 		this.port = typeof port !== "undefined" ? port : this.defaultPort;
-
+		
+		this.startRequestComplete = false;
 		this.moveRequestComplete = false;
 
 		this.winnerCode = 0;
@@ -14,6 +15,8 @@ class Client {
 		this.newBoard = [];
 		//last change
 		this.move = null;
+
+		this.messagePanel = "...";
 	}
 
 	/**
@@ -119,6 +122,7 @@ class Client {
 	}
 
 	request(message) {
+		this.startRequestComplete = false;
 		this.moveRequestComplete = false;
 
 		let request = new XMLHttpRequest();
@@ -142,14 +146,16 @@ class Client {
 
 	requestCompleted(event, response) {
 
+		this.startRequestComplete = true;
+
 		if (!isNaN(parseInt(response))) {
 			switch (parseInt(response)) {
 				case 0:
-					console.log("Started Successfully");
+					this.updateMessagePanel("Started Successfully");
 					return;
 				default:
 					console.log(parseInt(response));
-					console.log("Undefined Err");
+					this.updateMessagePanel("Undefined Err");
 					this.moveRequestComplete = false;
 					return;
 			}
@@ -171,7 +177,7 @@ class Client {
 	}
 
 	requestFailed(event) {
-		console.warn("Request failed.");
+		this.updateMessagePanel("Request failed.");
 	}
 
 	buildNewBoard(cellArr) {
@@ -210,22 +216,22 @@ class Client {
 		if (!isNaN(this.winnerCode)) {
 			switch (this.winnerCode) {
 				case 0:
-					console.log("Valid Play, No Winner");
+					this.updateMessagePanel("Valid Play, No Winner");
 					return;
 				case 1:
-					console.log("Valid Play, Winner is Player 1");
+					this.updateMessagePanel("Valid Play, Winner is Player 1");
 					return;
 				case 2:
-					console.log("Valid Play, Winner is Player 2");
+					this.updateMessagePanel("Valid Play, Winner is Player 2");
 					return;
 				case -1:
-					console.log("Valid Play, Draw");
+					this.updateMessagePanel("Valid Play, Draw");
 					return;
 				case -2:
-					console.log("Invalid Play");
+					this.updateMessagePanel("Invalid Play");
 					return;
 				default:
-					console.log("Undefined Err");
+					this.updateMessagePanel("Undefined Err");
 					this.moveRequestComplete = false;
 					return;
 			}
@@ -276,12 +282,16 @@ class Client {
 		return -1;
 	}
 
-	getWinner() {
-		if (this.moveRequestComplete) return this.winnerCode;
-		return -1;
-	}
-
 	isWon() {
 		return this.winnerCode > 0;
+	}
+
+	updateMessagePanel(message) {
+		this.messagePanel = message;
+	}
+
+	getMessagePanel() {
+		if (this.startRequestComplete) return this.messagePanel;
+		return -1;
 	}
 }
