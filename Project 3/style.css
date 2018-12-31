@@ -25,6 +25,7 @@ canvas {
 }
 
 #content {
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
     margin: 1em 0 0.5em 2em;
     color: white;
 }
