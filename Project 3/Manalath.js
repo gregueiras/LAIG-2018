@@ -267,7 +267,7 @@ class Manalath {
 		document.getElementById("streak").innerHTML = this.playerInfo[this.activePlayer].won;
 
 		let cnt = 0;
-		let maxTry = 5;
+		let maxTry = 50;
 		let game = this;
 		let interval = setInterval(function () {
 			++cnt;
@@ -297,7 +297,7 @@ class Manalath {
 				)
 			);
 
-			const maxTry = 10;
+			const maxTry = 50;
 			let cnt = 0;
 
 			let game = this;
@@ -335,7 +335,7 @@ class Manalath {
 			)
 		);
 
-		const maxTry = 10;
+		const maxTry = 500;
 		let cnt = 0;
 
 		let game = this;
