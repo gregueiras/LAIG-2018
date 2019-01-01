@@ -17,7 +17,7 @@ const GameDifficulty = Object.freeze({
 const PlayStatus = Object.freeze({
 	OnGoing: 0,
 	Finished: 1,
-	Error: 2, 
+	Error: 2,
 });
 class Manalath {
 	constructor(scene) {
@@ -43,6 +43,26 @@ class Manalath {
 
 		this.setPlayerInfo();
 
+		//start timers
+		let game = this;
+		setInterval(function () {
+			if(game.state == GameStates.READY) {
+				game.playerInfo[game.activePlayer].timer += 1;
+
+				const timer = game.playerInfo[game.activePlayer].timer;
+
+				let sec = Math.floor(timer % 60);
+				let min = Math.floor(timer / 60);
+
+        		sec = sec < 10 ? "0" + sec : sec;
+				min = min < 10 ? "0" + min : min;
+
+
+				document.getElementById("timer").innerHTML = min + ":" + sec;
+			}
+
+		}, 1000);
+
 		this.playStatus = PlayStatus.OnGoing;
 
 		this.infoMessage = "Connection not established";
@@ -53,7 +73,7 @@ class Manalath {
 
 		this.updatePanelInfo();
 
-		if(this.isAIAllowed()) {
+		if (this.isAIAllowed()) {
 			this.decideAIPlay();
 		}
 	}
@@ -66,15 +86,15 @@ class Manalath {
 		this.moves = [];
 		this.state = GameStates.READY;
 		this.activePlayer = 0; //0 || 1
-		
+
 		this.setPlayerInfo();
 
 		this.playStatus = PlayStatus.OnGoing;
 
-		if (typeof this.lvl === "string"){
+		if (typeof this.lvl === "string") {
 			this.lvl = parseInt(this.lvl);
 		}
-		if (typeof this.mode === "string"){
+		if (typeof this.mode === "string") {
 			this.mode = parseInt(this.mode);
 		}
 
@@ -86,7 +106,7 @@ class Manalath {
 
 		this.updatePanelInfo();
 
-		if(this.isAIAllowed()) {
+		if (this.isAIAllowed()) {
 			this.decideAIPlay();
 		}
 	}
@@ -97,7 +117,7 @@ class Manalath {
 		this.moves = [];
 		this.state = GameStates.READY;
 		this.activePlayer = 0; //0 || 1
-		
+
 		//reset timers
 		this.playerInfo[0].timer = 0;
 		this.playerInfo[1].timer = 0;
@@ -114,7 +134,7 @@ class Manalath {
 
 		this.updatePanelInfo();
 
-		if(this.isAIAllowed()) {
+		if (this.isAIAllowed()) {
 			this.decideAIPlay();
 		}
 	}
@@ -210,9 +230,9 @@ class Manalath {
 			}
 
 			this.changeActivePlayer();
-			
+
 			this.updatePanelInfo();
-			
+
 			if (this.isAIAllowed()) {
 				this.decideAIPlay();
 			}
@@ -222,7 +242,7 @@ class Manalath {
 	changeActivePlayer() {
 		this.activePlayer++;
 		this.activePlayer %= 2;
-		
+
 	}
 
 	setPlayerVictory() {
@@ -291,10 +311,10 @@ class Manalath {
 	}
 
 	decideAIPlay() {
-		if(this.state == GameStates.ANIMATING) {
+		if (this.state == GameStates.ANIMATING) {
 			console.warn("The game is in animation state");
 			return;
-		} else if (this.state == GameStates.STOPPED){
+		} else if (this.state == GameStates.STOPPED) {
 			console.warn("The game is paused");
 			return;
 		}
@@ -362,10 +382,10 @@ class Manalath {
 		if (!this.isPlayerAllowed()) {
 			console.warn("Not your turn to play");
 			return;
-		} else if(this.state == GameStates.ANIMATING) {
+		} else if (this.state == GameStates.ANIMATING) {
 			console.warn("The game is in animation state");
 			return;
-		} else if (this.state == GameStates.STOPPED){
+		} else if (this.state == GameStates.STOPPED) {
 			console.warn("The game is paused");
 			return;
 		}
@@ -456,7 +476,7 @@ class Manalath {
 	}
 
 	pause() {
-		if (this.state == GameStates.READY){
+		if (this.state == GameStates.READY) {
 			this.state = GameStates.STOPPED;
 			return true;
 		}
@@ -464,13 +484,13 @@ class Manalath {
 	}
 
 	resume() {
-		if (this.state == GameStates.STOPPED){
+		if (this.state == GameStates.STOPPED) {
 			this.state = GameStates.READY;
-			if(this.isAIAllowed()) {
+			if (this.isAIAllowed()) {
 				this.decideAIPlay();
 			}
 			return true;
-		} 
+		}
 		return false;
 	}
 }
