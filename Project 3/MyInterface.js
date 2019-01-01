@@ -107,6 +107,10 @@ class MyInterface extends CGFinterface {
                 game.reset();
                 inter.cameras[ACTIVE_CAMERA] = "GameBoard";
             },
+            restart: function () {
+                game.restart();
+                inter.cameras[ACTIVE_CAMERA] = "GameBoard";
+            },
             undo: function () {
                 game.undo()
             },
@@ -125,11 +129,12 @@ class MyInterface extends CGFinterface {
             }
         };
 
-        actions.add(actionsFuncs, "reset").name("Reset Game");
+        actions.add(actionsFuncs, "reset").name("Reset Configs");
+        actions.add(actionsFuncs, "restart").name("Play Again");
         actions.add(actionsFuncs, "undo").name("Undo Play");
-        actions.add(actionsFuncs, "movie").name("Play Game Movie");
-        actions.add(actionsFuncs, "quit").name("Exit Game");
         actions.add(actionsFuncs, "resume").name("Resume Game");
+        actions.add(actionsFuncs, "quit").name("Exit Game");
+        actions.add(actionsFuncs, "movie").name("Play Game Movie");
     }
 
 
@@ -180,4 +185,12 @@ class MyInterface extends CGFinterface {
         return this.activeKeys[keyCode] || false;
         let a = [1, 2, 4];
     };
+    
+    /**
+     * Must be commented to block camera mouse controlled movement
+     */
+    processMouse() {
+        super.processMouse();
+        //console.log("mouse is disabled");
+    }
 }

@@ -41,7 +41,11 @@ class Manalath {
 
 		this.activePlayer = 0; //0 || 1
 
+		this.setPlayerInfo();
+
 		this.playStatus = PlayStatus.OnGoing;
+
+		this.infoMessage = "Connection not established";
 
 		this.client.request(
 			this.client.buildRequestParams(this.mode, this.lvl)
@@ -62,6 +66,9 @@ class Manalath {
 		this.moves = [];
 		this.state = GameStates.READY;
 		this.activePlayer = 0; //0 || 1
+		
+		this.setPlayerInfo();
+
 		this.playStatus = PlayStatus.OnGoing;
 
 		if (typeof this.lvl === "string"){
@@ -82,6 +89,46 @@ class Manalath {
 		if(this.isAIAllowed()) {
 			this.decideAIPlay();
 		}
+	}
+
+	restart() {
+		this.board = new MyBoard(scene);
+		this.selectedPiece = null;
+		this.moves = [];
+		this.state = GameStates.READY;
+		this.activePlayer = 0; //0 || 1
+		
+		//reset timers
+		this.playerInfo[0].timer = 0;
+		this.playerInfo[1].timer = 0;
+
+		console.log(this.playerInfo);
+
+		this.playStatus = PlayStatus.OnGoing;
+
+		this.client = new Client();
+
+		this.client.request(
+			this.client.buildRequestParams(this.mode, this.lvl)
+		);
+
+		this.updatePanelInfo();
+
+		if(this.isAIAllowed()) {
+			this.decideAIPlay();
+		}
+	}
+
+	setPlayerInfo() {
+
+		let player = {
+			timer: 0,
+			won: 0,
+		};
+
+		this.playerInfo = [];
+		this.playerInfo.push(player);
+		this.playerInfo.push(JSON.parse(JSON.stringify(player)));
 	}
 
 	animate(cell) {
@@ -155,14 +202,14 @@ class Manalath {
 		this.state = GameStates.ANIMATING;
 		this.selectedPiece = null;
 
-		this.changeActivePlayer();
-
 		setTimeout(() => {
 			this.state = GameStates.READY;
 			if (this.client.isWon()) {
-				this.playStatus = PlayStatus.Finished;
+				this.setPlayerVictory();
 				return;
 			}
+
+			this.changeActivePlayer();
 			
 			this.updatePanelInfo();
 			
@@ -178,8 +225,17 @@ class Manalath {
 		
 	}
 
+	setPlayerVictory() {
+		this.playStatus = PlayStatus.Finished;
+		this.playerInfo[this.activePlayer].won += 1;
+		let looser = (this.activePlayer + 1) % 2;
+		this.playerInfo[looser].won = 0;
+		document.getElementById("streak").innerHTML = this.playerInfo[this.activePlayer].won;
+	}
+
 	updatePanelInfo() {
 		document.getElementById("player").innerHTML = this.activePlayer + 1;
+		document.getElementById("streak").innerHTML = this.playerInfo[this.activePlayer].won;
 
 		let cnt = 0;
 		let maxTry = 5;
@@ -194,10 +250,9 @@ class Manalath {
 			let mp = game.client.getMessagePanel();
 			if (mp != -1) {
 				clearInterval(interval);
-				document.getElementById("message").innerHTML = mp;
-			} else {
-				document.getElementById("message").innerHTML = "...";
+				game.infoMessage = mp;
 			}
+			document.getElementById("message").innerHTML = game.infoMessage;
 		}, 500);
 	}
 

@@ -42,8 +42,8 @@ h1 {
     content: "Active Player: ";
 }
 
-#score::before {
-    content: "Player's Score: ";
+#streak::before {
+    content: "Player's Win Streak: ";
 }
 
 #timer::before {

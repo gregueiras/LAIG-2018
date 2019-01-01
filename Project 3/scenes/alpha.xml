@@ -1,21 +1,17 @@
 <yas>
 
     <scene root="house" axis_length="3" />
-    <views default="GameBoard">
-        <perspective id="Menu" near="0.01" far="500" angle="60">
-            <from x="-4" y="1.5" z="3" />
-            <to x="0" y="1.5" z="3" />
-        </perspective>
-        <ortho id="Office" near="0.01" far="100" left="-5" right="5" top="5" bottom="-5">
-            <from x="10" y="10" z="10" />
-            <to x="0" y="0" z="0" />
-        </ortho >
+    <views default="GameBoard3">
         <perspective id="GameBoard" near="0.01" far="500" angle="90">
             <from x="3" y="2.2" z="3.1" />
             <to x="3" y="0" z="3" />
         </perspective>
         <perspective id="GameBoard2" near="0.01" far="500" angle="60">
             <from x="4.5" y="2.5" z="4.5" />
+            <to x="3.5" y="1.29" z="3.5" />
+        </perspective>
+        <perspective id="GameBoard3" near="0.01" far="500" angle="45">
+            <from x="7.5" y="5.5" z="7.5" />
             <to x="3.5" y="1.29" z="3.5" />
         </perspective>
     </views>
@@ -25,21 +21,14 @@
     </ambient>
     <lights>
         <omni id="GameBoard" enabled="1">
-            <location x="3" y="4" z="3" w="0" />
+            <location x="3" y="5" z="3" w="0" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.7" g="0.7" b="0.7" a="1" />
-            <specular r="0.4" g="0.4" b="0.4" a="1" />
-        </omni>
-        
-        <omni id="Menu" enabled="1">
-            <location x="-1" y="4" z="3" w="0" />
-            <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="0.6" g="0.6" b="0.6" a="1" />
-            <specular r="0.3" g="0.3" b="0.3" a="1" />
+            <specular r="0.6" g="0.6" b="0.6" a="1" />
         </omni>
         
         <spot id="Monroe Spot" enabled="1" angle="30" exponent="1">
-            <location x="6" y="3" z="6" w="0" />
+            <location x="6" y="6" z="6" w="0" />
             <target x="0" y="1" z="0" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.7" g="0.7" b="0.7" a="1" />
