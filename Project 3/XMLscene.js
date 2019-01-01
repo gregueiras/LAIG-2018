@@ -206,7 +206,19 @@ let scene;
       this.camera.id = selectedCamera;
       this.interface.setActiveCamera(this.camera);
     }
+    
   }
+
+  updateCameraPosition() {
+
+    if(this.graph.game == null) return;
+
+    this.graph.game.setCameraAngle();
+
+    this.camera.orbit(vec3.fromValues(0, 100, 50), this.graph.game.cameraRotAngle);
+    
+  }
+
   /**
    * Apply background color loaded from XML
    */
@@ -282,6 +294,7 @@ let scene;
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
     this.changeActiveCamera();
+    this.updateCameraPosition();
 
     // Initialize Model-View matrix as identity (no transformation
     this.updateProjectionMatrix();
@@ -342,6 +355,9 @@ let scene;
   }
 
   update(currentTime) {
+
+    this.graph.game.updateCameraTimer(currentTime);
+
     if (this.oldtime == 0) {
       this.oldtime = currentTime;
       return;

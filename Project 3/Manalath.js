@@ -28,6 +28,9 @@ class Manalath {
 		// x, y, state
 		this.moves = [];
 		this.state = GameStates.READY;
+		this.cameraTimer = 0;
+		this.cameraTimeElapsed = 0;
+		this.cameraRotAngle = 0;
 
 		this.animationSpan = 2;
 		this.client = new Client();
@@ -46,7 +49,7 @@ class Manalath {
 		//start timers
 		let game = this;
 		setInterval(function () {
-			if(game.state == GameStates.READY) {
+			if (game.state == GameStates.READY) {
 				game.playerInfo[game.activePlayer].timer += 1;
 
 				const timer = game.playerInfo[game.activePlayer].timer;
@@ -54,7 +57,7 @@ class Manalath {
 				let sec = Math.floor(timer % 60);
 				let min = Math.floor(timer / 60);
 
-        		sec = sec < 10 ? "0" + sec : sec;
+				sec = sec < 10 ? "0" + sec : sec;
 				min = min < 10 ? "0" + min : min;
 
 
@@ -85,6 +88,9 @@ class Manalath {
 		this.selectedPiece = null;
 		this.moves = [];
 		this.state = GameStates.READY;
+		this.cameraTimer = 0;
+		this.cameraTimeElapsed = 0;
+		this.cameraRotAngle = 0;
 		this.activePlayer = 0; //0 || 1
 
 		this.setPlayerInfo();
@@ -116,6 +122,9 @@ class Manalath {
 		this.selectedPiece = null;
 		this.moves = [];
 		this.state = GameStates.READY;
+		this.cameraTimer = 0;
+		this.cameraTimeElapsed = 0;
+		this.cameraRotAngle = 0;
 		this.activePlayer = 0; //0 || 1
 
 		//reset timers
@@ -492,5 +501,40 @@ class Manalath {
 			return true;
 		}
 		return false;
+	}
+
+	updateCameraTimer(currTimer) {
+
+		if (this.state != GameStates.ANIMATING) {
+			this.cameraTimer = currTimer;
+		}
+
+		this.cameraTimeElapsed = currTimer - this.cameraTimer;
+	}
+
+	setCameraAngle() {
+		const animSpan = (this.animationSpan * 1000 / 2);
+		if (this.state != GameStates.ANIMATING) {
+			//case no finished on time
+			if(this.cameraAngle > Math.PI * 0.9) {
+				this.cameraRotAngle = Math.PI - this.cameraAngle;
+				this.cameraAngle = 0;
+			} else {
+				this.cameraAngle = 0;
+				this.cameraRotAngle = 0;
+			}
+			return;
+		} 
+		//case animation state takes more time than camera rotation
+		else if (this.cameraTimeElapsed > animSpan) {
+			this.cameraRotAngle = Math.PI - this.cameraAngle;
+			this.cameraAngle = Math.PI;
+			return;
+		} 
+
+		let newCamAng = Math.PI * (this.cameraTimeElapsed / animSpan);
+		this.cameraRotAngle = newCamAng - this.cameraAngle;
+		this.cameraAngle = newCamAng;
+
 	}
 }
