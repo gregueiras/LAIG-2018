@@ -129,7 +129,7 @@ class MyInterface extends CGFinterface {
             }
         };
 
-        actions.add(actionsFuncs, "reset").name("Reset Configs");
+        actions.add(actionsFuncs, "reset").name("Apply Configs");
         actions.add(actionsFuncs, "restart").name("Play Again");
         actions.add(actionsFuncs, "undo").name("Undo Play");
         actions.add(actionsFuncs, "resume").name("Resume Game");
@@ -190,7 +190,7 @@ class MyInterface extends CGFinterface {
      * Must be commented to block camera mouse controlled movement
      */
     processMouse() {
-        super.processMouse();
+        //super.processMouse();
         //console.log("mouse is disabled");
     }
 }

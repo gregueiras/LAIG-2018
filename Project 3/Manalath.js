@@ -131,8 +131,6 @@ class Manalath {
 		this.playerInfo[0].timer = 0;
 		this.playerInfo[1].timer = 0;
 
-		console.log(this.playerInfo);
-
 		this.playStatus = PlayStatus.OnGoing;
 
 		this.client = new Client();
@@ -235,6 +233,7 @@ class Manalath {
 			this.state = GameStates.READY;
 			if (this.client.isWon()) {
 				this.setPlayerVictory();
+				this.updatePanelInfo();
 				return;
 			}
 
@@ -259,7 +258,6 @@ class Manalath {
 		this.playerInfo[this.activePlayer].won += 1;
 		let looser = (this.activePlayer + 1) % 2;
 		this.playerInfo[looser].won = 0;
-		document.getElementById("streak").innerHTML = this.playerInfo[this.activePlayer].won;
 	}
 
 	updatePanelInfo() {
@@ -396,6 +394,9 @@ class Manalath {
 			return;
 		} else if (this.state == GameStates.STOPPED) {
 			console.warn("The game is paused");
+			return;
+		} else if (this.playStatus == PlayStatus.Finished) {
+			console.warn("The game is finished");
 			return;
 		}
 
