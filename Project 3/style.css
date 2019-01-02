@@ -50,6 +50,10 @@ h1 {
     content: "Player's Time: ";
 }
 
+#turnTimer::before {
+    content: "Turn Time: "
+}
+
 #message::before {
     content: "> ";
 }

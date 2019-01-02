@@ -97,6 +97,7 @@ class MyInterface extends CGFinterface {
         configs.add(game, "selectedMode", modeArr).name("Mode");
         configs.add(game, "selectedLvl", lvlArr).name("Level");
         configs.add(game, "animationSpan", 0.1, 5).name("Animation Span");
+        configs.add(game, "maxTurnTime", 5, 60).name("Turn Timer");
 
         let actions = this.gui.addFolder("Actions");
         actions.open();

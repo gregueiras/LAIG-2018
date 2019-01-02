@@ -40,6 +40,8 @@ class Manalath {
 		this.lvl = GameDifficulty.EASY;
 
 		this.selectedMode = GameModes.PvP;
+		this.maxTurnTime = 10;
+		this.turnTime = 0;
 		this.mode = GameModes.PvP;
 
 		this.activePlayer = 0; //0 || 1
@@ -47,21 +49,25 @@ class Manalath {
 		this.setPlayerInfo();
 
 		//start timers
-		let game = this;
-		setInterval(function () {
-			if (game.state == GameStates.READY) {
-				game.playerInfo[game.activePlayer].timer += 1;
+		setInterval( () => {
+			if (this.state == GameStates.READY) {
+				this.playerInfo[this.activePlayer].timer += 1;
+				this.turnTime += 1;
 
-				const timer = game.playerInfo[game.activePlayer].timer;
+				if (this.turnTime > this.maxTurnTime) {
+					this.turnTime = 0;
+					this.randomPlay();
+				}
 
-				let sec = Math.floor(timer % 60);
-				let min = Math.floor(timer / 60);
+				const playerTimer = this.playerInfo[this.activePlayer].timer;
+				const turnTimer = this.turnTime;
 
-				sec = sec < 10 ? "0" + sec : sec;
-				min = min < 10 ? "0" + min : min;
+				const playerTimerString = this.parseTime(playerTimer);
+				const turnTimerString = this.parseTime(turnTimer);
 
+				document.getElementById("timer").innerHTML = playerTimerString;
+				document.getElementById("turnTimer").innerHTML = turnTimerString;
 
-				document.getElementById("timer").innerHTML = min + ":" + sec;
 			}
 
 		}, 1000);
@@ -81,6 +87,25 @@ class Manalath {
 		}
 	}
 
+	parseTime(timer) {
+		let sec = Math.floor(timer % 60);
+		let min = Math.floor(timer / 60);
+		sec = sec < 10 ? "0" + sec : sec;
+		min = min < 10 ? "0" + min : min;
+		return min + ":" + sec;
+	}
+
+	randomPlay() {
+		let cell = {};
+		do {
+			let board = this.board.board;
+			let index = Math.floor(Math.random() * board.length);
+			cell = board[index];
+		} while(cell.state !== CellState.empty)
+		const randomColor = (Math.random() > 0.5) ? CellState.black : CellState.white;
+		
+		this.AIPlay({x: cell.pX, y: cell.pY, state: randomColor});
+	}
 	reset() {
 		this.board = new MyBoard(scene);
 		this.mode = this.selectedMode;
@@ -94,6 +119,7 @@ class Manalath {
 		this.activePlayer = 0; //0 || 1
 
 		this.setPlayerInfo();
+		this.turnTime = 0;
 
 		this.playStatus = PlayStatus.OnGoing;
 
@@ -130,6 +156,7 @@ class Manalath {
 		//reset timers
 		this.playerInfo[0].timer = 0;
 		this.playerInfo[1].timer = 0;
+		this.turnTime = 0;
 
 		this.playStatus = PlayStatus.OnGoing;
 
@@ -228,7 +255,7 @@ class Manalath {
 
 		this.state = GameStates.ANIMATING;
 		this.selectedPiece = null;
-
+		this.turnTime = 0;
 		setTimeout(() => {
 			this.state = GameStates.READY;
 			if (this.client.isWon()) {
@@ -261,25 +288,24 @@ class Manalath {
 	}
 
 	updatePanelInfo() {
-		document.getElementById("player").innerHTML = this.activePlayer + 1;
+		document.getElementById("player").innerHTML = (this.activePlayer === 0) ? "Black" : "White";
 		document.getElementById("streak").innerHTML = this.playerInfo[this.activePlayer].won;
 
 		let cnt = 0;
 		let maxTry = 50;
-		let game = this;
-		let interval = setInterval(function () {
+		let interval = setInterval(() => {
 			++cnt;
 			if (cnt > maxTry) {
 				clearInterval(interval);
 				console.error("Err getting start response");
 				return;
 			}
-			let mp = game.client.getMessagePanel();
+			let mp = this.client.getMessagePanel();
 			if (mp != -1) {
 				clearInterval(interval);
-				game.infoMessage = mp;
+				this.infoMessage = mp;
 			}
-			document.getElementById("message").innerHTML = game.infoMessage;
+			document.getElementById("message").innerHTML = this.infoMessage;
 		}, 500);
 	}
 
@@ -298,20 +324,19 @@ class Manalath {
 			const maxTry = 50;
 			let cnt = 0;
 
-			let game = this;
-			let interval = setInterval(function () {
+			let interval = setInterval(() => {
 				++cnt;
 				if (cnt > maxTry) {
 					clearInterval(interval);
 					console.error(
 						"Can't get play... Something must have gone wrong"
 					);
-					game.playStatus = PlayStatus.Error;
+					this.playStatus = PlayStatus.Error;
 				}
-				let play = game.client.getMove();
+				let play = this.client.getMove();
 				if (play != -1) {
 					clearInterval(interval);
-					game.playStatus = PlayStatus.OnGoing;
+					this.playStatus = PlayStatus.OnGoing;
 				}
 			}, 500);
 		}
@@ -336,20 +361,19 @@ class Manalath {
 		const maxTry = 500;
 		let cnt = 0;
 
-		let game = this;
-		let interval = setInterval(function () {
+		let interval = setInterval(() => {
 			++cnt;
 			if (cnt > maxTry) {
 				clearInterval(interval);
 				console.error("Can't get AI play...");
-				game.playStatus = PlayStatus.Error;
+				this.playStatus = PlayStatus.Error;
 				return;
 			}
-			let play = game.client.getMove();
+			let play = this.client.getMove();
 			if (play != -1) {
 				clearInterval(interval);
-				game.playStatus = PlayStatus.OnGoing;
-				game.AIPlay(play);
+				this.playStatus = PlayStatus.OnGoing;
+				this.AIPlay(play);
 			}
 		}, 500);
 	}

@@ -219,10 +219,10 @@ class Client {
 					this.updateMessagePanel("Valid Play, No Winner");
 					return;
 				case 1:
-					this.updateMessagePanel("Valid Play, Winner is Player 1");
+					this.updateMessagePanel("Valid Play, Winner is Black Player");
 					return;
 				case 2:
-					this.updateMessagePanel("Valid Play, Winner is Player 2");
+					this.updateMessagePanel("Valid Play, Winner is White Player");
 					return;
 				case -1:
 					this.updateMessagePanel("Valid Play, Draw");
