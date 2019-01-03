@@ -96,6 +96,7 @@ class MyInterface extends CGFinterface {
 
         configs.add(game, "selectedMode", modeArr).name("Mode");
         configs.add(game, "selectedLvl", lvlArr).name("Level");
+        configs.add(game, "allowRandomPlay").name("Allow random");
         configs.add(game, "animationSpan", 0.1, 5).name("Animation Span");
         configs.add(game, "maxTurnTime", 5, 60).name("Turn Timer");
 
@@ -113,10 +114,10 @@ class MyInterface extends CGFinterface {
                 inter.cameras[ACTIVE_CAMERA] = "GameBoard";
             },
             undo: function () {
-                game.undo()
+                game.undo();
             },
             movie: function () {
-                game.playGameMovie()
+                game.playGameMovie();
             },
             quit: function () {
                 if(game.pause()) {

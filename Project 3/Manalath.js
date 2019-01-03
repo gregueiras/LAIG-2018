@@ -1,8 +1,7 @@
 const GameStates = Object.freeze({
 	READY: 0,
 	ANIMATING: 1,
-	END: 2,
-	STOPPED: 3
+	STOPPED: 2
 });
 const GameModes = Object.freeze({
 	PvP: 0,
@@ -48,15 +47,26 @@ class Manalath {
 
 		this.setPlayerInfo();
 
+		//On overtime player play
+		this.allowRandomPlay = true;
+
+		this.playStatus = PlayStatus.OnGoing;
+
 		//start timers
 		setInterval( () => {
-			if (this.state == GameStates.READY) {
+			if (this.state == GameStates.READY && this.playStatus == PlayStatus.OnGoing) {
 				this.playerInfo[this.activePlayer].timer += 1;
 				this.turnTime += 1;
 
 				if (this.turnTime > this.maxTurnTime) {
-					this.turnTime = 0;
-					this.randomPlay();
+					if(this.isPlayerAllowed() && this.allowRandomPlay) {
+						this.turnTime = 0;
+						this.randomPlay();
+					} else {
+						document.getElementById("turnTimer").style.color = "#ef6666";
+					}
+				} else {
+					document.getElementById("turnTimer").style.color = "#fff";
 				}
 
 				const playerTimer = this.playerInfo[this.activePlayer].timer;
@@ -71,8 +81,6 @@ class Manalath {
 			}
 
 		}, 1000);
-
-		this.playStatus = PlayStatus.OnGoing;
 
 		this.infoMessage = "Connection not established";
 
