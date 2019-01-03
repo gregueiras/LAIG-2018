@@ -104,6 +104,7 @@ class Manalath {
 	}
 
 	randomPlay() {
+
 		let cell = {};
 		do {
 			let board = this.board.board;
@@ -267,6 +268,7 @@ class Manalath {
 		this.state = GameStates.ANIMATING;
 		this.selectedPiece = null;
 		this.turnTime = 0;
+		
 		setTimeout(() => {
 			this.state = GameStates.READY;
 
@@ -334,7 +336,7 @@ class Manalath {
 				)
 			);
 
-			const maxTry = 50;
+			const maxTry = 5;
 			let cnt = 0;
 
 			let interval = setInterval(() => {
@@ -349,7 +351,7 @@ class Manalath {
 				let play = this.client.getMove();
 				if (play != -1) {
 					clearInterval(interval);
-					this.playStatus = PlayStatus.OnGoing;
+					//this.playStatus = PlayStatus.OnGoing;
 				}
 			}, 500);
 		}
