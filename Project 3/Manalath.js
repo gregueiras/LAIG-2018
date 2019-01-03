@@ -52,6 +52,8 @@ class Manalath {
 
 		this.playStatus = PlayStatus.OnGoing;
 
+		this.infoMessage = "Connection not established";
+
 		//start timers
 		setInterval( () => {
 			if (this.state == GameStates.READY && this.playStatus == PlayStatus.OnGoing) {
@@ -82,8 +84,6 @@ class Manalath {
 
 		}, 1000);
 
-		this.infoMessage = "Connection not established";
-
 		this.client.request(
 			this.client.buildRequestParams(this.mode, this.lvl)
 		);
@@ -108,6 +108,9 @@ class Manalath {
 		do {
 			let board = this.board.board;
 			let index = Math.floor(Math.random() * board.length);
+			if (index == 30) {
+				++index;
+			}
 			cell = board[index];
 		} while(cell.state !== CellState.empty)
 		const randomColor = (Math.random() > 0.5) ? CellState.black : CellState.white;
@@ -266,20 +269,19 @@ class Manalath {
 		this.turnTime = 0;
 		setTimeout(() => {
 			this.state = GameStates.READY;
-			if (this.client.isWon()) {
-				this.setPlayerVictory();
-				this.updatePanelInfo();
-				return;
-			}
 
 			this.changeActivePlayer();
 
 			this.updatePanelInfo();
 
 			if (this.isAIAllowed()) {
-				this.decideAIPlay();
+				if (this.client.isWon()) {
+					this.setPlayerVictory();
+				} else {
+					this.decideAIPlay();
+				}
 			}
-		}, this.animationSpan * 1000 + 250);
+		}, this.animationSpan * 1000);
 	}
 
 	changeActivePlayer() {
@@ -312,6 +314,9 @@ class Manalath {
 			if (mp != -1) {
 				clearInterval(interval);
 				this.infoMessage = mp;
+				if (this.client.isWon()) {
+					this.setPlayerVictory();
+				}
 			}
 			document.getElementById("message").innerHTML = this.infoMessage;
 		}, 500);
@@ -356,6 +361,9 @@ class Manalath {
 			return;
 		} else if (this.state == GameStates.STOPPED) {
 			console.warn("The game is paused");
+			return;
+		} else if (this.playStatus == PlayStatus.Finished) {
+			console.warn("The game is finished");
 			return;
 		}
 		this.client.request(
