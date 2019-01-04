@@ -119,6 +119,12 @@ class Manalath {
 		this.AIPlay({x: cell.pX, y: cell.pY, state: randomColor});
 	}
 	reset() {
+
+		if(this.cameraAngle != 0) {
+			console.warn("Camera on rotation, can't do this operation...");
+			return;
+		}
+
 		this.board = new MyBoard(scene);
 		this.mode = this.selectedMode;
 		this.lvl = this.selectedLvl;
@@ -156,6 +162,12 @@ class Manalath {
 	}
 
 	restart() {
+
+		if(this.cameraAngle != 0) {
+			console.warn("Camera on rotation, can't do this operation...");
+			return;
+		}
+
 		this.board = new MyBoard(scene);
 		this.selectedPiece = null;
 		this.moves = [];
@@ -281,7 +293,7 @@ class Manalath {
 					this.decideAIPlay();
 				} 
 			}
-		}, this.animationSpan * 1000);
+		}, this.animationSpan * 1000 + 1000);
 	}
 
 	changeActivePlayer() {
