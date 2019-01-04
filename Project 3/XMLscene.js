@@ -20,6 +20,7 @@ let scene;
     this.interface = myInterface;
     this.lightValues = {};
     this.oldtime = 0;
+    this.cameraAnimating = false;
     scene = this;
   }
 
@@ -217,6 +218,34 @@ let scene;
 
     this.camera.orbit(vec3.fromValues(0, 100, 50), this.graph.game.cameraRotAngle);
     
+    if (this.graph.game.state !== GameStates.ANIMATING && this.move) {
+      this.cameraTime += this.elapsedTime;
+
+      if (this.cameraTime > this.graph.game.animationSpan) {
+        this.cameraTime = 0;
+        this.move = undefined;
+        this.cameraAnimating = false;
+        this.applyCamera(this.newCamera.id)
+        this.graph.game.state = GameStates.READY;
+      } else {
+        
+        let stepRatio = this.cameraTime / this.graph.game.animationSpan;
+        let step = vec3.fromValues(
+          this.move.x * stepRatio + this.oldPos[0],
+          this.move.y * stepRatio + this.oldPos[1],
+          this.move.z * stepRatio + this.oldPos[2]
+        );
+        let stepTarget = vec3.fromValues(
+          this.moveTarget.x * stepRatio + this.oldTarget[0],
+          this.moveTarget.y * stepRatio + this.oldTarget[1],
+          this.moveTarget.z * stepRatio + this.oldTarget[2]
+        );
+
+        this.camera.setPosition(step);
+        this.camera.setTarget(stepTarget);
+        this.camera.fov = this.moveFov * stepRatio + this.oldFov;
+      }
+    }
   }
 
   /**
@@ -245,10 +274,44 @@ let scene;
   changeActiveCamera() {
     if (this.interface.cameras) {
       let interfaceCam = this.interface.cameras[ACTIVE_CAMERA];
-      if (this.camera.id != interfaceCam) {
-        this.applyCamera(interfaceCam);
+      let defOrtho = this.graph.views.orthos[interfaceCam];
+      let defPerspective = this.graph.views.perspectives[interfaceCam];
+      if (this.camera.id != interfaceCam && !this.cameraAnimating) {
+        if (defOrtho) {
+          this.animateCameraChange(this.camera, defOrtho)
+        } else {
+          this.animateCameraChange(this.camera, defPerspective)
+        }
       }
     }
+  }
+
+  animateCameraChange(activeCamera, newCamera) {
+    this.cameraAnimating = true;
+    this.cameraTime = 0;
+    this.newCamera = newCamera;
+
+    this.oldPos = JSON.parse(JSON.stringify(activeCamera.position));
+    this.oldTarget = JSON.parse(JSON.stringify(activeCamera.target));
+    this.oldFov = JSON.parse(JSON.stringify(activeCamera.fov));
+    
+    let destination = newCamera.from; 
+    let target = newCamera.to; 
+  
+    this.move = {
+      x: destination.x - this.oldPos[0],
+      y: destination.y - this.oldPos[1],
+      z: destination.z - this.oldPos[2]
+    };
+    this.moveTarget = {
+      x: target.x - this.oldTarget[0],
+      y: target.y - this.oldTarget[1],
+      z: target.z - this.oldTarget[2]
+    };
+    this.moveFov = newCamera.angle * DEGREE_TO_RAD - this.oldFov;
+    this.graph.game.state = GameStates.STOPPED;
+    
+
   }
 
   logPicking() {
