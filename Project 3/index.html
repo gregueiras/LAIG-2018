@@ -15,13 +15,51 @@
     <div class="panel">
         <div id="content">
             <h1>Manalath</h1>
+            <button id="dispGuide" onclick="changeGuideDisplay()">Guide</button>
             <p id="player"></p>
-            <p id="streak"></p>
             <p id="timer"></p>
             <p id="turnTimer"></p>
+            <p class="streak" id="s1"></p>
+            <p class="streak" id="s2"></p>
             <div id="message"></div>
         </div>
+        <div id="board">
+            <div id="rules">
+                <h2>Guide</h2>
+                <q>
+                    Two players (White and Black) take turns. In their turn, players choose a piece of any(!) color
+                    and place it on an empty space. A piece may not be placed such that a group of more than 5
+                    pieces is created.
+                    <p>If there is, at the end of your turn, …</p>
+                    <ul>
+                        <li>a group of 5 of your colour, you win.</li>
+                        <li>a group of 4 of your colour, you lose.</li>
+                    </ul>
+                    If both conditions are present at the end of your turn, you lose.
+                </q>
+    
+                <p>Info from <a href="https://boardgamegeek.com/boardgame/127993/manalath">this</a> page.</p>
+            </div>
+        </div>
     </div>
+
+    <script>
+        document.getElementById("rules").style.display = "none";
+        function changeGuideDisplay() {
+            let rulesElem = document.getElementById("rules");
+            let btnElem = document.getElementById("dispGuide");
+
+            if (rulesElem.style.display == "none") {
+                rulesElem.style.display = "inherit";
+                btnElem.style.opacity = 0.6;
+
+            } else {
+                rulesElem.style.display = "none";
+                btnElem.style.opacity = 1;
+            }
+
+        }
+    </script>
 
     <script src="main.js"></script>
 

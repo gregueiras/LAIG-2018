@@ -22,12 +22,14 @@ getInformation(Board,Lvl, X,Y,Color) :-
 play_game_loop(Board,Lvl,NewWinner, NewBoard) :-
   getCurrentPlayer(Player), !,
   getInformation(Board,Lvl, X,Y,Color), 
-  play(Board,X,Y,Color,NewBoard,NewWinner).
+  play(Board,X,Y,Color,NewBoard,NewWinner),
+  display_game(NewBoard,Player).
 
 %Player play
 play_game_loop(Board, Lvl, X, Y, Color, NewWinner, NewBoard) :-
   getCurrentPlayer(Player), !,
-  play(Board,X,Y,Color,NewBoard,NewWinner).
+  play(Board,X,Y,Color,NewBoard,NewWinner),
+  display_game(NewBoard,Player).
 
 
 start_game_PvP(Lvl) :-

@@ -21,17 +21,30 @@ canvas {
     background-color: rgba(0, 0, 0, 0.4);
     position: fixed;
     bottom: 0;
-    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
 }
 
 #content {
     font-family: 'IBM Plex Sans Condensed', sans-serif;
-    margin: 1em 0 0.5em 2em;
+    margin: 1em 1em 0.5em 2em;
+    color: white;
+    min-width: 35%;
+}
+
+#board {
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
+    margin: 0em 2em 0.5em 2em;
     color: white;
 }
 
 h1 {
     font-size: 1.2em;
+}
+
+h2 {
+    font-size: 1.1em;
 }
 
 #content p{
@@ -40,24 +53,51 @@ h1 {
 
 #player::before {
     content: "Active Player: ";
+    font-weight: bold;
 }
 
-#streak::before {
-    content: "Player's Win Streak: ";
+#s1::before {
+    content: "Black's Victories: ";
+    font-weight: bold;
+}
+
+#s2::before {
+    content: "White's Victories: ";
+    font-weight: bold;
 }
 
 #timer::before {
     content: "Player's Time: ";
+    font-weight: bold;
 }
 
 #turnTimer::before {
-    content: "Turn Time: "
+    content: "Turn Time: ";
+    font-weight: bold;
 }
 
 #message::before {
     content: "> ";
+    font-weight: bold;
 }
 
 #message {
     font-size: 1.1em;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(150, 169, 253);
+}
+
+#dispGuide {
+    background-color: white;
+    border: none;
+    color: black;
+    padding: 5px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
+    font-size: 1em;
 }

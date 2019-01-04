@@ -110,11 +110,11 @@ class Client {
 		let x = move.x;
 		let y = move.y;
 		let state;
-		if ((move.state = CellState.empty)) {
+		if (move.state == CellState.empty) {
 			state = "emptyCell";
-		} else if ((move.state = CellState.white)) {
+		} else if (move.state == CellState.white) {
 			state = "whitePiece";
-		} else if ((move.state = CellState.black)) {
+		} else if (move.state == CellState.black) {
 			state = "blackPiece";
 		}
 
@@ -284,6 +284,10 @@ class Client {
 
 	isWon() {
 		return this.winnerCode > 0;
+	}
+
+	getWinnerCode() {
+		return this.winnerCode;
 	}
 
 	updateMessagePanel(message) {

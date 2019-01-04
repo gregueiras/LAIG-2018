@@ -48,7 +48,7 @@ class Manalath {
 		this.setPlayerInfo();
 
 		//On overtime player play
-		this.allowRandomPlay = true;
+		this.allowRandomPlay = false;
 
 		this.playStatus = PlayStatus.OnGoing;
 
@@ -268,20 +268,18 @@ class Manalath {
 		this.state = GameStates.ANIMATING;
 		this.selectedPiece = null;
 		this.turnTime = 0;
+
+		this.changeActivePlayer();
+
+		this.updatePanelInfo();
 		
 		setTimeout(() => {
 			this.state = GameStates.READY;
 
-			this.changeActivePlayer();
-
-			this.updatePanelInfo();
-
 			if (this.isAIAllowed()) {
-				if (this.client.isWon()) {
-					this.setPlayerVictory();
-				} else {
+				if (!this.client.isWon()) {
 					this.decideAIPlay();
-				}
+				} 
 			}
 		}, this.animationSpan * 1000);
 	}
@@ -294,17 +292,20 @@ class Manalath {
 
 	setPlayerVictory() {
 		this.playStatus = PlayStatus.Finished;
-		this.playerInfo[this.activePlayer].won += 1;
-		let looser = (this.activePlayer + 1) % 2;
-		this.playerInfo[looser].won = 0;
+		this.playerInfo[this.client.getWinnerCode()-1].won += 1;
+	}
+
+	updateScoreBoard() {
+		document.getElementById("s1").innerHTML = this.playerInfo[0].won;
+		document.getElementById("s2").innerHTML = this.playerInfo[1].won;
 	}
 
 	updatePanelInfo() {
 		document.getElementById("player").innerHTML = (this.activePlayer === 0) ? "Black" : "White";
-		document.getElementById("streak").innerHTML = this.playerInfo[this.activePlayer].won;
+		this.updateScoreBoard();
 
 		let cnt = 0;
-		let maxTry = 50;
+		let maxTry = 500;
 		let interval = setInterval(() => {
 			++cnt;
 			if (cnt > maxTry) {
@@ -315,13 +316,15 @@ class Manalath {
 			let mp = this.client.getMessagePanel();
 			if (mp != -1) {
 				clearInterval(interval);
-				this.infoMessage = mp;
+				this.infoMessage = mp; 
 				if (this.client.isWon()) {
 					this.setPlayerVictory();
+					document.getElementById("player").innerHTML = "---";
+					this.updateScoreBoard();
 				}
 			}
 			document.getElementById("message").innerHTML = this.infoMessage;
-		}, 500);
+		}, 50);
 	}
 
 	validatePlayerPlay(move) {
@@ -390,7 +393,6 @@ class Manalath {
 			let play = this.client.getMove();
 			if (play != -1) {
 				clearInterval(interval);
-				this.playStatus = PlayStatus.OnGoing;
 				this.AIPlay(play);
 			}
 		}, 500);
