@@ -192,7 +192,7 @@ class MyInterface extends CGFinterface {
      * Must be commented to block camera mouse controlled movement
      */
     processMouse() {
-        //super.processMouse();
+        super.processMouse();
         //console.log("mouse is disabled");
     }
 }

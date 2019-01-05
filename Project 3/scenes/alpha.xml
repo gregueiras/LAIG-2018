@@ -1,6 +1,6 @@
 <yas>
 
-    <scene root="house" axis_length="3" />
+    <scene root="arena" axis_length="3" />
     <views default="GameBoard">
         <perspective id="GameBoard" near="0.01" far="500" angle="90">
             <from x="4" y="2.0" z="3" />
@@ -105,6 +105,27 @@
         </material>
     </materials>
     <transformations>
+        <transformation id="tf0.1">
+            <translate x="1" y="0" z="0" />
+            <rotate axis="y" angle="180" />
+        </transformation>
+        <transformation id="tf0.2">
+            <rotate axis="y" angle="-90" />
+        </transformation>
+        <transformation id="tf0.3">
+            <rotate axis="x" angle="90" />
+        </transformation>
+        <transformation id="tf0.4">
+            <translate x="0" y="1" z="1" />
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="tf0.5">
+            <translate x="1" y="0" z="1" />
+            <rotate axis="y" angle="90" />
+        </transformation>
+        <transformation id="tf0.6">
+            <translate x="0" y="0" z="1" />
+        </transformation>
         <transformation id="tf1">
             <translate x="0" y="0" z="0" />
             <rotate axis="x" angle="0" />
@@ -193,6 +214,116 @@
             <scale x="0.12" y="0.15" z="0.12" />
             <rotate axis="x" angle="-90" />
         </transformation>
+        <transformation id="tf21.1">
+            <translate x="0" y="0" z="-1" />
+            <rotate axis="x" angle="90" />
+        </transformation>
+        <transformation id="tf21.2">
+            <translate x="0" y="6" z="-1" />
+            <rotate axis="z" angle="-90" />
+            <rotate axis="x" angle="90" />
+        </transformation>
+        <transformation id="tf21.3">
+            <translate x="6" y="0" z="-1" />
+            <rotate axis="z" angle="90" />
+            <rotate axis="x" angle="90" />
+        </transformation>
+        <transformation id="tf21.4">
+            <translate x="0" y="6" z="0" />
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="tf22.1">
+            <translate x="0" y="0" z="-1" />
+        </transformation>
+        <transformation id="tf22.2">
+            <translate x="6" y="6" z="-1" />
+        </transformation>
+        <transformation id="tf22.3">
+            <translate x="0" y="6" z="-1" />
+        </transformation>
+        <transformation id="tf22.4">
+            <translate x="6" y="0" z="-1" />
+        </transformation>
+        <transformation id="tf23.1">
+            <translate x="0.5" y="0.5" z="0.3" />
+        </transformation>
+        <transformation id="tf23.2">
+            <translate x="5.5" y="5.5" z="0.3" />
+        </transformation>
+        <transformation id="tf23.3">
+            <translate x="0.5" y="5.5" z="0.3" />
+        </transformation>
+        <transformation id="tf23.4">
+            <translate x="5.5" y="0.5" z="0.3" />
+        </transformation>
+        <transformation id="tf24.1">
+            <translate x="0.5" y="0.5" z="0.5" />
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="tf24.2">
+            <translate x="0.5" y="0.5" z="0.9" />
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="tf24.3">
+            <translate x="0.5" y="0.5" z="1.3" />
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="tf25.2">
+            <rotate axis="z" angle="180" />
+            <translate x="-6" y="0" z="0" />
+            <rotate axis="z" angle="-90" />
+        </transformation>
+        <transformation id="tf25.3">
+            <translate x="0" y="6" z="0" />
+            <rotate axis="z" angle="-90" />
+        </transformation>
+        <transformation id="tf25.4">
+            <rotate axis="z" angle="180" />
+            <translate x="-6" y="-6" z="0" />
+        </transformation>
+        <transformation id="tf26.1">
+            <translate x="0.5" y="2" z="0.5" />
+        </transformation>
+        <transformation id="tf26.2">
+            <translate x="0.5" y="4" z="0.5" />
+        </transformation>
+        <transformation id="tf27.1">
+            <translate x="0.5" y="0.5" z="0.5" />
+            <rotate axis="x" angle="-90" />
+            <rotate axis="y" angle="-135" />
+        </transformation>
+        <transformation id="tf27.2">
+            <translate x="0.5" y="0.5" z="0.9" />
+            <rotate axis="x" angle="-90" />
+            <rotate axis="y" angle="-135" />
+        </transformation>
+        <transformation id="tf27.3">
+            <translate x="0.5" y="0.5" z="1.3" />
+            <rotate axis="x" angle="-90" />
+            <rotate axis="y" angle="-135" />
+        </transformation>
+        <transformation id="tf28">
+            <scale x="1" y="0.7" z="0.8" />
+        </transformation>
+        <transformation id="tf28.1">
+            <translate x="0" y="0" z="0" />
+            <scale x="1.5" y="0.33" z="1" />
+        </transformation>
+        <transformation id="tf28.2">
+            <translate x="0" y="0.33" z="0" />
+            <scale x="1.5" y="0.33" z="0.66" />
+        </transformation>
+        <transformation id="tf28.3">
+            <translate x="0" y="0.66" z="0" />
+            <scale x="1.5" y="0.33" z="0.33" />
+        </transformation>
+        <transformation id="tf29.1">
+            <translate x="1.8" y="0" z="-1" />
+            <rotate axis="z" angle="180" />
+        </transformation>
+        <transformation id="tf29.2">
+            <translate x="4.2" y="6" z="-1" />
+        </transformation>
     </transformations>
 
     <animations>
@@ -205,6 +336,9 @@
     </animations>
 
     <primitives>
+        <primitive id="rect0">
+            <rectangle x1="0" y1="0" x2="1" y2="1"/>
+        </primitive>
         <primitive id="rect1">
             <rectangle x1="0" y1="0" x2="6" y2="3"/>
         </primitive>
@@ -256,10 +390,28 @@
         <primitive id = "game">
             <manalath />
         </primitive>
+        <primitive id="rect9">
+            <rectangle x1="0" y1="0" x2="6" y2="1"/>
+        </primitive >
+        <primitive id="cil2">
+            <cylinder base="0.15" top="0.15" height="2.5" slices="20" stacks="5" />
+        </primitive >
+        <primitive id="cil3">
+            <cylinder base="0.1" top="0.1" height="1.2" slices="20" stacks="5" />
+        </primitive >
+        <primitive id="cil4">
+            <cylinder base="0.05" top="0.05" height="5" slices="10" stacks="5" />
+        </primitive >
+        <primitive id="cil5">
+            <cylinder base="0.025" top="0.025" height="0.8" slices="10" stacks="5" />
+        </primitive >
+        <primitive id="cil6">
+            <cylinder base="0.08" top="0.08" height="0.8" slices="10" stacks="5" />
+        </primitive >
 
     </primitives >
     <components>
-        <component id="house">
+        <component id="arena">
             <transformation>
             </transformation>
             <materials>
@@ -268,7 +420,7 @@
             </materials>
             <texture id="text_wood" length_s="1" length_t="1" />
             <children>
-                <componentref id="room" />
+                <componentref id="ring" />
             </children>
         </component>
         
@@ -286,7 +438,7 @@
             </children>
         </component>
         
-        <component id="room">
+        <component id="ring">
             <transformation>
                 <transformationref id="tf1" />
             </transformation>
@@ -296,50 +448,11 @@
             </materials>
             <texture id="text_wood" length_s="1" length_t="1" />
             <children>
-                <componentref id="board_wall" />
-                <componentref id="window_wall" />
-                <componentref id="menu_wall" />
-                <componentref id="floor" />
+                <componentref id="ringfloor" />
                 <componentref id="table" />
             </children>
         </component>
-        <component id="board_wall">
-            <transformation>
-                <transformationref id="tf1"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="text_wallpaint" length_s="6" length_t="3" />
-            <children>
-                <primitiveref id="rect1" />
-            </children>
-        </component>
-        <component id="window_wall">
-            <transformation>
-                <transformationref id="tf2" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="text_wallpaint" length_s="6" length_t="3" />
-            <children>
-                <primitiveref id="rect2" />
-            </children>
-        </component>
-        <component id="menu_wall">
-            <transformation>
-                <transformationref id="tf2.1" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="text_wallpaint" length_s="6" length_t="3" />
-            <children>
-                <primitiveref id="rect2" />
-            </children>
-        </component>
-        <component id="floor">
+        <component id="ringfloor">
             <transformation>
                 <transformationref id="tf3" />
             </transformation>
@@ -349,8 +462,416 @@
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
                 <primitiveref id="rect3" />
+                <componentref id="ringfloor_1" />
+                <componentref id="ringfloor_2" />
+                <componentref id="ringfloor_3" />
+                <componentref id="ringfloor_4" />
+                <componentref id="ringpost_1" />
+                <componentref id="ringpost_2" />
+                <componentref id="ringpost_3" />
+                <componentref id="ringpost_4" />
+                <componentref id="ringpostint_1" />
+                <componentref id="ringpostint_2" />
+                <componentref id="ringpostint_3" />
+                <componentref id="ringpostint_4" />
+                <componentref id="ringstrings_1" />
+                <componentref id="ringstrings_2" />
+                <componentref id="ringstrings_3" />
+                <componentref id="ringstrings_4" />
+                <componentref id="ringstairs_1" />
+                <componentref id="ringstairs_2" />
             </children>
         </component>
+        <component id="ringfloor_1">
+            <transformation>
+                <transformationref id="tf21.1" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="rect9" />
+            </children>
+        </component>
+        <component id="ringfloor_2">
+            <transformation>
+                <transformationref id="tf21.2" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="rect9" />
+            </children>
+        </component>
+        <component id="ringfloor_3">
+            <transformation>
+                <transformationref id="tf21.3" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="rect9" />
+            </children>
+        </component>
+        <component id="ringfloor_4">
+            <transformation>
+                <transformationref id="tf21.4" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="rect9" />
+            </children>
+        </component>
+        <component id="ringpost_1">
+            <transformation>
+                <transformationref id="tf22.1" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="cil2" />
+            </children>
+        </component>
+        <component id="ringpost_2">
+            <transformation>
+                <transformationref id="tf22.2" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="cil2" />
+            </children>
+        </component>
+        <component id="ringpost_3">
+            <transformation>
+                <transformationref id="tf22.3" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="cil2" />
+            </children>
+        </component>
+        <component id="ringpost_4">
+            <transformation>
+                <transformationref id="tf22.4" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="cil2" />
+            </children>
+        </component>
+        <component id="ringpostint_1">
+            <transformation>
+                <transformationref id="tf23.1" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="cil3" />
+            </children>
+        </component>
+        <component id="ringpostint_2">
+            <transformation>
+                <transformationref id="tf23.2" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="cil3" />
+            </children>
+        </component>
+        <component id="ringpostint_3">
+            <transformation>
+                <transformationref id="tf23.3" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="cil3" />
+            </children>
+        </component>
+        <component id="ringpostint_4">
+            <transformation>
+                <transformationref id="tf23.4" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="cil3" />
+            </children>
+        </component>
+        <component id="ringstrings_1">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <componentref id="ringstring_1" />
+                <componentref id="ringstring_2" />
+                <componentref id="ringstring_3" />
+                <componentref id="ringstringunion_1" />
+                <componentref id="ringstringunion_2" />
+                <componentref id="ringpostunion_1" />
+                <componentref id="ringpostunion_2" />
+                <componentref id="ringpostunion_3" />
+            </children>
+        </component>
+        <component id="ringstrings_2">
+            <transformation>
+                <transformationref id="tf25.2" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <componentref id="ringstring_1" />
+                <componentref id="ringstring_2" />
+                <componentref id="ringstring_3" />
+                <componentref id="ringstringunion_1" />
+                <componentref id="ringstringunion_2" />
+                <componentref id="ringpostunion_1" />
+                <componentref id="ringpostunion_2" />
+                <componentref id="ringpostunion_3" />
+            </children>
+        </component>
+        <component id="ringstrings_3">
+            <transformation>
+                <transformationref id="tf25.3" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <componentref id="ringstring_1" />
+                <componentref id="ringstring_2" />
+                <componentref id="ringstring_3" />
+                <componentref id="ringstringunion_1" />
+                <componentref id="ringstringunion_2" />
+                <componentref id="ringpostunion_1" />
+                <componentref id="ringpostunion_2" />
+                <componentref id="ringpostunion_3" />
+            </children>
+        </component>
+        <component id="ringstrings_4">
+            <transformation>
+                <transformationref id="tf25.4" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <componentref id="ringstring_1" />
+                <componentref id="ringstring_2" />
+                <componentref id="ringstring_3" />
+                <componentref id="ringstringunion_1" />
+                <componentref id="ringstringunion_2" />
+                <componentref id="ringpostunion_1" />
+                <componentref id="ringpostunion_2" />
+                <componentref id="ringpostunion_3" />
+            </children>
+        </component>
+        <component id="ringstring_1">
+            <transformation>
+                <transformationref id="tf24.1" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="cil4" />
+            </children>
+        </component>
+        <component id="ringstring_2">
+            <transformation>
+                <transformationref id="tf24.2" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="cil4" />
+            </children>
+        </component>
+        <component id="ringstring_3">
+            <transformation>
+                <transformationref id="tf24.3" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="cil4" />
+            </children>
+        </component>
+        <component id="ringstringunion_1">
+            <transformation>
+                <transformationref id="tf26.1" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="cil5" />
+            </children>
+        </component>
+        <component id="ringstringunion_2">
+            <transformation>
+                <transformationref id="tf26.2" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="cil5" />
+            </children>
+        </component>
+        <component id="ringpostunion_1">
+            <transformation>
+                <transformationref id="tf27.1" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="cil6" />
+            </children>
+        </component>
+        <component id="ringpostunion_2">
+            <transformation>
+                <transformationref id="tf27.2" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="cil6" />
+            </children>
+        </component>
+        <component id="ringpostunion_3">
+            <transformation>
+                <transformationref id="tf27.3" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="cil6" />
+            </children>
+        </component>
+        <component id="ringstairs_1">
+            <transformation>
+                <transformationref id="tf29.1" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <componentref id="ringstairs" />
+            </children>
+        </component>
+        <component id="ringstairs_2">
+            <transformation>
+                <transformationref id="tf29.2" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <componentref id="ringstairs" />
+            </children>
+        </component>
+        <component id="ringstairs">
+            <transformation>
+                <transformationref id="tf28" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <componentref id="ringstair_1" />
+                <componentref id="ringstair_2" />
+                <componentref id="ringstair_3" />
+            </children>
+        </component>
+        <component id="ringstair_1">
+            <transformation>
+                <transformationref id="tf28.1" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="ringstair_2">
+            <transformation>
+                <transformationref id="tf28.2" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="ringstair_3">
+            <transformation>
+                <transformationref id="tf28.3" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        
         
         <component id="table">
             <transformation>
@@ -653,6 +1174,95 @@
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="rect8" />
+            </children>
+        </component>
+
+        <component id="l1">
+            <transformation>
+                <transformationref id="tf0.1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rect0" />
+            </children>
+        </component>
+        <component id="l2">
+            <transformation>
+                <transformationref id="tf0.2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rect0" />
+            </children>
+        </component>
+        <component id="l3">
+            <transformation>
+                <transformationref id="tf0.3" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rect0" />
+            </children>
+        </component>
+        <component id="l4">
+            <transformation>
+                <transformationref id="tf0.4" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rect0" />
+            </children>
+        </component>
+        <component id="l5">
+            <transformation>
+                <transformationref id="tf0.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rect0" />
+            </children>
+        </component>
+        <component id="l6">
+            <transformation>
+                <transformationref id="tf0.6" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rect0" />
+            </children>
+        </component>
+        <component id="cube">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="l1" />
+                <componentref id="l2" />
+                <componentref id="l3" />
+                <componentref id="l4" />
+                <componentref id="l5" />
+                <componentref id="l6" />
             </children>
         </component>
         
