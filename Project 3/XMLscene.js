@@ -54,11 +54,11 @@ let scene;
     this.highlightMaterial.setColor(color.r, color.g, color.b, color.a);
 
     this.defaultMaterial = new CGFappearance(this);
-    let val = 0.5;
+    let val = 0.14;
     this.defaultMaterial.setDiffuse(val, val, val, 1);
-    this.defaultMaterial.setSpecular(val, val, val, 1);
-    this.defaultMaterial.setAmbient(0.2, 0.2, 0.2, 1);
-    this.defaultMaterial.setShininess(10.0);
+    this.defaultMaterial.setSpecular(val/2, val/2, val/2, 1);
+    this.defaultMaterial.setAmbient(0.1, 0.1, 0.1, 1);
+    this.defaultMaterial.setShininess(1.28);
     this.setPickEnabled(true);
   }
 
@@ -228,7 +228,7 @@ let scene;
         this.applyCamera(this.newCamera.id)
         this.graph.game.state = GameStates.READY;
       } else {
-        
+
         let stepRatio = this.cameraTime / this.graph.game.animationSpan;
         let step = vec3.fromValues(
           this.move.x * stepRatio + this.oldPos[0],

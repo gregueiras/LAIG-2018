@@ -26,7 +26,7 @@
             <diffuse r="0.7" g="0.7" b="0.7" a="1" />
             <specular r="0.6" g="0.6" b="0.6" a="1" />
         </omni>
-        
+
         <spot id="Monroe Spot" enabled="1" angle="30" exponent="1">
             <location x="6" y="6" z="6" w="0" />
             <target x="0" y="1" z="0" />
@@ -53,6 +53,8 @@
         <texture id="text_tv" file="./scenes/images/tv.jpg" />
         <texture id="text_grass" file="./scenes/images/grass2.jpg" />
         <texture id="seamless_stone" file="./scenes/images/stone.jpg" />
+        <texture id="text_red_rope" file="./scenes/images/redRope.jpg" />
+
     </textures>
     <materials>
         <material id="default" shininess = "0.1">
@@ -66,6 +68,36 @@
             <ambient r="0.788" g="0.788" b="0.788" a="1" />
             <diffuse r="0.1" g="0.1" b="0.1" a="1" />
             <specular r="0.1" g="0.1" b="0.1" a="1" />
+        </material>
+        <material id="redFabric" shininess = "0.1">
+            <emission r="0" g="0" b="0" a="0" />
+            <ambient r="0.09" g="0" b="0" a="1" />
+            <diffuse r="0.38" g="0" b="0" a="1" />
+            <specular r="0.07" g="0" b="0" a="1" />
+        </material>
+        <material id="whiteFabric" shininess = "0.1">
+            <emission r="0" g="0" b="0" a="0" />
+            <ambient r="0.09" g="0.09" b="0.09" a="1" />
+            <diffuse r="0.38" g="0.38" b="0.38" a="1" />
+            <specular r="0.07" g="0.07" b="0.07" a="1" />
+        </material>
+        <material id="blueFabric" shininess = "0.1">
+            <emission r="0" g="0" b="0" a="0" />
+            <ambient r="0" g="0" b="0.09" a="1" />
+            <diffuse r="0" g="0" b="0.38" a="1" />
+            <specular r="0" g="0" b="0.07" a="1" />
+        </material>
+        <material id="blackRubber" shininess = "0.08">
+            <emission r="0" g="0" b="0" a="0" />
+            <ambient r="0.02" g="0.02" b="0.02" a="1" />
+            <diffuse r="0.01" g="0.01" b="0.01" a="1" />
+            <specular r="0.4" g="0.4" b="0.4" a="1" />
+        </material>
+        <material id="chrome" shininess = "0.6">
+            <emission r="0" g="0" b="0" a="0" />
+            <ambient r="0.25" g="0.25" b="0.25" a="1" />
+            <diffuse r="0.4" g="0.4" b="0.4" a="1" />
+            <specular r="0.774597" g="0.774597" b="0.774597" a="1" />
         </material>
         <material id="brass" shininess = "0.217949">            <!-- http://devernay.free.fr/cours/opengl/materials.html -->
             <emission r="0" g="0" b="0" a="0" />
@@ -144,6 +176,10 @@
             <translate x="0" y="0" z="6" />
             <rotate axis="x" angle="-90" />
         </transformation>
+        <transformation id="tfBottom">
+            <rotate axis="x" angle="180" />
+            <translate x="0" y="-6" z="1" />
+        </transformation>
         <transformation id="tf4">            <!-- table translation -->
             <translate x="2" y="1" z="4" />
         </transformation>
@@ -210,7 +246,7 @@
             <scale x="1" y="0.5" z="1.35" />
         </transformation>
         <transformation id="tfGame">
-            <translate x="1" y="0.15" z="-1" />
+            <translate x="1" y="0.13" z="-1" />
             <scale x="0.12" y="0.15" z="0.12" />
             <rotate axis="x" angle="-90" />
         </transformation>
@@ -423,7 +459,7 @@
                 <componentref id="ring" />
             </children>
         </component>
-        
+
 
         <component id="manalath">
             <transformation>
@@ -437,7 +473,7 @@
                 <primitiveref id="game" />
             </children>
         </component>
-        
+
         <component id="ring">
             <transformation>
                 <transformationref id="tf1" />
@@ -457,15 +493,16 @@
                 <transformationref id="tf3" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="whiteFabric" />
             </materials>
-            <texture id="text_soalho" length_s="6" length_t="6" />
+            <texture id="none" length_s="6" length_t="6" />
             <children>
                 <primitiveref id="rect3" />
                 <componentref id="ringfloor_1" />
                 <componentref id="ringfloor_2" />
                 <componentref id="ringfloor_3" />
                 <componentref id="ringfloor_4" />
+                <componentref id="ringfloor_bottom" />
                 <componentref id="ringpost_1" />
                 <componentref id="ringpost_2" />
                 <componentref id="ringpost_3" />
@@ -480,6 +517,18 @@
                 <componentref id="ringstrings_4" />
                 <componentref id="ringstairs_1" />
                 <componentref id="ringstairs_2" />
+            </children>
+        </component>
+        <component id="ringfloor_bottom">
+            <transformation>
+                <transformationref id="tfBottom" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="text_soalho" length_s="6" length_t="6" />
+            <children>
+                <primitiveref id="rect3" />
             </children>
         </component>
         <component id="ringfloor_1">
@@ -535,7 +584,7 @@
                 <transformationref id="tf22.1" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="chrome" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
@@ -547,7 +596,7 @@
                 <transformationref id="tf22.2" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="chrome" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
@@ -559,7 +608,7 @@
                 <transformationref id="tf22.3" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="chrome" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
@@ -571,7 +620,7 @@
                 <transformationref id="tf22.4" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="chrome" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
@@ -583,7 +632,7 @@
                 <transformationref id="tf23.1" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="blackRubber" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
@@ -595,7 +644,7 @@
                 <transformationref id="tf23.2" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="blackRubber" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
@@ -607,7 +656,7 @@
                 <transformationref id="tf23.3" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="blackRubber" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
@@ -619,7 +668,7 @@
                 <transformationref id="tf23.4" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="blackRubber" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
@@ -632,7 +681,7 @@
             <materials>
                 <material id="wood" />
             </materials>
-            <texture id="text_soalho" length_s="6" length_t="6" />
+            <texture id="inherit" length_s="1" length_t="1" />
             <children>
                 <componentref id="ringstring_1" />
                 <componentref id="ringstring_2" />
@@ -651,7 +700,7 @@
             <materials>
                 <material id="wood" />
             </materials>
-            <texture id="text_soalho" length_s="6" length_t="6" />
+            <texture id="inherit" length_s="1" length_t="1"/>
             <children>
                 <componentref id="ringstring_1" />
                 <componentref id="ringstring_2" />
@@ -670,7 +719,7 @@
             <materials>
                 <material id="wood" />
             </materials>
-            <texture id="text_soalho" length_s="6" length_t="6" />
+            <texture id="inherit" length_s="1" length_t="1" />
             <children>
                 <componentref id="ringstring_1" />
                 <componentref id="ringstring_2" />
@@ -689,7 +738,7 @@
             <materials>
                 <material id="wood" />
             </materials>
-            <texture id="text_soalho" length_s="6" length_t="6" />
+            <texture id="inherit" length_s="1" length_t="1" />
             <children>
                 <componentref id="ringstring_1" />
                 <componentref id="ringstring_2" />
@@ -706,9 +755,9 @@
                 <transformationref id="tf24.1" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="whiteFabric" />
             </materials>
-            <texture id="text_soalho" length_s="6" length_t="6" />
+            <texture id="inherit" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="cil4" />
             </children>
@@ -718,9 +767,9 @@
                 <transformationref id="tf24.2" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="redFabric" />
             </materials>
-            <texture id="text_soalho" length_s="6" length_t="6" />
+            <texture id="inherit" length_s="100" length_t="100" />
             <children>
                 <primitiveref id="cil4" />
             </children>
@@ -730,9 +779,9 @@
                 <transformationref id="tf24.3" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="blueFabric" />
             </materials>
-            <texture id="text_soalho" length_s="6" length_t="6" />
+            <texture id="inherit" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="cil4" />
             </children>
@@ -742,7 +791,7 @@
                 <transformationref id="tf26.1" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="whiteFabric" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
@@ -754,7 +803,7 @@
                 <transformationref id="tf26.2" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="whiteFabric" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
@@ -766,7 +815,7 @@
                 <transformationref id="tf27.1" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="whiteFabric" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
@@ -778,7 +827,7 @@
                 <transformationref id="tf27.2" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="redFabric" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
@@ -790,7 +839,7 @@
                 <transformationref id="tf27.3" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="blueFabric" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
@@ -802,7 +851,7 @@
                 <transformationref id="tf29.1" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="chrome" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
@@ -814,7 +863,7 @@
                 <transformationref id="tf29.2" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="chrome" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
@@ -826,7 +875,7 @@
                 <transformationref id="tf28" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="chrome" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
@@ -840,7 +889,7 @@
                 <transformationref id="tf28.1" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="chrome" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
@@ -852,7 +901,7 @@
                 <transformationref id="tf28.2" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="chrome" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
@@ -864,15 +913,15 @@
                 <transformationref id="tf28.3" />
             </transformation>
             <materials>
-                <material id="wood" />
+                <material id="chrome" />
             </materials>
             <texture id="text_soalho" length_s="6" length_t="6" />
             <children>
                 <componentref id="cube" />
             </children>
         </component>
-        
-        
+
+
         <component id="table">
             <transformation>
                 <transformationref id="tf4" />
@@ -947,7 +996,7 @@
                 <primitiveref id="tri4"/>
             </children>
         </component>
-        
+
         <component id="table_base">
             <transformation>
                 <transformationref id="tf20" />
@@ -1265,6 +1314,6 @@
                 <componentref id="l6" />
             </children>
         </component>
-        
+
     </components>
 </yas>

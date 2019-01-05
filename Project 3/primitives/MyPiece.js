@@ -66,7 +66,7 @@ class MyPiece {
       this.animate.apply();
     }
 
-    this.scene.translate(this.xC, 1.2, this.yC);
+    this.scene.translate(this.xC, 0.2, this.yC);
     this.scene.scale(0.5, 2, 0.5);
 
     if (this.color) this.color.bind();

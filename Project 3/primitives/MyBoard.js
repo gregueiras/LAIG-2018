@@ -12,7 +12,7 @@ class MyBoard {
     }
     this.base = new MyBoardCell(scene, 0.95, 0.001);
 
-    this.cellTexture = new CGFtexture(scene, "./scenes/images/table.png");
+    this.cellTexture = new CGFtexture(scene, "./scenes/images/wallpaint2.png");
     this.baseTexture = new CGFtexture(scene, "./scenes/images/stone.jpg");
 
     this.blackPiece = new MyPiece(scene, CellState.black);
