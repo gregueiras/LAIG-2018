@@ -216,7 +216,7 @@ let scene;
 
     this.graph.game.setCameraAngle();
 
-    this.camera.orbit(vec3.fromValues(0, 100, 50), this.graph.game.cameraRotAngle);
+    this.camera.orbit([0, 1, 0], this.graph.game.cameraRotAngle);
     
     if (this.graph.game.state !== GameStates.ANIMATING && this.move) {
       this.cameraTime += this.elapsedTime;
