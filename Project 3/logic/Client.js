@@ -274,6 +274,7 @@ class Client {
 			}
 		}
 
+		this.updateMessagePanel("Invalid Play");
 		console.error("Move not found");
 	}
 

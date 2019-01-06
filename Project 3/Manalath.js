@@ -55,13 +55,13 @@ class Manalath {
 		this.infoMessage = "Connection not established";
 
 		//start timers
-		setInterval( () => {
+		setInterval(() => {
 			if (this.state == GameStates.READY && this.playStatus == PlayStatus.OnGoing) {
 				this.playerInfo[this.activePlayer].timer += 1;
 				this.turnTime += 1;
 
 				if (this.turnTime > this.maxTurnTime) {
-					if(this.isPlayerAllowed() && this.allowRandomPlay) {
+					if (this.isPlayerAllowed() && this.allowRandomPlay) {
 						this.turnTime = 0;
 						this.randomPlay();
 					} else {
@@ -113,14 +113,18 @@ class Manalath {
 				++index;
 			}
 			cell = board[index];
-		} while(cell.state !== CellState.empty)
+		} while (cell.state !== CellState.empty)
 		const randomColor = (Math.random() > 0.5) ? CellState.black : CellState.white;
-		
-		this.AIPlay({x: cell.pX, y: cell.pY, state: randomColor});
+
+		this.AIPlay({
+			x: cell.pX,
+			y: cell.pY,
+			state: randomColor
+		});
 	}
 	reset() {
 
-		if(this.cameraAngle != 0) {
+		if (this.cameraAngle != 0) {
 			console.warn("Camera on rotation, can't do this operation...");
 			return;
 		}
@@ -163,7 +167,7 @@ class Manalath {
 
 	restart() {
 
-		if(this.cameraAngle != 0) {
+		if (this.cameraAngle != 0) {
 			console.warn("Camera on rotation, can't do this operation...");
 			return;
 		}
@@ -284,14 +288,14 @@ class Manalath {
 		this.changeActivePlayer();
 
 		this.updatePanelInfo();
-		
+
 		setTimeout(() => {
 			this.state = GameStates.READY;
 
 			if (this.isAIAllowed()) {
 				if (!this.client.isWon()) {
 					this.decideAIPlay();
-				} 
+				}
 			}
 		}, this.animationSpan * 1000 + 1000);
 	}
@@ -304,7 +308,7 @@ class Manalath {
 
 	setPlayerVictory() {
 		this.playStatus = PlayStatus.Finished;
-		this.playerInfo[this.client.getWinnerCode()-1].won += 1;
+		this.playerInfo[this.client.getWinnerCode() - 1].won += 1;
 	}
 
 	updateScoreBoard() {
@@ -328,8 +332,17 @@ class Manalath {
 			let mp = this.client.getMessagePanel();
 			if (mp != -1) {
 				clearInterval(interval);
-				this.infoMessage = mp; 
-				if (this.client.isWon()) {
+				this.infoMessage = mp;
+				if (this.infoMessage == "Invalid Play") {
+					this.state = GameStates.ANIMATING;
+					this.undo();
+					this.isUndo = true;
+					this.undoCameraAngle = 9999;
+					setTimeout(() => {
+						this.isUndo = false;
+						this.state = GameStates.READY;
+					}, this.animationSpan * 1000);
+				} else if (this.client.isWon()) {
 					this.setPlayerVictory();
 					document.getElementById("player").innerHTML = "---";
 					this.updateScoreBoard();
@@ -570,28 +583,49 @@ class Manalath {
 	}
 
 	setCameraAngle() {
+		console.log(this.undoCameraAngle);
+		console.log(this.cameraAngle);
+
+		
+
 		const animSpan = (this.animationSpan * 1000 / 2);
 		if (this.state != GameStates.ANIMATING) {
-			//case no finished on time
-			if(this.cameraAngle > Math.PI * 0.9) {
-				this.cameraRotAngle = Math.PI - this.cameraAngle;
-				this.cameraAngle = 0;
-			} else {
-				this.cameraAngle = 0;
-				this.cameraRotAngle = 0;
-			}
+			this.cameraAngle = 0;
+			this.cameraRotAngle = 0;
 			return;
-		} 
+		}
 		//case animation state takes more time than camera rotation
 		else if (this.cameraTimeElapsed > animSpan) {
 			this.cameraRotAngle = Math.PI - this.cameraAngle;
+			if (this.isUndo) {
+				this.cameraRotAngle *= -1;
+				this.undoCameraAngle += this.cameraRotAngle;
+				if (this.undoCameraAngle <= 0) {
+					this.cameraRotAngle = -1 * this.undoCameraAngle;
+					this.undoCameraAngle = 0;
+				}
+			}
 			this.cameraAngle = Math.PI;
 			return;
-		} 
+		}
+		
+		if (this.undoCameraAngle == 9999) {
+			this.undoCameraAngle = this.cameraAngle;
+		}
 
 		let newCamAng = Math.PI * (this.cameraTimeElapsed / animSpan);
 		this.cameraRotAngle = newCamAng - this.cameraAngle;
 		this.cameraAngle = newCamAng;
+
+		if (this.isUndo) {
+			this.cameraRotAngle *= -1;
+			this.undoCameraAngle += this.cameraRotAngle;
+			if (this.undoCameraAngle <= 0) {
+				this.cameraRotAngle = -1 * this.undoCameraAngle;
+				this.undoCameraAngle = 0;
+			}
+		}
+
 
 	}
 }

@@ -8,7 +8,7 @@ const CHANGE_MATERIAL = "KeyM";
  * XMLscene class, representing the scene that is to be rendered.
  */
 let scene;
- class XMLscene extends CGFscene {
+class XMLscene extends CGFscene {
   /**
    *Creates an instance of XMLscene and binds it to a interface
    * @param {CGFinterface} myInterface
@@ -56,7 +56,7 @@ let scene;
     this.defaultMaterial = new CGFappearance(this);
     let val = 0.14;
     this.defaultMaterial.setDiffuse(val, val, val, 1);
-    this.defaultMaterial.setSpecular(val/2, val/2, val/2, 1);
+    this.defaultMaterial.setSpecular(val / 2, val / 2, val / 2, 1);
     this.defaultMaterial.setAmbient(0.1, 0.1, 0.1, 1);
     this.defaultMaterial.setShininess(1.28);
     this.setPickEnabled(true);
@@ -207,17 +207,17 @@ let scene;
       this.camera.id = selectedCamera;
       this.interface.setActiveCamera(this.camera);
     }
-    
+
   }
 
   updateCameraPosition() {
 
-    if(this.graph.game == null) return;
+    if (this.graph.game == null) return;
 
     this.graph.game.setCameraAngle();
 
     this.camera.orbit([0, 1, 0], this.graph.game.cameraRotAngle);
-    
+
     if (this.graph.game.state !== GameStates.ANIMATING && this.move) {
       this.cameraTime += this.elapsedTime;
 
@@ -294,10 +294,10 @@ let scene;
     this.oldPos = JSON.parse(JSON.stringify(activeCamera.position));
     this.oldTarget = JSON.parse(JSON.stringify(activeCamera.target));
     this.oldFov = JSON.parse(JSON.stringify(activeCamera.fov));
-    
-    let destination = newCamera.from; 
-    let target = newCamera.to; 
-  
+
+    let destination = newCamera.from;
+    let target = newCamera.to;
+
     this.move = {
       x: destination.x - this.oldPos[0],
       y: destination.y - this.oldPos[1],
@@ -310,13 +310,13 @@ let scene;
     };
     this.moveFov = newCamera.angle * DEGREE_TO_RAD - this.oldFov;
     this.graph.game.state = GameStates.STOPPED;
-    
+
 
   }
 
   logPicking() {
     if (!this.game && this.graph.primitives) {
-      for(const key of Object.keys(this.graph.primitives)) {
+      for (const key of Object.keys(this.graph.primitives)) {
         let primitive = this.graph.primitives[key];
         if (primitive.type === "manalath") {
           this.game = primitive.shape;
@@ -400,11 +400,11 @@ let scene;
     this.checkKeys();
   }
 
-   updateEnvironment() {
-     if (this.interface.lastEnvironment !== this.interface.environment) {
-       window.location.search = `?file=${this.interface.environment}`;
-     }
-   }
+  updateEnvironment() {
+    if (this.interface.lastEnvironment !== this.interface.environment) {
+      window.location.search = `?file=${this.interface.environment}`;
+    }
+  }
 
   /**
    * Check if the change material key is pressed and processes it
