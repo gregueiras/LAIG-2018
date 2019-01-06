@@ -6,9 +6,9 @@
             <from x="4" y="2.0" z="3" />
             <to x="3" y="0" z="3" />
         </perspective>
-        <perspective id="GameBoard2" near="0.01" far="500" angle="60">
-            <from x="4.5" y="2.5" z="4.5" />
-            <to x="3.5" y="1.29" z="3.5" />
+        <perspective id="GameBoard2" near="0.01" far="500" angle="70">
+            <from x="4" y="3" z="4.5" />
+            <to x="3" y="0" z="3" />
         </perspective>
         <perspective id="GameBoard3" near="0.01" far="500" angle="45">
             <from x="7.5" y="5.5" z="7.5" />
