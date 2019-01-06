@@ -1,5 +1,15 @@
 const CellState = Object.freeze({ empty: 0, black: 1, white: 2 });
+/**
+ * Class responsible for drawing and handling a manalath board and pieces
+ *
+ * @class MyBoard
+ */
 class MyBoard {
+  /**
+   *Creates an instance of MyBoard.
+   * @param {*} scene this instance CGFscene
+   * @memberof MyBoard
+   */
   constructor(scene) {
     this.scene = scene;
     this.board = [];
@@ -20,6 +30,11 @@ class MyBoard {
     this.createBoard();
   }
 
+  /**
+   * Creates a manalath board, creating every board cell and piece
+   *
+   * @memberof MyBoard
+   */
   createBoard() {
     const hex_size = 1.155;
     const map_radius = 4;
@@ -65,6 +80,11 @@ class MyBoard {
     }
   }
 
+  /**
+   * Display all board elements, cells and pieces
+   *
+   * @memberof MyBoard
+   */
   display() {
     this.scene.pushMatrix();
     
@@ -87,10 +107,26 @@ class MyBoard {
     this.scene.popMatrix();
   }
 
+  /**
+   * Auxiliary method, returns the bigger of the elements
+   *
+   * @param {*} a element A
+   * @param {*} b element B
+   * @returns returns the bigger of the elements, the first if they are equal
+   * @memberof MyBoard
+   */
   max(a, b) {
     return a >= b ? a : b;
   }
 
+  /**
+   * Auxiliary method, returns the smaller of the elements
+   *
+   * @param {*} a element A
+   * @param {*} b element B
+   * @returns returns the smaller of the elements, the first if they are equal
+   * @memberof MyBoard
+   */
   min(a, b) {
     return a <= b ? a : b;
   }
