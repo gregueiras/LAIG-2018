@@ -218,13 +218,18 @@ let scene;
     let maxTry = 200;
     
     if(this.graph.game.startRotationToPlayer) {
+      let orientation = 1;
+      if(this.graph.game.isUndoRotation) {
+        orientation = -1;
+        this.graph.game.isUndoRotation = false;
+      }
       let interval = setInterval(() => {
         ++cnt;
         if (cnt > maxTry) {
           clearInterval(interval);
           return;
         }
-        let ang = Math.PI / maxTry;
+        let ang = orientation * Math.PI / maxTry;
         this.camera.orbit([0, 1, 0], ang);
         
       }, 8);

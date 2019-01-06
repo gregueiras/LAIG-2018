@@ -542,14 +542,11 @@ class Manalath {
 		piece.reverse = true;
 		piece.available = true;
 		cell.state = CellState.empty;
-		if (this.state != GameStates.ANIMATING) {
-			if(!this.moviePlaying) {
-				this.startRotationToPlayer = true;
-			}
-			return true;
-		} else {
-			return false;
+		if(!this.moviePlaying) {
+			this.startRotationToPlayer = true;
+			this.isUndoRotation = true;
 		}
+		return true;
 	}
 
 	/**
