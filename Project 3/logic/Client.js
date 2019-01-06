@@ -173,7 +173,7 @@ class Client {
 	 * Handles the response made from the server
 	 *
 	 * @param {*} event event that triggered this function, unused
-	 * @param {*} response response recived
+	 * @param {*} response response received
 	 * @memberof Client
 	 */
 	requestCompleted(event, response) {
@@ -194,15 +194,15 @@ class Client {
 
     this.moveRequestComplete = true;
 
-    let splited = response.split("]");
+    let splitted = response.split("]");
 
-    let cellArr = splited[0].slice(2);
+    let cellArr = splitted[0].slice(2);
 
     this.buildNewBoard(cellArr);
 
     this.findMove();
 
-    this.winnerCode = parseInt(splited[1].slice(1));
+    this.winnerCode = parseInt(splitted[1].slice(1));
 
     this.handleWinnerCode();
   }
