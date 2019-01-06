@@ -193,6 +193,15 @@
             <scale x="0.12" y="0.15" z="0.12" />
             <rotate axis="x" angle="-90" />
         </transformation>
+        <transformation id="tfPaint1">          
+            <translate x="3" y="0.5" z="0.1" />
+        </transformation>
+        <transformation id="tfPaint2">          
+            <translate x="-2.5" y="0" z="0" />
+        </transformation>
+        <transformation id="tfPaint3">          
+            <translate x="0.5" y="0.5" z="0.1" />
+        </transformation>
     </transformations>
 
     <animations>
@@ -228,6 +237,12 @@
         </primitive >
         <primitive id="rect8">
             <rectangle x1="0" y1="0" x2="0.2" y2="0.2"/>
+        </primitive >
+        <primitive id="paint1">
+            <rectangle x1="0" y1="0" x2="2" y2="2"/>
+        </primitive >
+        <primitive id="tv">
+            <rectangle x1="0" y1="0" x2="5" y2="2"/>
         </primitive >
         <primitive id="cil1">
             <cylinder base="0.3" top="0.3" height="3" slices="30" stacks="30" />
@@ -313,6 +328,7 @@
             <texture id="text_wallpaint" length_s="6" length_t="3" />
             <children>
                 <primitiveref id="rect1" />
+                <componentref id="paint3" />
             </children>
         </component>
         <component id="window_wall">
@@ -325,6 +341,44 @@
             <texture id="text_wallpaint" length_s="6" length_t="3" />
             <children>
                 <primitiveref id="rect2" />
+                <componentref id="paint1" />
+            </children>
+        </component>
+        <component id="paint1">
+            <transformation>
+                <transformationref id="tfPaint1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="text_paint1" length_s="2" length_t="2" />
+            <children>
+                <primitiveref id="paint1" />
+                <componentref id="paint2" />
+            </children>
+        </component>
+        <component id="paint2">
+            <transformation>
+                <transformationref id="tfPaint2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="text_paint2" length_s="2" length_t="2" />
+            <children>
+                <primitiveref id="paint1" />
+            </children>
+        </component>
+        <component id="paint3">
+            <transformation>
+                <transformationref id="tfPaint3" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="text_tv" length_s="5" length_t="2" />
+            <children>
+                <primitiveref id="tv" />
             </children>
         </component>
         <component id="menu_wall">
