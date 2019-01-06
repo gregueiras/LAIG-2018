@@ -524,7 +524,7 @@ class Manalath {
 	undo() {
 		if (this.moves.length === 0) return false;
 
-		if(!this.moviePlaying) {
+		/*if(!this.moviePlaying) {
 			this.state = GameStates.ANIMATING;
 			this.isUndo = true;
 			this.cameraAngle = Math.PI - this.cameraAngle;
@@ -532,7 +532,7 @@ class Manalath {
 				this.isUndo = false;
 				this.state = GameStates.READY;
 			}, this.animationSpan * 1000 / 2);
-		}
+		}*/
 
 		let lastMove = this.moves.pop();
 		let piece = lastMove.piece;
