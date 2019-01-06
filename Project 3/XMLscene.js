@@ -214,9 +214,26 @@ let scene;
 
     if(this.graph.game == null) return;
 
-    this.graph.game.setCameraAngle();
+    let cnt = 0;
+    let maxTry = 200;
+    
+    if(this.graph.game.startRotationToPlayer) {
+      let interval = setInterval(() => {
+        ++cnt;
+        if (cnt > maxTry) {
+          clearInterval(interval);
+          return;
+        }
+        let ang = Math.PI / maxTry;
+        this.camera.orbit([0, 1, 0], ang);
+        
+      }, 8);
+      this.graph.game.startRotationToPlayer = false;
+    }
 
-    this.camera.orbit([0, 1, 0], this.graph.game.cameraRotAngle);
+    /*this.graph.game.setCameraAngle();
+
+    this.camera.orbit([0, 1, 0], this.graph.game.cameraRotAngle);*/
     
     if (this.graph.game.state !== GameStates.ANIMATING && this.move) {
       this.cameraTime += this.elapsedTime;
