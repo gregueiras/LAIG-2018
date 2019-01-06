@@ -337,7 +337,7 @@ class Manalath {
 					this.state = GameStates.ANIMATING;
 					this.undo();
 					this.isUndo = true;
-					this.undoCameraAngle = 9999;
+					this.cameraAngle = Math.PI - this.cameraAngle;
 					setTimeout(() => {
 						this.isUndo = false;
 						this.state = GameStates.READY;
@@ -583,11 +583,6 @@ class Manalath {
 	}
 
 	setCameraAngle() {
-		console.log(this.undoCameraAngle);
-		console.log(this.cameraAngle);
-
-		
-
 		const animSpan = (this.animationSpan * 1000 / 2);
 		if (this.state != GameStates.ANIMATING) {
 			this.cameraAngle = 0;
