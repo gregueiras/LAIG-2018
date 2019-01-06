@@ -1,4 +1,17 @@
+/**
+ * Class responsible for drawing and handling a manalath board cell
+ *
+ * @class MyBoardCell
+ */
 class MyBoardCell {
+  /**
+   *Creates an instance of MyBoardCell.
+   * @param {*} scene this instance CGFscene
+   * @param {*} borderFactor cell border size ratio
+   * @param {*} heightFactor cell height ratio
+   * @param {*} id cell id
+   * @memberof MyBoardCell
+   */
   constructor(scene, borderFactor, heightFactor, id) {
     this.scene = scene;
     this.border = new MyHollowPrism(scene, 6, 1, borderFactor);
@@ -10,6 +23,12 @@ class MyBoardCell {
     this.yC = 0;
   }
 
+  /**
+   * Set the cell coordinates
+   *
+   * @param {*} pos cell position
+   * @memberof MyBoardCell
+   */
   setPosition(pos) {
     this.xC = pos.xC;
     this.yC = pos.yC;
@@ -17,6 +36,11 @@ class MyBoardCell {
     this.pY = pos.pY;
   }
 
+  /**
+   * Displays the board cell
+   *
+   * @memberof MyBoardCell
+   */
   display() {
     this.scene.pushMatrix();
 
