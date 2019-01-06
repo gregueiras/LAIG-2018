@@ -345,7 +345,6 @@ let scene;
   /**
    * Displays the scene.
    */
-  // Quando trocar de shader, usar this.setActiveShader(this.defaultShader);
   display() {
     this.logPicking();
     this.clearPickRegistration();
@@ -365,6 +364,8 @@ let scene;
 
     // Apply transformations corresponding to the camera position relative to the origin
     this.applyViewMatrix();
+
+    this.updateEnvironment();
 
     this.pushMatrix();
 
@@ -398,6 +399,12 @@ let scene;
 
     this.checkKeys();
   }
+
+   updateEnvironment() {
+     if (this.interface.lastEnvironment !== this.interface.environment) {
+       window.location.search = `?file=${this.interface.environment}`;
+     }
+   }
 
   /**
    * Check if the change material key is pressed and processes it

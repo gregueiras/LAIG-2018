@@ -137,8 +137,28 @@ class MyInterface extends CGFinterface {
         actions.add(actionsFuncs, "resume").name("Resume Game");
         actions.add(actionsFuncs, "quit").name("Exit Game");
         actions.add(actionsFuncs, "movie").name("Play Game Movie");
+
+        this.addEnvironment(actions);
+
     }
 
+
+    addEnvironment(actions) {
+        const parameters = window.location.search.substr(1).split("=");
+        if (parameters.length !== 1) {
+            this.lastEnvironment = parameters[1];
+            this.environment = parameters[1];
+        }
+        else {
+            this.environment = "arena.xml";
+            this.lastEnvironment = "arena.xml";
+        }
+        const environments = {
+            Arena: "arena.xml",
+            Room: "room.xml"
+        };
+        actions.add(this, "environment", environments).name("Environment");
+    }
 
     /**
      * Overrides processKeyboard function from WebCGF and starts listening for pressed keys
