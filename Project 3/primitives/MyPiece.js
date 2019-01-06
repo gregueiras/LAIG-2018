@@ -1,5 +1,16 @@
+/**
+ * Class responsible for drawing and handling a manalath piece
+ *
+ * @class MyPiece
+ */
 class MyPiece {
   
+  /**
+   *Creates an instance of MyPiece.
+   * @param {*} scene this instance CGFscene
+   * @param {*} id piece id
+   * @memberof MyPiece
+   */
   constructor(scene, id) {
     this.scene = scene;
     this.piece = new MySphere(scene, 1, 20, 20);
@@ -13,6 +24,13 @@ class MyPiece {
 
   }
 
+  /**
+   * Set the piece coordinates
+   *
+   * @param {*} pos piece position
+   * @returns this instance
+   * @memberof MyPiece
+   */
   setPosition(pos) {
     this.xC = pos.xC;
     this.yC = pos.yC;
@@ -23,6 +41,13 @@ class MyPiece {
     return this;
   }
 
+  /**
+   * Set the piece color
+   *
+   * @param {*} color piece color
+   * @returns this instance
+   * @memberof MyPiece
+   */
   setColor(color) {
     switch (color) {
       case CellState.white:
@@ -41,6 +66,11 @@ class MyPiece {
     return this;
   }
 
+  /**
+   * Displays the piece
+   *
+   * @memberof MyPiece
+   */
   display() {
     this.scene.pushMatrix();
 
@@ -86,6 +116,12 @@ class MyPiece {
     this.scene.popMatrix();
   }
 
+  /**
+   * Set the piece highlight status
+   *
+   * @param {*} enable true if the piece should be highlighted, false if not
+   * @memberof MyPiece
+   */
   setHighlight(enable) {
     this.highlight = enable;
   }
