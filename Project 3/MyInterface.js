@@ -120,7 +120,10 @@ class MyInterface extends CGFinterface {
                 inter.cameras[ACTIVE_CAMERA] = "GameBoard";
             },
             undo: function () {
-                game.undo();
+                if(game.undo()) {
+                    game.changeActivePlayer();
+                    game.updatePanelInfo();
+                }
             },
             movie: function () {
                 game.playGameMovie();

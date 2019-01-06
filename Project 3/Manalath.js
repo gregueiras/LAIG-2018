@@ -325,7 +325,6 @@ parseTime(time) {
 
 		this.state = GameStates.ANIMATING;
 		this.selectedPiece = null;
-		this.turnTime = 0;
 
 		this.changeActivePlayer();
 
@@ -349,7 +348,7 @@ parseTime(time) {
 	changeActivePlayer() {
 			this.activePlayer++;
 			this.activePlayer %= 2;
-
+			this.turnTime = 0;
 		}
 
 	/**
@@ -517,7 +516,7 @@ parseTime(time) {
 	 * @memberof Manalath
 	 */
 	undo() {
-		if (this.moves.length === 0) return;
+		if (this.moves.length === 0) return false;
 
 		let lastMove = this.moves.pop();
 		let piece = lastMove.piece;
@@ -526,6 +525,11 @@ parseTime(time) {
 		piece.reverse = true;
 		piece.available = true;
 		cell.state = CellState.empty;
+		if(this.state != GameStates.ANIMATING) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
