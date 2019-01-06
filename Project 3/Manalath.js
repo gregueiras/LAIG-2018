@@ -63,13 +63,13 @@ class Manalath {
 		this.infoMessage = "Connection not established";
 
 		//start timers
-		setInterval( () => {
+		setInterval(() => {
 			if (this.state == GameStates.READY && this.playStatus == PlayStatus.OnGoing) {
 				this.playerInfo[this.activePlayer].timer += 1;
 				this.turnTime += 1;
 
 				if (this.turnTime > this.maxTurnTime) {
-					if(this.isPlayerAllowed() && this.allowRandomPlay) {
+					if (this.isPlayerAllowed() && this.allowRandomPlay) {
 						this.turnTime = 0;
 						this.randomPlay();
 					} else {
@@ -103,14 +103,14 @@ class Manalath {
 		}
 	}
 
-/**
- * Receives a time in seconds and returns it in MM:SS format
- *
- * @param {*} time time in seconds
- * @returns formatted string in MM:SS format
- * @memberof Manalath
- */
-parseTime(time) {
+	/**
+	 * Receives a time in seconds and returns it in MM:SS format
+	 *
+	 * @param {*} time time in seconds
+	 * @returns formatted string in MM:SS format
+	 * @memberof Manalath
+	 */
+	parseTime(time) {
 		let sec = Math.floor(time % 60);
 		let min = Math.floor(time / 60);
 		sec = sec < 10 ? "0" + sec : sec;
@@ -133,10 +133,14 @@ parseTime(time) {
 				++index;
 			}
 			cell = board[index];
-		} while(cell.state !== CellState.empty)
+		} while (cell.state !== CellState.empty)
 		const randomColor = (Math.random() > 0.5) ? CellState.black : CellState.white;
-		
-		this.AIPlay({x: cell.pX, y: cell.pY, state: randomColor});
+
+		this.AIPlay({
+			x: cell.pX,
+			y: cell.pY,
+			state: randomColor
+		});
 	}
 	/**
 	 * Resets the game
@@ -145,7 +149,7 @@ parseTime(time) {
 	 */
 	reset() {
 
-		if(this.cameraAngle != 0) {
+		if (this.cameraAngle != 0) {
 			console.warn("Camera on rotation, can't do this operation...");
 			return;
 		}
@@ -193,7 +197,7 @@ parseTime(time) {
 	 */
 	restart() {
 
-		if(this.cameraAngle != 0) {
+		if (this.cameraAngle != 0) {
 			console.warn("Camera on rotation, can't do this operation...");
 			return;
 		}
@@ -329,14 +333,14 @@ parseTime(time) {
 		this.changeActivePlayer();
 
 		this.updatePanelInfo();
-		
+
 		setTimeout(() => {
 			this.state = GameStates.READY;
 
 			if (this.isAIAllowed()) {
 				if (!this.client.isWon()) {
 					this.decideAIPlay();
-				} 
+				}
 			}
 		}, this.animationSpan * 1000 + 1000);
 	}
@@ -346,10 +350,10 @@ parseTime(time) {
 	 * @memberof Manalath
 	 */
 	changeActivePlayer() {
-			this.activePlayer++;
-			this.activePlayer %= 2;
-			this.turnTime = 0;
-		}
+		this.activePlayer++;
+		this.activePlayer %= 2;
+		this.turnTime = 0;
+	}
 
 	/**
 	 * Changes the playStatus to Finished and increments the winner count of the player who won
@@ -357,9 +361,9 @@ parseTime(time) {
 	 * @memberof Manalath
 	 */
 	setPlayerVictory() {
-			this.playStatus = PlayStatus.Finished;
-			this.playerInfo[this.client.getWinnerCode()-1].won += 1;
-		}
+		this.playStatus = PlayStatus.Finished;
+		this.playerInfo[this.client.getWinnerCode() - 1].won += 1;
+	}
 
 	/**
 	 * Updates the scoreboard with the winners counters
@@ -392,8 +396,17 @@ parseTime(time) {
 			let mp = this.client.getMessagePanel();
 			if (mp != -1) {
 				clearInterval(interval);
-				this.infoMessage = mp; 
-				if (this.client.isWon()) {
+				this.infoMessage = mp;
+				if (this.infoMessage == "Invalid Play") {
+					this.state = GameStates.ANIMATING;
+					this.undo();
+					this.isUndo = true;
+					this.cameraAngle = Math.PI - this.cameraAngle;
+					setTimeout(() => {
+						this.isUndo = false;
+						this.state = GameStates.READY;
+					}, this.animationSpan * 1000);
+				} else if (this.client.isWon()) {
 					this.setPlayerVictory();
 					document.getElementById("player").innerHTML = "---";
 					this.updateScoreBoard();
@@ -525,7 +538,7 @@ parseTime(time) {
 		piece.reverse = true;
 		piece.available = true;
 		cell.state = CellState.empty;
-		if(this.state != GameStates.ANIMATING) {
+		if (this.state != GameStates.ANIMATING) {
 			return true;
 		} else {
 			return false;
@@ -714,26 +727,40 @@ parseTime(time) {
 	setCameraAngle() {
 		const animSpan = (this.animationSpan * 1000 / 2);
 		if (this.state != GameStates.ANIMATING) {
-			//case no finished on time
-			if(this.cameraAngle > Math.PI * 0.9) {
-				this.cameraRotAngle = Math.PI - this.cameraAngle;
-				this.cameraAngle = 0;
-			} else {
-				this.cameraAngle = 0;
-				this.cameraRotAngle = 0;
-			}
+			this.cameraAngle = 0;
+			this.cameraRotAngle = 0;
 			return;
-		} 
+		}
 		//case animation state takes more time than camera rotation
 		else if (this.cameraTimeElapsed > animSpan) {
 			this.cameraRotAngle = Math.PI - this.cameraAngle;
+			if (this.isUndo) {
+				this.cameraRotAngle *= -1;
+				this.undoCameraAngle += this.cameraRotAngle;
+				if (this.undoCameraAngle <= 0) {
+					this.cameraRotAngle = -1 * this.undoCameraAngle;
+					this.undoCameraAngle = 0;
+				}
+			}
 			this.cameraAngle = Math.PI;
 			return;
-		} 
+		}
+
+		if (this.undoCameraAngle == 9999) {
+			this.undoCameraAngle = this.cameraAngle;
+		}
 
 		let newCamAng = Math.PI * (this.cameraTimeElapsed / animSpan);
 		this.cameraRotAngle = newCamAng - this.cameraAngle;
 		this.cameraAngle = newCamAng;
 
+		if (this.isUndo) {
+			this.cameraRotAngle *= -1;
+			this.undoCameraAngle += this.cameraRotAngle;
+			if (this.undoCameraAngle <= 0) {
+				this.cameraRotAngle = -1 * this.undoCameraAngle;
+				this.undoCameraAngle = 0;
+			}
+		}
 	}
 }
