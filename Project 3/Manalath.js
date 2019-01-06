@@ -18,7 +18,16 @@ const PlayStatus = Object.freeze({
 	Finished: 1,
 	Error: 2,
 });
+/**
+ * Manalath Class, responsible for handling every game element
+ * @class Manalath
+ */
 class Manalath {
+	/**
+	 * Creates an instance of Manalath.
+	 * @param {*} scene this instance CGFscene
+	 * @memberof Manalath
+	 */
 	constructor(scene) {
 		this.scene = scene;
 		this.board = new MyBoard(scene);
@@ -34,7 +43,6 @@ class Manalath {
 		this.animationSpan = 2;
 		this.client = new Client();
 
-		//TODO Implement on the menu
 		this.selectedLvl = GameDifficulty.EASY;
 		this.lvl = GameDifficulty.EASY;
 
@@ -95,14 +103,26 @@ class Manalath {
 		}
 	}
 
-	parseTime(timer) {
-		let sec = Math.floor(timer % 60);
-		let min = Math.floor(timer / 60);
+/**
+ * Receives a time in seconds and returns it in MM:SS format
+ *
+ * @param {*} time time in seconds
+ * @returns formatted string in MM:SS format
+ * @memberof Manalath
+ */
+parseTime(time) {
+		let sec = Math.floor(time % 60);
+		let min = Math.floor(time / 60);
 		sec = sec < 10 ? "0" + sec : sec;
 		min = min < 10 ? "0" + min : min;
 		return min + ":" + sec;
 	}
 
+	/**
+	 * Selects a random piece make a random play
+	 *
+	 * @memberof Manalath
+	 */
 	randomPlay() {
 
 		let cell = {};
@@ -118,6 +138,11 @@ class Manalath {
 		
 		this.AIPlay({x: cell.pX, y: cell.pY, state: randomColor});
 	}
+	/**
+	 * Resets the game
+	 *
+	 * @memberof Manalath
+	 */
 	reset() {
 
 		if(this.cameraAngle != 0) {
@@ -161,6 +186,11 @@ class Manalath {
 		}
 	}
 
+	/**
+	 * Restarts the game
+	 *
+	 * @memberof Manalath
+	 */
 	restart() {
 
 		if(this.cameraAngle != 0) {
@@ -196,7 +226,11 @@ class Manalath {
 			this.decideAIPlay();
 		}
 	}
-
+	/**
+	 * Initializes both players
+	 *
+	 * @memberof Manalath
+	 */
 	setPlayerInfo() {
 
 		let player = {
@@ -209,6 +243,12 @@ class Manalath {
 		this.playerInfo.push(JSON.parse(JSON.stringify(player)));
 	}
 
+	/**
+	 * Animates the movement of the selected piece to cell
+	 *
+	 * @param {*} cell destination cell
+	 * @memberof Manalath
+	 */
 	animate(cell) {
 		if (
 			this.selectedPiece &&
@@ -260,6 +300,12 @@ class Manalath {
 		}
 	}
 
+	/**
+	 * Play the selected piece to cell
+	 *
+	 * @param {*} cell destination cell to be played
+	 * @memberof Manalath
+	 */
 	play(cell) {
 		this.selectedPiece.available = false;
 
@@ -295,23 +341,42 @@ class Manalath {
 			}
 		}, this.animationSpan * 1000 + 1000);
 	}
-
+	/**
+	 * Alternate the active player
+	 *
+	 * @memberof Manalath
+	 */
 	changeActivePlayer() {
-		this.activePlayer++;
-		this.activePlayer %= 2;
+			this.activePlayer++;
+			this.activePlayer %= 2;
 
-	}
+		}
 
+	/**
+	 * Changes the playStatus to Finished and increments the winner count of the player who won
+	 *
+	 * @memberof Manalath
+	 */
 	setPlayerVictory() {
-		this.playStatus = PlayStatus.Finished;
-		this.playerInfo[this.client.getWinnerCode()-1].won += 1;
-	}
+			this.playStatus = PlayStatus.Finished;
+			this.playerInfo[this.client.getWinnerCode()-1].won += 1;
+		}
 
+	/**
+	 * Updates the scoreboard with the winners counters
+	 *
+	 * @memberof Manalath
+	 */
 	updateScoreBoard() {
 		document.getElementById("s1").innerHTML = this.playerInfo[0].won;
 		document.getElementById("s2").innerHTML = this.playerInfo[1].won;
 	}
 
+	/**
+	 * Updates all info on the panel
+	 *
+	 * @memberof Manalath
+	 */
 	updatePanelInfo() {
 		document.getElementById("player").innerHTML = (this.activePlayer === 0) ? "Black" : "White";
 		this.updateScoreBoard();
@@ -339,6 +404,12 @@ class Manalath {
 		}, 50);
 	}
 
+	/**
+	 * Validates the player move, communicating with the PROLOG server
+	 *
+	 * @param {*} move move to be made
+	 * @memberof Manalath
+	 */
 	validatePlayerPlay(move) {
 		//case of computer play, this was already done when searching for a play
 		if (this.isPlayerAllowed()) {
@@ -372,6 +443,11 @@ class Manalath {
 		}
 	}
 
+	/**
+	 * Asks the PROLOG server for a play and plays it
+	 *
+	 * @memberof Manalath
+	 */
 	decideAIPlay() {
 		if (this.state == GameStates.ANIMATING) {
 			console.warn("The game is in animation state");
@@ -410,6 +486,12 @@ class Manalath {
 		}, 500);
 	}
 
+	/**
+	 * Makes the play of the AI player
+	 *
+	 * @param {*} play play to be made
+	 * @memberof Manalath
+	 */
 	AIPlay(play) {
 		this.selectedPiece = undefined;
 		do {
@@ -429,6 +511,11 @@ class Manalath {
 		this.animate(cell);
 	}
 
+	/**
+	 * Undo the last movement made
+	 *
+	 * @memberof Manalath
+	 */
 	undo() {
 		if (this.moves.length === 0) return;
 
@@ -441,6 +528,12 @@ class Manalath {
 		cell.state = CellState.empty;
 	}
 
+	/**
+	 * Handle the picking of the pieces
+	 *
+	 * @param {*} obj object picked
+	 * @memberof Manalath
+	 */
 	handlePicking(obj) {
 		if (!this.isPlayerAllowed()) {
 			console.warn("Not your turn to play");
@@ -470,6 +563,11 @@ class Manalath {
 		}
 	}
 
+	/**
+	 * Displays the board and the pieces
+	 *
+	 * @memberof Manalath
+	 */
 	display() {
 		this.scene.pushMatrix();
 
@@ -480,6 +578,11 @@ class Manalath {
 		this.scene.popMatrix();
 	}
 
+	/**
+	 * Play all movement made in the game, like a replay movie
+	 *
+	 * @memberof Manalath
+	 */
 	playGameMovie() {
 		let moves = this.moves.slice();
 		while (this.moves.length !== 0) {
@@ -500,6 +603,12 @@ class Manalath {
 		}, i * this.animationSpan * 1000);
 	}
 
+	/**
+	 * Returns true if it is the turn of a human player, false if not
+	 *
+	 * @returns true if it is the turn of a human player, false if not
+	 * @memberof Manalath
+	 */
 	isPlayerAllowed() {
 		switch (this.mode) {
 			case GameModes.PvP:
@@ -521,6 +630,12 @@ class Manalath {
 		return false;
 	}
 
+	/**
+	 * Returns true if it is the turn of an AI player, false if not
+	 *
+	 * @returns true if it is the turn of an AI player, false if not
+	 * @memberof Manalath
+	 */
 	isAIAllowed() {
 		switch (this.mode) {
 			case GameModes.PvP:
@@ -541,6 +656,12 @@ class Manalath {
 		return false;
 	}
 
+	/**
+	 * Pauses the game
+	 *
+	 * @returns true if the game can be paused, false if not
+	 * @memberof Manalath
+	 */
 	pause() {
 		if (this.state == GameStates.READY) {
 			this.state = GameStates.STOPPED;
@@ -549,6 +670,12 @@ class Manalath {
 		return false;
 	}
 
+	/**
+	 * Resumes the game, and if it is the AI turn, plays
+	 *
+	 * @returns true if the game can be paused, false if not
+	 * @memberof Manalath
+	 */
 	resume() {
 		if (this.state == GameStates.STOPPED) {
 			this.state = GameStates.READY;
@@ -560,6 +687,12 @@ class Manalath {
 		return false;
 	}
 
+	/**
+	 * Updates the camera timer, used in the camera rotation
+	 *
+	 * @param {*} currTimer current camera timer
+	 * @memberof Manalath
+	 */
 	updateCameraTimer(currTimer) {
 
 		if (this.state != GameStates.ANIMATING) {
@@ -569,6 +702,11 @@ class Manalath {
 		this.cameraTimeElapsed = currTimer - this.cameraTimer;
 	}
 
+	/**
+	 * Set the camera rotation angle
+	 *
+	 * @memberof Manalath
+	 */
 	setCameraAngle() {
 		const animSpan = (this.animationSpan * 1000 / 2);
 		if (this.state != GameStates.ANIMATING) {
