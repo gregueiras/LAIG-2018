@@ -288,6 +288,7 @@ class Manalath {
 				this.animationSpan,
 				[options.start, up, down, options.end]
 			);
+			this.startRotationToPlayer = true;
 			this.play(cell);
 		} else if (this.moviePlaying) {
 			console.warn(`Sit back and enjoy the movie of your last game`);
@@ -542,6 +543,9 @@ class Manalath {
 		piece.available = true;
 		cell.state = CellState.empty;
 		if (this.state != GameStates.ANIMATING) {
+			if(!this.moviePlaying) {
+				this.startRotationToPlayer = true;
+			}
 			return true;
 		} else {
 			return false;
