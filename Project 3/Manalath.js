@@ -398,14 +398,7 @@ class Manalath {
 				clearInterval(interval);
 				this.infoMessage = mp;
 				if (this.infoMessage == "Invalid Play") {
-					this.state = GameStates.ANIMATING;
 					this.undo();
-					this.isUndo = true;
-					this.cameraAngle = Math.PI - this.cameraAngle;
-					setTimeout(() => {
-						this.isUndo = false;
-						this.state = GameStates.READY;
-					}, this.animationSpan * 1000);
 				} else if (this.client.isWon()) {
 					this.setPlayerVictory();
 					document.getElementById("player").innerHTML = "---";
@@ -530,6 +523,16 @@ class Manalath {
 	 */
 	undo() {
 		if (this.moves.length === 0) return false;
+
+		if(!this.moviePlaying) {
+			this.state = GameStates.ANIMATING;
+			this.isUndo = true;
+			this.cameraAngle = Math.PI - this.cameraAngle;
+			setTimeout(() => {
+				this.isUndo = false;
+				this.state = GameStates.READY;
+			}, this.animationSpan * 1000 / 2);
+		}
 
 		let lastMove = this.moves.pop();
 		let piece = lastMove.piece;
