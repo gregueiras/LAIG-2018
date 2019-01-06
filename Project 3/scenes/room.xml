@@ -313,7 +313,6 @@
             <children>
                 <componentref id="board_wall" />
                 <componentref id="window_wall" />
-                <componentref id="menu_wall" />
                 <componentref id="floor" />
                 <componentref id="table" />
             </children>
@@ -380,19 +379,7 @@
             <children>
                 <primitiveref id="tv" />
             </children>
-        </component>
-        <component id="menu_wall">
-            <transformation>
-                <transformationref id="tf2.1" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="text_wallpaint" length_s="6" length_t="3" />
-            <children>
-                <primitiveref id="rect2" />
-            </children>
-        </component>
+        </component>        
         <component id="floor">
             <transformation>
                 <transformationref id="tf3" />
