@@ -80,6 +80,12 @@ class MyInterface extends CGFinterface {
         this.gui.add(this.cameras, ACTIVE_CAMERA, cameras);
     }
 
+    /**
+     * Add game related options
+     *
+     * @param {*} game Manalath instance to be linked with the interface
+     * @memberof MyInterface
+     */
     addGame(game) {
         var configs = this.gui.addFolder("Configurations");
         configs.open();
@@ -142,7 +148,12 @@ class MyInterface extends CGFinterface {
 
     }
 
-
+    /**
+     * Add the environment related interface options
+     *
+     * @param {*} actions game actions interface group
+     * @memberof MyInterface
+     */
     addEnvironment(actions) {
         const parameters = window.location.search.substr(1).split("=");
         if (parameters.length !== 1) {
@@ -209,7 +220,9 @@ class MyInterface extends CGFinterface {
     };
     
     /**
-     * Must be commented to block camera mouse controlled movement
+     * Mouse is disabled
+     *
+     * @memberof MyInterface
      */
     processMouse() {
         //super.processMouse();
