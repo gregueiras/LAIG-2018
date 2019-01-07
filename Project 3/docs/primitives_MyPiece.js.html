@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: primitives/MyPiece.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: primitives/MyPiece.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Class responsible for drawing and handling a manalath piece
+ *
+ * @class MyPiece
+ */
+class MyPiece {
+  
+  /**
+   *Creates an instance of MyPiece.
+   * @param {*} scene this instance CGFscene
+   * @param {*} id piece id
+   */
+  constructor(scene, id) {
+    this.scene = scene;
+    this.piece = new MySphere(scene, 1, 20, 20);
+    this.color = null;
+    this.id = id;
+    this.set = null;
+    this.currTime = 0;
+    this.available = true;
+    this.state = CellState.empty;
+    this.highlight = false;
+
+  }
+
+  /**
+   * Set the piece coordinates
+   *
+   * @param {*} pos piece position
+   * @returns this instance
+   * @memberof MyPiece
+   */
+  setPosition(pos) {
+    this.xC = pos.xC;
+    this.yC = pos.yC;
+    this.pX = pos.pX;
+    this.pY = pos.pY;
+    this.side = pos.side;
+
+    return this;
+  }
+
+  /**
+   * Set the piece color
+   *
+   * @param {*} color piece color
+   * @returns this instance
+   * @memberof MyPiece
+   */
+  setColor(color) {
+    switch (color) {
+      case CellState.white:
+      case -1:
+      this.color = new CGFtexture(this.scene, "./scenes/images/metal.jpg");
+      this.state = CellState.white;
+      break;
+      
+      case CellState.black:
+      case 1:
+      this.color = new CGFtexture(this.scene, "./scenes/images/space.jpg");
+      this.state = CellState.black;
+        break;
+    }
+
+    return this;
+  }
+
+  /**
+   * Displays the piece
+   *
+   * @memberof MyPiece
+   */
+  display() {
+    this.scene.pushMatrix();
+
+    if (!this.set) {
+      const spreadFactor = 0.6;
+      this.xC *= spreadFactor;
+      this.yC *= spreadFactor;
+      this.yC += this.side * 10;
+
+      this.set = true;
+    }
+
+    if (this.animate &amp;&amp; this.scene.elapsedTime) {
+      if (this.reverse) {
+        if (this.currTime > this.animate.span) this.currTime = this.animate.span;
+        this.currTime -= this.scene.elapsedTime;
+      } else {
+        if (this.currTime &lt; 0) this.currTime = 0;
+        this.currTime += this.scene.elapsedTime;
+      }
+
+      this.animate.update(this.currTime);
+      this.animate.apply();
+    }
+
+    this.scene.translate(this.xC, 0.2, this.yC);
+    this.scene.scale(0.5, 2, 0.5);
+
+    if (this.color) this.color.bind();
+    
+    this.scene.registerForPick(this.id, this);
+    
+    this.scene.pushMatrix();
+    
+    if (this.highlight) this.scene.highlightMaterial.apply();
+    
+    this.piece.display();
+    
+    if (this.highlight) this.scene.defaultMaterial.apply(); 
+
+    this.scene.popMatrix();
+
+    this.scene.popMatrix();
+  }
+
+  /**
+   * Set the piece highlight status
+   *
+   * @param {*} enable true if the piece should be highlighted, false if not
+   * @memberof MyPiece
+   */
+  setHighlight(enable) {
+    this.highlight = enable;
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Animation.html">Animation</a></li><li><a href="CircularAnimation.html">CircularAnimation</a></li><li><a href="Client.html">Client</a></li><li><a href="Cylinder2.html">Cylinder2</a></li><li><a href="Cylinder3.html">Cylinder3</a></li><li><a href="LinearAnimation.html">LinearAnimation</a></li><li><a href="Manalath.html">Manalath</a></li><li><a href="MyBoard.html">MyBoard</a></li><li><a href="MyBoardCell.html">MyBoardCell</a></li><li><a href="MyCircle.html">MyCircle</a></li><li><a href="MyCylinder.html">MyCylinder</a></li><li><a href="MyCylinderBase.html">MyCylinderBase</a></li><li><a href="MyHollowPrism.html">MyHollowPrism</a></li><li><a href="MyInterface.html">MyInterface</a></li><li><a href="MyPiece.html">MyPiece</a></li><li><a href="MyPrism.html">MyPrism</a></li><li><a href="MyQuad.html">MyQuad</a></li><li><a href="MySceneGraph.html">MySceneGraph</a></li><li><a href="MySphere.html">MySphere</a></li><li><a href="MyTerrain.html">MyTerrain</a></li><li><a href="MyTorus.html">MyTorus</a></li><li><a href="MyTriangle.html">MyTriangle</a></li><li><a href="MyWater.html">MyWater</a></li><li><a href="Patch.html">Patch</a></li><li><a href="Plane.html">Plane</a></li><li><a href="XMLscene.XMLscene.html">XMLscene</a></li></ul><h3>Global</h3><ul><li><a href="global.html#isAxis">isAxis</a></li><li><a href="global.html#isBetween">isBetween</a></li><li><a href="global.html#isBoolean">isBoolean</a></li><li><a href="global.html#isInteger">isInteger</a></li><li><a href="global.html#isString">isString</a></li><li><a href="global.html#scene">scene</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Jan 07 2019 00:09:32 GMT+0000 (Western European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

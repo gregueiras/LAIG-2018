@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: primitives/MyBoard.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: primitives/MyBoard.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const CellState = Object.freeze({ empty: 0, black: 1, white: 2 });
+/**
+ * Class responsible for drawing and handling a manalath board and pieces
+ *
+ * @class MyBoard
+ */
+class MyBoard {
+  /**
+   *Creates an instance of MyBoard.
+   * @param {*} scene this instance CGFscene
+   */
+  constructor(scene) {
+    this.scene = scene;
+    this.board = [];
+    this.pieces = [];
+
+    let id = 1;
+    for (let index = 0; index &lt; 61; index++) {
+      this.board.push(new MyBoardCell(scene, 0.9, 0.001, id++));
+      this.pieces.push(new MyPiece(scene, id++));
+    }
+    this.base = new MyBoardCell(scene, 0.95, 0.001);
+
+    this.cellTexture = new CGFtexture(scene, "./scenes/images/wallpaint2.png");
+    this.baseTexture = new CGFtexture(scene, "./scenes/images/stone.jpg");
+
+    this.blackPiece = new MyPiece(scene, CellState.black);
+    this.whitePiece = new MyPiece(scene, CellState.white);
+    this.createBoard();
+  }
+
+  /**
+   * Creates a manalath board, creating every board cell and piece
+   *
+   * @memberof MyBoard
+   */
+  createBoard() {
+    const hex_size = 1.155;
+    const map_radius = 4;
+    const origin = {
+      x: 0,
+      y: 0
+    };
+    let count = 0;
+    for (let q = -map_radius; q &lt;= map_radius; q++) {
+      let r1 = this.max(-map_radius, -q - map_radius);
+      let r2 = this.min(map_radius, -q + map_radius);
+      for (let r = r1; r &lt;= r2; r++) {
+        let x = (Math.sqrt(3) * q + (Math.sqrt(3) / 2) * r) * hex_size;
+        let y = (0 * q + (3 / 2) * r) * hex_size;
+
+        let R = r + 4;
+
+        let side;
+        if ((r > -1 &amp;&amp; q > 0) || (r > 0 &amp;&amp; q &lt;= 0)) {
+          side = 1;
+        } else if (q === 0 &amp;&amp; r === 0) {
+          side = null;
+        } else {
+          side = -1;
+        }
+
+        const pos = {
+          xC: x + origin.x,
+          yC: y + origin.y,
+          pX: (q + R) * 2,
+          pY: r + 4,
+          side: side
+        };
+
+        if (side !== null) {
+          this.pieces[count].setPosition(pos).setColor(side);
+          this.board[count++].setPosition(pos);
+        } else {
+          this.pieces[count] = null;
+          this.board[count++].setPosition(pos);
+        }
+      }
+    }
+  }
+
+  /**
+   * Display all board elements, cells and pieces
+   *
+   * @memberof MyBoard
+   */
+  display() {
+    this.scene.pushMatrix();
+    
+    this.scene.translate(0, -0.1, 0);
+    this.scene.scale(10, 0.1, 10);
+    this.baseTexture.bind();
+    this.base.display();
+    this.scene.popMatrix();
+
+    this.scene.pushMatrix();
+    this.scene.scale(1, 0.1, 1);
+
+    this.cellTexture.bind();
+    this.board.forEach(hexagon => {
+      hexagon.display();
+    });
+    this.pieces.forEach(piece => {
+      if (piece) piece.display();
+    });
+    this.scene.popMatrix();
+  }
+
+  /**
+   * Auxiliary method, returns the bigger of the elements
+   *
+   * @param {*} a element A
+   * @param {*} b element B
+   * @returns returns the bigger of the elements, the first if they are equal
+   * @memberof MyBoard
+   */
+  max(a, b) {
+    return a >= b ? a : b;
+  }
+
+  /**
+   * Auxiliary method, returns the smaller of the elements
+   *
+   * @param {*} a element A
+   * @param {*} b element B
+   * @returns returns the smaller of the elements, the first if they are equal
+   * @memberof MyBoard
+   */
+  min(a, b) {
+    return a &lt;= b ? a : b;
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Animation.html">Animation</a></li><li><a href="CircularAnimation.html">CircularAnimation</a></li><li><a href="Client.html">Client</a></li><li><a href="Cylinder2.html">Cylinder2</a></li><li><a href="Cylinder3.html">Cylinder3</a></li><li><a href="LinearAnimation.html">LinearAnimation</a></li><li><a href="Manalath.html">Manalath</a></li><li><a href="MyBoard.html">MyBoard</a></li><li><a href="MyBoardCell.html">MyBoardCell</a></li><li><a href="MyCircle.html">MyCircle</a></li><li><a href="MyCylinder.html">MyCylinder</a></li><li><a href="MyCylinderBase.html">MyCylinderBase</a></li><li><a href="MyHollowPrism.html">MyHollowPrism</a></li><li><a href="MyInterface.html">MyInterface</a></li><li><a href="MyPiece.html">MyPiece</a></li><li><a href="MyPrism.html">MyPrism</a></li><li><a href="MyQuad.html">MyQuad</a></li><li><a href="MySceneGraph.html">MySceneGraph</a></li><li><a href="MySphere.html">MySphere</a></li><li><a href="MyTerrain.html">MyTerrain</a></li><li><a href="MyTorus.html">MyTorus</a></li><li><a href="MyTriangle.html">MyTriangle</a></li><li><a href="MyWater.html">MyWater</a></li><li><a href="Patch.html">Patch</a></li><li><a href="Plane.html">Plane</a></li><li><a href="XMLscene.XMLscene.html">XMLscene</a></li></ul><h3>Global</h3><ul><li><a href="global.html#isAxis">isAxis</a></li><li><a href="global.html#isBetween">isBetween</a></li><li><a href="global.html#isBoolean">isBoolean</a></li><li><a href="global.html#isInteger">isInteger</a></li><li><a href="global.html#isString">isString</a></li><li><a href="global.html#scene">scene</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Jan 07 2019 00:09:32 GMT+0000 (Western European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

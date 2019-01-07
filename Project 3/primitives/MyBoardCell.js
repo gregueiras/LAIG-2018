@@ -10,7 +10,6 @@ class MyBoardCell {
    * @param {*} borderFactor cell border size ratio
    * @param {*} heightFactor cell height ratio
    * @param {*} id cell id
-   * @memberof MyBoardCell
    */
   constructor(scene, borderFactor, heightFactor, id) {
     this.scene = scene;

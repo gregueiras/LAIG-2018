@@ -9,7 +9,6 @@ class MyPiece {
    *Creates an instance of MyPiece.
    * @param {*} scene this instance CGFscene
    * @param {*} id piece id
-   * @memberof MyPiece
    */
   constructor(scene, id) {
     this.scene = scene;

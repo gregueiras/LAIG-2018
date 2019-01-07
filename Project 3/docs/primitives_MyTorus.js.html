@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: primitives/MyTorus.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: primitives/MyTorus.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+
+/**
+ * Creates a torus centered on origin with interior radius on XY
+ *
+ * @extends {CGFobject}
+ */
+class MyTorus extends CGFobject {
+
+  /**
+   *Creates an instance of MyTorus.
+   * @param {CGFscene} scene
+   * @param {number} outRadius the outer radius 
+   * @param {number} inRadius the inner radius
+   * @param {number} slices the number of radial segments
+   * @param {number} loops the number of radial segments centered on outer radius
+   * @memberof MyTorus
+   */
+  constructor(scene, outRadius, inRadius, slices, loops) {
+    super(scene);
+
+    this.slices = slices;
+    this.loops = loops;
+    this.outRadius = outRadius;
+    this.inRadius = inRadius;
+
+    this.vertices = new Array();
+    this.indices = new Array();
+    this.normals = new Array();
+    this.texCoords = new Array();
+    this.initBuffers();
+  };
+
+
+  /**
+   * Initializes this instance vertices, indices, normals and texture coordinates.
+   *
+   * @memberof MyTorus
+   */
+  initVIN() {
+    let arc = Math.PI * 2;
+
+    for (let j = 0; j &lt;= this.loops; j++) {
+      let theta = Math.PI * 2 * j / this.loops;
+
+      for (let i = 0; i &lt;= this.slices; i++) {
+        let alpha = i / this.slices * arc;
+
+        let v = {
+          x: Math.cos(alpha) * (this.outRadius + this.inRadius * Math.cos(theta)),
+          y: Math.sin(alpha) * (this.outRadius + this.inRadius * Math.cos(theta)),
+          z: Math.sin(theta) * this.inRadius
+        };
+
+        this.vertices.push(v.x, v.y, v.z);
+
+        let c = { //center of torus section
+          x: Math.cos(alpha) * this.outRadius,
+          y: Math.sin(alpha) * this.outRadius,
+          z: 0
+        };
+
+        let n = { //normal between center of torus section and outer/inner layer
+          x: v.x - c.x,
+          y: v.y - c.y,
+          z: v.z
+        };
+
+        this.normals.push(n.x, n.y, n.z);
+
+        this.texCoords.push(i / this.slices);
+        this.texCoords.push(j / this.loops);
+      }
+    }
+    for (let j = 1; j &lt;= this.loops; j++) {
+      for (let i = 1; i &lt;= this.slices; i++) {
+        // indices
+
+        var a = (this.slices + 1) * j + i - 1;
+        var b = (this.slices + 1) * (j - 1) + i - 1;
+        var c = (this.slices + 1) * (j - 1) + i;
+        var d = (this.slices + 1) * j + i;
+
+        // faces
+        this.indices.push(a, b, d);
+        this.indices.push(b, c, d);
+
+      }
+    }
+  }
+
+
+  /**
+   * Initializes this instance buffers.
+   *
+   * @memberof MyTorus
+   */
+  initBuffers() {
+    this.initVIN();
+    this.primitiveType = this.scene.gl.TRIANGLES;
+    this.initGLBuffers();
+  };
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Animation.html">Animation</a></li><li><a href="CircularAnimation.html">CircularAnimation</a></li><li><a href="Client.html">Client</a></li><li><a href="Cylinder2.html">Cylinder2</a></li><li><a href="Cylinder3.html">Cylinder3</a></li><li><a href="LinearAnimation.html">LinearAnimation</a></li><li><a href="Manalath.html">Manalath</a></li><li><a href="MyBoard.html">MyBoard</a></li><li><a href="MyBoardCell.html">MyBoardCell</a></li><li><a href="MyCircle.html">MyCircle</a></li><li><a href="MyCylinder.html">MyCylinder</a></li><li><a href="MyCylinderBase.html">MyCylinderBase</a></li><li><a href="MyHollowPrism.html">MyHollowPrism</a></li><li><a href="MyInterface.html">MyInterface</a></li><li><a href="MyPiece.html">MyPiece</a></li><li><a href="MyPrism.html">MyPrism</a></li><li><a href="MyQuad.html">MyQuad</a></li><li><a href="MySceneGraph.html">MySceneGraph</a></li><li><a href="MySphere.html">MySphere</a></li><li><a href="MyTerrain.html">MyTerrain</a></li><li><a href="MyTorus.html">MyTorus</a></li><li><a href="MyTriangle.html">MyTriangle</a></li><li><a href="MyWater.html">MyWater</a></li><li><a href="Patch.html">Patch</a></li><li><a href="Plane.html">Plane</a></li><li><a href="XMLscene.XMLscene.html">XMLscene</a></li></ul><h3>Global</h3><ul><li><a href="global.html#isAxis">isAxis</a></li><li><a href="global.html#isBetween">isBetween</a></li><li><a href="global.html#isBoolean">isBoolean</a></li><li><a href="global.html#isInteger">isInteger</a></li><li><a href="global.html#isString">isString</a></li><li><a href="global.html#scene">scene</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Jan 07 2019 00:09:32 GMT+0000 (Western European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

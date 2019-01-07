@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: MyInterface.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: MyInterface.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//Name to appear in the dropdown interface
+const ACTIVE_CAMERA = 'Active Camera';
+
+/**
+ * MyInterface class, creating a GUI interface.
+ */
+class MyInterface extends CGFinterface {
+    /**
+     * Calls CGFinterface constructor
+     * @constructor
+     */
+    constructor() {
+        super();
+    }
+
+    /**
+     * Initializes the interface.
+     * @param {CGFapplication} application
+     */
+    init(application) {
+        super.init(application);
+        // init GUI. For more information on the methods, check:
+        //  http://workshop.chromeexperiments.com/examples/gui
+
+        this.gui = new dat.GUI();
+        this.initKeys();
+
+        return true;
+    }
+
+    /**
+     * Adds a folder containing the IDs of the lights passed as parameter.
+     * @param {string[]} lights
+     */
+    addLightsGroup(lights) {
+
+        var group = this.gui.addFolder("Lights");
+        //group.open();
+
+        for (let i = 0; i &lt; lights.omnis.length; i++) {
+            const light = lights.omnis[i];
+            this.scene.lightValues[light.id] = (light.enabled ? true : false);
+            let name = light.id;
+            group.add(this.scene.lightValues, name);
+
+        }
+        for (let i = 0; i &lt; lights.spots.length; i++) {
+            const light = lights.spots[i];
+            this.scene.lightValues[light.id] = (light.enabled ? true : false);
+            let name = light.id;
+            group.add(this.scene.lightValues, name);
+
+        }
+
+    }
+
+    /**
+     * Add cameras to the dropdown menu
+     * @param {Object} views - views object created by XML parser
+     * @memberof MyInterface
+     */
+    addCameraOptions(views) {
+        this.cameras = {};
+        this.cameras[ACTIVE_CAMERA] = views.default;
+
+        let cameras = {};
+
+        let keys = Object.keys(views.orthos);
+        for (let key of keys) {
+            let cam = views.orthos[key];
+            cameras[cam.id] = cam.id;
+        }
+
+        keys = Object.keys(views.perspectives);
+        for (let key of keys) {
+            let cam = views.perspectives[key];
+            cameras[cam.id] = cam.id;
+        }
+
+        this.gui.add(this.cameras, ACTIVE_CAMERA, cameras);
+    }
+
+    /**
+     * Add game related options
+     *
+     * @param {*} game Manalath instance to be linked with the interface
+     * @memberof MyInterface
+     */
+    addGame(game) {
+        var configs = this.gui.addFolder("Configurations");
+        configs.open();
+
+        let modeArr = {};
+        modeArr['PvP'] = GameModes.PvP;
+        modeArr['PvC'] = GameModes.PvC;
+        modeArr['CvP'] = GameModes.CvP;
+        modeArr['CvC'] = GameModes.CvC;
+
+        let lvlArr = {};
+        lvlArr['Easy'] = GameDifficulty.EASY;
+        lvlArr['Hard'] = GameDifficulty.HARD;
+
+        configs.add(game, "selectedMode", modeArr).name("Mode");
+        configs.add(game, "selectedLvl", lvlArr).name("Level");
+        configs.add(game, "allowRandomPlay").name("Allow random");
+        configs.add(game, "animationSpan", 0.1, 5).name("Animation Span");
+        configs.add(game, "maxTurnTime", 1, 60).name("Turn Timer");
+
+        let actions = this.gui.addFolder("Actions");
+        actions.open();
+
+        let inter = this;
+        let actionsFuncs = {
+            reset: function () {
+                game.reset();
+                inter.cameras[ACTIVE_CAMERA] = "GameBoard";
+            },
+            restart: function () {
+                game.restart();
+                inter.cameras[ACTIVE_CAMERA] = "GameBoard";
+            },
+            undo: function () {
+                if(game.undo()) {
+                    game.changeActivePlayer();
+                    game.updatePanelInfo();
+                }
+            },
+            movie: function () {
+                game.playGameMovie();
+            },
+            quit: function () {
+                if(game.pause()) {
+                    inter.cameras[ACTIVE_CAMERA] = "GameBoard2";
+                }
+            },
+            resume: function () {
+                if(game.resume()) {
+                    inter.cameras[ACTIVE_CAMERA] = "GameBoard";
+                }
+            }
+        };
+
+        actions.add(actionsFuncs, "reset").name("Apply Configs");
+        actions.add(actionsFuncs, "restart").name("Play Again");
+        actions.add(actionsFuncs, "undo").name("Undo Play");
+        actions.add(actionsFuncs, "resume").name("Resume Game");
+        actions.add(actionsFuncs, "quit").name("Exit Game");
+        actions.add(actionsFuncs, "movie").name("Play Game Movie");
+
+        this.addEnvironment(actions);
+
+    }
+
+    /**
+     * Add the environment related interface options
+     *
+     * @param {*} actions game actions interface group
+     * @memberof MyInterface
+     */
+    addEnvironment(actions) {
+        const parameters = window.location.search.substr(1).split("=");
+        if (parameters.length !== 1) {
+            this.lastEnvironment = parameters[1];
+            this.environment = parameters[1];
+        }
+        else {
+            this.environment = "arena.xml";
+            this.lastEnvironment = "arena.xml";
+        }
+        const environments = {
+            Arena: "arena.xml",
+            Room: "room.xml"
+        };
+        actions.add(this, "environment", environments).name("Environment");
+    }
+
+    /**
+     * Overrides processKeyboard function from WebCGF and starts listening for pressed keys
+     * @memberof MyInterface
+     */
+    initKeys() {
+        this.processKeyboard = function () {};
+        this.activeKeys = {};
+    }
+
+    /**
+     * Overrides processKeyDown function from WebCGF and processes a pressed key
+     * @param {keyEvent} event
+     * @memberof MyInterface
+     */
+    processKeyDown(event) {
+        this.activeKeys[event.code] = true;
+    };
+
+    /**
+     * Overrides processKeyUp function from WebCGF
+     * @param {keyEvent} event
+     * @memberof MyInterface
+     */
+    processKeyUp(event) {};
+
+
+    /**
+     * Process key released (manually called)
+     * @param {keyEvent} event
+     * @memberof MyInterface
+     */
+    releaseKey(event) {
+        this.activeKeys[event] = false;
+    };
+
+
+    /**
+     * Returns true if a key is active, false if it isn't
+     *
+     * @param {keyCode} keyCode
+     * @returns {boolean} true if key is active or false if it isn't
+     * @memberof MyInterface
+     */
+    isKeyPressed(keyCode) {
+        return this.activeKeys[keyCode] || false;
+        let a = [1, 2, 4];
+    };
+    
+    /**
+     * Mouse is disabled
+     *
+     * @memberof MyInterface
+     */
+    processMouse() {
+        //super.processMouse();
+        //console.log("mouse is disabled");
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Animation.html">Animation</a></li><li><a href="CircularAnimation.html">CircularAnimation</a></li><li><a href="Client.html">Client</a></li><li><a href="Cylinder2.html">Cylinder2</a></li><li><a href="Cylinder3.html">Cylinder3</a></li><li><a href="LinearAnimation.html">LinearAnimation</a></li><li><a href="Manalath.html">Manalath</a></li><li><a href="MyBoard.html">MyBoard</a></li><li><a href="MyBoardCell.html">MyBoardCell</a></li><li><a href="MyCircle.html">MyCircle</a></li><li><a href="MyCylinder.html">MyCylinder</a></li><li><a href="MyCylinderBase.html">MyCylinderBase</a></li><li><a href="MyHollowPrism.html">MyHollowPrism</a></li><li><a href="MyInterface.html">MyInterface</a></li><li><a href="MyPiece.html">MyPiece</a></li><li><a href="MyPrism.html">MyPrism</a></li><li><a href="MyQuad.html">MyQuad</a></li><li><a href="MySceneGraph.html">MySceneGraph</a></li><li><a href="MySphere.html">MySphere</a></li><li><a href="MyTerrain.html">MyTerrain</a></li><li><a href="MyTorus.html">MyTorus</a></li><li><a href="MyTriangle.html">MyTriangle</a></li><li><a href="MyWater.html">MyWater</a></li><li><a href="Patch.html">Patch</a></li><li><a href="Plane.html">Plane</a></li><li><a href="XMLscene.XMLscene.html">XMLscene</a></li></ul><h3>Global</h3><ul><li><a href="global.html#isAxis">isAxis</a></li><li><a href="global.html#isBetween">isBetween</a></li><li><a href="global.html#isBoolean">isBoolean</a></li><li><a href="global.html#isInteger">isInteger</a></li><li><a href="global.html#isString">isString</a></li><li><a href="global.html#scene">scene</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Jan 07 2019 00:09:32 GMT+0000 (Western European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

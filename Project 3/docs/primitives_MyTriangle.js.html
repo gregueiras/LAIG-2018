@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: primitives/MyTriangle.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: primitives/MyTriangle.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Creates a triangle on specified coordinates. if not specified
+ * will create triangle with (0,0,0), (1, 0, 0) and (0,1,0) vertices
+ *
+ * @extends {CGFobject}
+ */
+
+class MyTriangle extends CGFobject {
+
+	/**
+	 *Creates an instance of MyTriangle.
+	 * @param {CGFscene} scene this instance scene
+	 * @param {number} x1 the first vertex X value
+	 * @param {number} x2 the second vertex X value
+	 * @param {number} x3 the third vertex X value
+	 * @param {number} y1 the first vertex Y value
+	 * @param {number} y2 the second vertex Y value
+	 * @param {number} y3 the third vertex Y value
+	 * @param {number} z1 the first vertex Z value
+	 * @param {number} z2 the second vertex Z value
+	 * @param {number} z3 the third vertex Z value
+	 * @memberof MyTriangle
+	 */
+	constructor(scene, x1, x2, x3, y1, y2, y3, z1, z2, z3) {
+		super(scene);
+
+		this.minS = 0;
+		this.maxS = 1;
+		this.minT = 0;
+		this.maxT = 1;
+
+		x1 = typeof x1 !== 'undefined' ? x1 : 0;
+		y1 = typeof y1 !== 'undefined' ? y1 : 0;
+		z1 = typeof z1 !== 'undefined' ? z1 : 0;
+		x2 = typeof x2 !== 'undefined' ? x2 : 1;
+		y2 = typeof y2 !== 'undefined' ? y2 : 0;
+		z2 = typeof z2 !== 'undefined' ? z2 : 0;
+		x3 = typeof x3 !== 'undefined' ? x3 : 0;
+		y3 = typeof y3 !== 'undefined' ? y3 : 1;
+		z3 = typeof z3 !== 'undefined' ? z3 : 0;
+
+		this.x1 = x1;
+		this.x2 = x2;
+		this.x3 = x3;
+		this.y1 = y1;
+		this.y2 = y2;
+		this.y3 = y3;
+		this.z1 = z1;
+		this.z2 = z2;
+		this.z3 = z3;
+
+		this.initBuffers();
+	};
+
+
+	/**
+	 * Initializes this instance vertices, indices, normals and texture coordinates.
+	 *
+	 * @memberof MyTriangle
+	 */
+	initVIN() {
+		this.vertices = [
+			this.x1, this.y1, this.z1,
+			this.x2, this.y2, this.z2,
+			this.x3, this.y3, this.z3,
+		];
+
+		this.indices = [
+			0, 1, 2,
+		];
+
+		this.normals = [
+			0, 0, 1,
+			0, 0, 1,
+			0, 0, 1,
+			0, 0, 1
+		];
+
+		this.texCoords = [
+			this.minS, this.maxT,
+			this.maxS, this.maxT,
+			this.minS, this.minT,
+			this.maxS, this.minT
+		];
+
+	}
+
+	/**
+	 * Initializes this instance buffers.
+	 *
+	 * @memberof MyTriangle
+	 */
+	initBuffers() {
+		this.initVIN();
+		this.primitiveType = this.scene.gl.TRIANGLES;
+		this.initGLBuffers();
+	};
+
+
+	/**
+	 * Modifies texture appliance parameters to this instance.
+	 *
+	 * @param {number} ls the number of units that texture should occupy on X coordinate
+	 * @param {number} lt the number of units that texture should occupy on Y coordinate
+	 * @memberof MyTriangle
+	 */
+	setTexCoords(ls, lt) {
+
+		var a = Math.sqrt(Math.pow(this.x1 - this.x3, 2) + Math.pow(this.y1 - this.y3, 2) + Math.pow(this.z1 - this.z3, 2));
+		var b = Math.sqrt(Math.pow(this.x2 - this.x3, 2) + Math.pow(this.y2 - this.y3, 2) + Math.pow(this.z2 - this.z3, 2));
+		var c = Math.sqrt(Math.pow(this.x3 - this.x2, 2) + Math.pow(this.y3 - this.y2, 2) + Math.pow(this.z3 - this.z2, 2));
+
+		//var alpha = Math.acos((- Math.pow(a, 2) + Math.pow(b, 2) + Math.pow(c, 2)) / (2*b*c));
+		var beta = Math.acos((Math.pow(a, 2) - Math.pow(b, 2) + Math.pow(c, 2)) / (2 * a * c));
+		//var upsilon = Math.acos((Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2)) / (2*a*b));
+
+		var x0 = c - a * Math.cos(beta);
+		var y0 = lt - a * Math.sin(beta);
+
+		this.texCoords = [
+			0, 1,
+			c / ls, 1,
+			x0 / ls, y0 / lt
+		];
+
+		this.updateTexCoordsGLBuffers();
+	}
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Animation.html">Animation</a></li><li><a href="CircularAnimation.html">CircularAnimation</a></li><li><a href="Client.html">Client</a></li><li><a href="Cylinder2.html">Cylinder2</a></li><li><a href="Cylinder3.html">Cylinder3</a></li><li><a href="LinearAnimation.html">LinearAnimation</a></li><li><a href="Manalath.html">Manalath</a></li><li><a href="MyBoard.html">MyBoard</a></li><li><a href="MyBoardCell.html">MyBoardCell</a></li><li><a href="MyCircle.html">MyCircle</a></li><li><a href="MyCylinder.html">MyCylinder</a></li><li><a href="MyCylinderBase.html">MyCylinderBase</a></li><li><a href="MyHollowPrism.html">MyHollowPrism</a></li><li><a href="MyInterface.html">MyInterface</a></li><li><a href="MyPiece.html">MyPiece</a></li><li><a href="MyPrism.html">MyPrism</a></li><li><a href="MyQuad.html">MyQuad</a></li><li><a href="MySceneGraph.html">MySceneGraph</a></li><li><a href="MySphere.html">MySphere</a></li><li><a href="MyTerrain.html">MyTerrain</a></li><li><a href="MyTorus.html">MyTorus</a></li><li><a href="MyTriangle.html">MyTriangle</a></li><li><a href="MyWater.html">MyWater</a></li><li><a href="Patch.html">Patch</a></li><li><a href="Plane.html">Plane</a></li><li><a href="XMLscene.XMLscene.html">XMLscene</a></li></ul><h3>Global</h3><ul><li><a href="global.html#isAxis">isAxis</a></li><li><a href="global.html#isBetween">isBetween</a></li><li><a href="global.html#isBoolean">isBoolean</a></li><li><a href="global.html#isInteger">isInteger</a></li><li><a href="global.html#isString">isString</a></li><li><a href="global.html#scene">scene</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Jan 07 2019 00:09:32 GMT+0000 (Western European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

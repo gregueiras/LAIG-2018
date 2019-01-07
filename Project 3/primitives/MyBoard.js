@@ -8,7 +8,6 @@ class MyBoard {
   /**
    *Creates an instance of MyBoard.
    * @param {*} scene this instance CGFscene
-   * @memberof MyBoard
    */
   constructor(scene) {
     this.scene = scene;

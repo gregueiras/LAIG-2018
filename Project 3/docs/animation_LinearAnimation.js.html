@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: animation/LinearAnimation.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: animation/LinearAnimation.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Makes the object of appliance move accordingly to given
+ * control points, in a linear trajectory, during a set
+ * time period.
+ * @extends {Animation}
+ */
+class LinearAnimation extends Animation {
+
+  /**
+   *  Creates an instance of LinearAnimation.
+   * 
+   * @param {MySceneGraph} graph the scene graph
+   * @param {number} span the time duration
+   * @param {Point[]} pointList the list of control points
+   * @param {string} id the id
+   * @memberof LinearAnimation
+   */
+  constructor(graph, span, pointList, id) {
+    super(graph, id, span);
+    this.endRot = [];
+    this.interpolateTransformations(pointList);
+
+    this.transformations.sort((a, b) => {
+      let x = a.type.toLowerCase();
+      var y = b.type.toLowerCase();
+      if (x > y) {
+        return -1;
+      }
+      if (x &lt; y) {
+        return 1;
+      }
+      return 0;
+
+    });
+    
+    this.transformations.push(this.endRot)
+    this.transformations = this.transformations.flat();
+  }
+
+  /**
+   * Stores all necessary transformations preparing them for appliance.
+   * 
+   * @param {Point[]} pointList the list of control points
+   */
+  interpolateTransformations(pointList) {
+    let totD = this.totalDistance(pointList);
+    let speed = this.span / totD;
+
+    let distSoFar = 0;
+    let oldDir = {
+      x: 0,
+      y: 0,
+      z: 1
+    };
+
+    for (let index = 0; index &lt; pointList.length - 1; index++) {
+      const currPoint = pointList[index];
+      const nextPoint = pointList[index + 1];
+
+      let dir = this.vector(currPoint, nextPoint);
+      let translation = {
+        type: "translate",
+        origX: dir.x,
+        origY: dir.y,
+        origZ: dir.z,
+        startTime: distSoFar * speed,
+        distance: this.linearDistance(currPoint, nextPoint),
+        endTime: null
+      };
+
+      distSoFar += translation.distance;
+      translation.endTime = distSoFar * speed;
+      dir = this.normalize(dir);
+
+
+      let rotAngle = this.angleBetweenVectors(oldDir, dir) / DEGREE_TO_RAD;
+      let rotAxis = this.cross(oldDir, dir);
+      if (rotAxis.y &lt; 0)
+        rotAngle = -rotAngle;
+
+      if (dir.x === 0 &amp;&amp; dir.y === 1 &amp;&amp; dir.z === 0) {
+        this.transformations.push(translation);
+        oldDir = dir;
+        continue;
+      }
+
+      let rotation = {
+        type: "rotate",
+        origAngle: rotAngle,
+        axis: "y",
+        endTime: translation.startTime,
+        instant: true,
+      };
+
+      let reverse = {
+        type: "rotate",
+        origAngle: -rotAngle,
+        axis: "y",
+        endTime: this.span,
+        instant: true,
+        lastRot: true
+      };
+
+      this.transformations.push(translation);
+      this.transformations.push(rotation);
+      this.endRot.unshift(reverse);
+      oldDir = dir;
+    }
+  }
+
+  /**
+   * Returns the linear distance between two points.
+   * 
+   * @param {Point} pA the origin point
+   * @param {Point} pB the destination point
+   * @returns shortest distance between pA and pB
+   */
+  linearDistance(pA, pB) {
+    return Math.sqrt(
+      Math.pow((pA.x - pB.x), 2) +
+      Math.pow((pA.y - pB.y), 2) +
+      Math.pow((pA.z - pB.z), 2)
+    );
+  }
+
+  /**
+   * Creates a vector from origin to destination.
+   * 
+   * @param {Point} pA the origin point
+   * @param {Point} pB the destination point
+   * @returns vector from pA to pB
+   */
+  vector(pA, pB) {
+    let vec = {
+      x: 0,
+      y: 0,
+      z: 0
+    };
+
+    vec.x = pB.x - pA.x;
+    vec.y = pB.y - pA.y;
+    vec.z = pB.z - pA.z;
+
+    return vec;
+  }
+
+  /**
+   * Calculates this animation total distance.
+   * 
+   * @param {Point[]} pointList 
+   * @returns animation total distance
+   */
+  totalDistance(pointList) {
+    let distance = 0;
+
+    for (let index = 0; index &lt; pointList.length - 1; index++) {
+      const currPoint = pointList[index];
+      const nextPoint = pointList[index + 1];
+
+      distance += this.linearDistance(currPoint, nextPoint);
+    }
+
+    return distance;
+  }
+
+  /**
+   * Takes two vectors and calculates the scalar product.
+   * 
+   * @param {Vector} vA 
+   * @param {Vector} vB 
+   * @returns the scalar product between vA and vB
+   */
+  dotProduct(vA, vB) {
+    return vA.x * vB.x + vA.y * vB.y + vA.z * vB.z;
+  }
+
+  /**
+   * Calculates vector norm.
+   * 
+   * @param {Vector} v 
+   * @returns v norm
+   */
+  mag(v) {
+    return Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2) + Math.pow(v.z, 2));
+  }
+
+  /**
+   * Normalizes the given vector
+   * 
+   * @param {Vector} v 
+   * @returns v normalized
+   */
+  normalize(v) {
+    let m = this.mag(v);
+    return {
+      x: v.x / m,
+      y: v.y / m,
+      z: v.z / m,
+    };
+  }
+
+  /**
+   * calculates angle between two vectors.
+   * 
+   * @param {Vector} vA 
+   * @param {Vector} vB 
+   * @returns the angle between vA and vB
+   */
+  angleBetweenVectors(vA, vB) {
+    return Math.acos(this.dotProduct(vA, vB) / (this.mag(vA) * this.mag(vB)));
+  }
+
+  /**
+   * Calculates the cross product between two vectors
+   * only for horizontal orientation change.
+   * 
+   * @param {Vector} vA 
+   * @param {Vector} vB 
+   * @returns the "cross product" between vA and vB.
+   */
+  cross(vA, vB) {
+    return {
+      x: vA.y * vB.z - vA.z * vB.y,
+      y: vA.z * vB.x - vA.x * vB.z,
+      z: 0
+    };
+  }
+
+  /**
+   * Updates animation current position.
+   * @param {number} currTime the scene time counter
+   * @param {number} rotate the flag indicating if it should update rotation and not translation
+   * @param {boolean} lastAnimation the flag indicating if this animation is the last one to be made
+   */
+  update(currTime, rotate, lastAnimation) {
+    super.update(currTime, rotate, false, lastAnimation);
+  }
+
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Animation.html">Animation</a></li><li><a href="CircularAnimation.html">CircularAnimation</a></li><li><a href="Client.html">Client</a></li><li><a href="Cylinder2.html">Cylinder2</a></li><li><a href="Cylinder3.html">Cylinder3</a></li><li><a href="LinearAnimation.html">LinearAnimation</a></li><li><a href="Manalath.html">Manalath</a></li><li><a href="MyBoard.html">MyBoard</a></li><li><a href="MyBoardCell.html">MyBoardCell</a></li><li><a href="MyCircle.html">MyCircle</a></li><li><a href="MyCylinder.html">MyCylinder</a></li><li><a href="MyCylinderBase.html">MyCylinderBase</a></li><li><a href="MyHollowPrism.html">MyHollowPrism</a></li><li><a href="MyInterface.html">MyInterface</a></li><li><a href="MyPiece.html">MyPiece</a></li><li><a href="MyPrism.html">MyPrism</a></li><li><a href="MyQuad.html">MyQuad</a></li><li><a href="MySceneGraph.html">MySceneGraph</a></li><li><a href="MySphere.html">MySphere</a></li><li><a href="MyTerrain.html">MyTerrain</a></li><li><a href="MyTorus.html">MyTorus</a></li><li><a href="MyTriangle.html">MyTriangle</a></li><li><a href="MyWater.html">MyWater</a></li><li><a href="Patch.html">Patch</a></li><li><a href="Plane.html">Plane</a></li><li><a href="XMLscene.XMLscene.html">XMLscene</a></li></ul><h3>Global</h3><ul><li><a href="global.html#isAxis">isAxis</a></li><li><a href="global.html#isBetween">isBetween</a></li><li><a href="global.html#isBoolean">isBoolean</a></li><li><a href="global.html#isInteger">isInteger</a></li><li><a href="global.html#isString">isString</a></li><li><a href="global.html#scene">scene</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Jan 07 2019 00:09:32 GMT+0000 (Western European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
